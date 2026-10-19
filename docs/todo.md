@@ -32,7 +32,7 @@ Item = { id: "B-01", status: "ready", priority: "p1", size: "M",   // S < half a
 
 ### B-28 Provenance on every record: turn, pane, task, project, commit, PR
 
-status: claimed · priority: p1 · size: M · owner: vps2 lane 4 · branch: · verified:
+status: review · priority: p1 · size: M · owner: vps2 lane 4 · branch: night/lane-4 · verified: /root/proj/night/logs/lane-4-B-28.log
 
 Cross-cutting. Every row that comes out of a turn or a check links back to where it came from, so a
 PR can be traced to the turn that wrote its commits, the task that turn was on, and the project.
@@ -60,6 +60,7 @@ Acceptance:
 
 notes:
 - 2026-10-19 "for turns, commits, prs, etc. make sure we track the turn, the tasks, project".
+- 2026-10-19 10:50 vps2 lane 4: shipped on night/lane-4 (commit 7b521d7): core.Provenance filled at write time by internal/provenance (env-bound pane, pane assignment, open turn, tree) on history entries/turns, context items, notes, todos, capture metadata, review turns/documents/marks, and the new commits/prs tables in the history unit (`deck code record-commit|record-pr|list`, `deck code trace --json '{"id":…}'` prints PR → commits → turn → pane → task → project). FROM block in context/history/capture/todo details. Outline §15, suite scripts/e2e-provenance.sh. Full-suite log: every suite green except the outline's macOS-only cases. Open: `deck trace <id>` as a bare subcommand (cmd/deck, lane 2); jumps from the FROM lines; commit detection by git hook/head-move polling (upstream §6.13); ActionItem/Schedule rows (lane 3) and document_report (lane 2) get provenance the same way once they exist.
 
 ### B-25 Command palette opens in search mode
 
