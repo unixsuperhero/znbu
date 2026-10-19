@@ -554,7 +554,7 @@ notes:
 
 ### B-09 Pane lifecycle in the rail: working at the bottom and locked, review at the top, rest in the middle
 
-status: claimed · priority: p1 · size: L · owner: vps2 lane 1 · branch: night/lane-1 · verified: 
+status: review · priority: p1 · size: L · owner: vps2 lane 1 · branch: night/lane-1 · verified: /root/proj/night/logs/lane-1-B-09.log
 
 The rail becomes three sections that a pane moves through. Replaces the two-section rule in §7.1.
 
@@ -600,6 +600,21 @@ notes:
 - 2026-10-19 vps2 lane 1: claimed. Open question answered for this build: agents only enter the working
   section; a terminal after a command stays in the panes section (its state is not a turn). Revisit if the
   human wants terminals there too.
+- 2026-10-19 vps2 lane 1: built on night/lane-1 (commit a7a67a4); outline §15 replaces the two-section rule of
+  §7.1. One rail list: `─ Review ─` (one row per pane with unreviewed turns, finish order, `●` glyph and a
+  background, `N turns to review · <latest prompt>`; document reviews keep their rows), the `o`/`O` groups,
+  `─ Working ─` (agent state `working`, first-seen order, locked: tab bar plus `Locked while the agent
+  works … press U`, no capture, `U` unlocks until the focus leaves). A fully reviewed pane stays on top while
+  focused and drops to the middle on the next move. Per-turn queue rows left the rail (the reviews page
+  keeps them) and a pane whose latest turn finished no longer vanishes. Verified by outline `rail_lifecycle`
+  plus the rewritten `history_review` and `shared_navigation`, `review_accordion`, `pane_tabs`,
+  `grouping_stale`, `pin_scope`, the review suite and `go test ./...`; the full `scripts/e2e-all.sh` run
+  (log above) passed every suite except outline `repo_discovery` and `shared_navigation` (timing waits on
+  the palette and the Assign offers, green alone) and the macOS-only `native_picker`.
+- 2026-10-19 decisions: terminals never enter the working section (a command is not a turn); working order
+  is the time the shell first saw the pane working (the daemon reports no prompt time); `enter` still goes
+  live on a locked row, `U` only concerns the preview. B-08 (lane 4) adds the per-section height caps on
+  top of these sections; the section names match its `review`/`panes`/`working`.
 
 ### B-10 Review accordion: the detail for a pane with unreviewed turns
 
