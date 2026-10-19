@@ -47,7 +47,7 @@ notes:
 
 ### B-38 Panes rail as a nested tree below the pin
 
-status: ready · priority: p1 · size: M · owner: · branch: · verified:
+status: review · priority: p1 · size: M · owner: claude (redeck-astra pane) · branch: matomeru main · verified: vps2 outline cases rail_tree, grouping_stale, pin_scope, rail_lifecycle, history_review, shared_navigation
 
 The panes page's rail groups panes in a tree: project › task › subtask, starting at the level
 below whatever is pinned (pinned to a project: its tasks are the top level; pinned to a task: its
@@ -56,6 +56,7 @@ the pane lifecycle item keep their place above and below the tree.
 
 notes:
 - 2026-10-19 queued after the bulk-create tree.
+- 2026-10-19 built as grouping 0 behind `panes.rail_tree` (default on); `o`/`O` cycle on to the flat groupings. Folding is `z` (innermost group into one `▸` row, `z`/`enter` unfold) and `Z` (one level up); headings are not selectable rows. `{`/`}` jump per distinct path. Outline §27.
 
 ### B-35 Replace the one-off orchestrator with a stuck-pane check that raises action items
 
