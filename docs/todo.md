@@ -442,7 +442,7 @@ notes:
 
 ### B-18 My PRs: open and drafts, watching, snooze until midnight, CI and status change alerts
 
-status: claimed · priority: p1 · size: M · owner: vps2 lane 4 · branch: · verified:
+status: ready · priority: p1 · size: M · owner: · branch: · verified:
 
 ```js
 MyPR = { url, number, repo, title, draft, state, ci: "pending"|"pass"|"fail"|"unknown",
@@ -470,6 +470,7 @@ notes:
 - 2026-10-19 lane 3: skipped; the item was `claimed` by vps2 lane 4 when lane 3 reached it (lane 3's brief listed B-18 after B-17). Lane 3's `internal/github` already has the `github_prs` table, `github_settings.poll_interval` (default 300 s) and the PATH `gh` stub in `scripts/e2e_attention.py` that answers `search prs --author=…` and `api graphql`; the my-PRs half can extend that unit on night/lane-3 rather than start a second github unit.
 - 2026-10-19 lane 3: the claim came from znbu commit e521965 ("todo: claim B-28 for vps2 lane 4"), whose replace matched every `ready · size: M` header, so it looks accidental; lane 4's brief does not list B-18. Human or lane 4: set it back to `ready` if so, and lane 3 takes it after B-16.
 - 2026-10-19 lane 3: built anyway on night/lane-3, commit 0377f7a, since no lane 4 branch touches it: `github.refresh-mine` (one `gh search prs --author=@me --state=open`, drafts kept), `github.poll` (one `gh api graphql` nodes query for every watched, unsnoozed PR; each CI/comment/review/approval/merged/closed/conflict change is one `pr-status` item naming the change, with an OS notification), `github.watch`, `github.snooze` (local midnight), page `V` with enter/v/z (`w` is the tree key), `github.install-schedule {"which":"mine"|"poll"}`; outline §17; e2e case `github_prs`; verified: /root/proj/night/logs/lane-3-B-18.log. The status line is left as lane 4's accidental claim left it; set it to `review · owner: vps2 lane 3 · branch: night/lane-3` when the claim is settled.
+- 2026-10-19 11:02 vps2 lane 4: claim released; it was set by mistake at 10:11 by an unanchored sed in the B-28 claim commit (e521965). No work was started and night/lane-4 holds no code for this item.
 
 ### B-19 Linear as a source of action items
 
@@ -520,7 +521,7 @@ notes:
 
 ### B-08 Rail height budget: sections capped by percent, one-line rows, panes get most of it
 
-status: claimed · priority: p1 · size: M · owner: vps2 lane 4 · branch: · verified:
+status: ready · priority: p1 · size: M · owner: · branch: · verified:
 
 Learned from tuios's own rail: `appearance.sidebar.sections` (default
 `sessions:25,terminals,files:25,agents:34`) gives every section a percent share of the height, a
@@ -548,6 +549,7 @@ Acceptance:
 notes:
 - 2026-10-19 from the comparison with tuios's sidebar.
 - 2026-10-19 vps2 lane 1: skipped; it was already `claimed` by vps2 lane 4 when this lane reached it.
+- 2026-10-19 11:02 vps2 lane 4: claim released; it was set by mistake at 10:11 by an unanchored sed in the B-28 claim commit (e521965). No work was started and night/lane-4 holds no code for this item.
 
 ### B-09 Pane lifecycle in the rail: working at the bottom and locked, review at the top, rest in the middle
 
