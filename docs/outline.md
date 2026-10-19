@@ -112,6 +112,7 @@ Grouping       = { id, levels: ["harness","project","top-task"] }
 Modal          = { id, kind: "list"|"form"|"tree", source: sourceId, onPick: { replace: id } | { command } }
 Form           = { id, submit: commandName, fields: [Field], box: "top" }   // drawn in the top ~8 lines, content pushed down
 Field          = { name, key: char, source: sourceId, preview?: sourceId, add?: "task"|"project", multi?: bool, hint? }
+                 // add: text matching no option is taken as the name of a new one, created on submit under the form's context
                  // key: the one highlighted char in the field's button; pressing it focuses the field
 Action         = { name, mode, defaultKey, does }     // from config/keys.go today
 ```
@@ -360,7 +361,8 @@ VimSession = { id, name, path, project_id, task_id, cwd, created }
   - a field is a button with one highlighted char; that char focuses the field and enters input mode
   - a form opens in normal mode (keys pick fields, `esc` closes, `/` filters); `esc` in input mode returns to normal; `tab` / `shift+tab` cycle fields
   - every option list is fuzzy; `ctrl+n` / `ctrl+p` move in it; moving through options previews the option's object: the rail selects it, the detail shows it
-  - `+ add new…` opens the mass-add outline (parked form); in it `tab` / `shift+tab` change the nesting level
+  - a task, project or parent field with no exact match creates one on submit: the typed text is the name; a new task goes under the form's parent (the pinned task, or the field's chosen parent), a new project is a new project; the hint reads `new: <text>` so it is never a surprise
+  - `+ add new…` opens the mass-add outline (parked form) for more than one at a time; in it `tab` / `shift+tab` change the nesting level
   - delete confirmation defaults to `y`; `esc` closes the palette so `ctrl+p` can move up in it
 - modal input library: every modal and form runs on one engine; a config of modes, bindings (key → action) and actions (action → method on the object); fed keys one at a time, it tracks the mode and the object
   - [ ] plain text input through neovim (embedded or headless) is the ideal; the engine is the fallback
