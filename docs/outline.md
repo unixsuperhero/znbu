@@ -285,7 +285,7 @@ Counts      = { scrollback, activity, transcript, history, total }
 HistoryEntry   = { id, kind, at, observed, source, source_id, session?, window?, summary, detail, turn?: HarnessTurn }
 HarnessTurn    = { id, harness, conversation_id, session, window, prompt, response?,
                    started_at, completed_at?, transcript_path?, response_message? }
-Review         = { id: promptHistoryId, session, window, pane, harness, prompt, response,
+Review         = { id: promptHistoryId, turn_id?, session, window, pane, harness, prompt, response,
                    responses: [ReviewResponse], output?, started_at, completed_at, reviewed_at }
 ReviewResponse = { id, at, text }
 ReviewMark     = { [historyId]: reviewedAtMs }
@@ -299,12 +299,13 @@ ReviewMark     = { [historyId]: reviewedAtMs }
 - folder: `~/.local/share/tuios-deck/captures`
 - autocapture: `events.Handler`, writes `-turn` / `-cmd` on turn or command end
 - terminal snapshots supplement the structured harness turn records in history; they do not replace the full prompt and final answer
+  - packaged turn snapshots link to their review by session, window ID, and turn ID, not an exact timestamp or a mutable pane name
 - `List`, `Read`, `Dir` (no store import)
 - commands: `captures.capture`, `captures.delete`
 - page: captures
 
 ```js
-Capture = { name, path, size, modified, session, pane, kind: "turn"|"cmd"|"" }
+Capture = { name, path, size, modified, session, pane, window?, turn_id?, kind: "turn"|"cmd"|"" }
 ```
 
 - `Capture belongs_to :pane (session+pane name)`
