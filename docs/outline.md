@@ -50,7 +50,7 @@ Unit = { id, tables: [name], commands: [name], emits: [type], listens: [daemonTy
 
 ```js
 Wiring = { client, store, config?, registry, bus, runner,
-           units: [work, prompts, context, history, reviews, captures, notes, reminders, panes],
+           units: [work, code, prompts, context, history, reviews, captures, notes, reminders, panes],
            shells: [tui | cli] }
 ```
 
@@ -146,24 +146,28 @@ StartAgentParams = { session, agent, name, cwd, prompt, ready_timeout }
 - listens: `agent-state`, `window-closed`, `window-created`, `session-*`
 - activity/transcript rendering stays here
 - `HiddenTasks` moves out (needs store) → work unit
+- a pane lives on a tuios host; `local` is the deck's own daemon, other hosts are the registered ones (`tuios hosts`); a pane is identified by host + session + window everywhere the deck stores a window
+- `cwd` is what the code unit (§6.13) uses to tell which worktree a pane is in and whether an agent is working there
 
 ```js
-Session = { name, attached, dir, branch, panes: [Pane] }
+Session = { host, name, attached, dir, branch, panes: [Pane] }
 Pane    = { session, id, name, state, harness, foreground, cwd, message, blocked_by,
             is_agent, ready, needs_you, queued, unread, working, last_activity, idle_ms, stale }
 ```
 
-- `Session has_many :panes`
-- `Pane belongs_to :session`
+- `Session has_many :panes; Session belongs_to :host`
+- `Pane belongs_to :session; Pane has_one :worktree (by cwd, through code)`
 
 ### 6.3 work — projects, tasks, assignments
 
 - tables: `projects`, `tasks`, `assignments`, `active`
-- a project is a git repo
-  - new project: pick an existing repo (the common case) or a folder, which the deck turns into one with `git init`
-  - on pick the deck lists the repo's worktrees (`git worktree list`) into `trees`; the person picks the default
-  - every new agent or terminal starts in the active project's chosen tree unless the form says otherwise; `Start(spec).cwd` defaults to it
-  - `settings` per project: default tree, default harness, default preset
+- a project is a real piece of work people do, named by what it is for; it is not a repo and not a folder
+  - a project has zero or more directories (§6.13): repos and plain dirs, each on a tuios host; most projects have one, a product with a frontend repo, a backend repo and a shared library has three
+  - new project: a name; directories are attached afterwards from a native picker, the repo scan or the CLI, never inferred from a path; a project with no directory still holds tasks
+  - a repo directory has worktrees; the project picks one default directory and a default worktree per directory
+  - a place (`Place`) is host + directory + worktree + branch; a task may pin its own place, a subtask inherits its parent's, and the project's defaults fill whatever is missing
+  - every new agent or terminal starts in the resolved place unless the form says otherwise; `Start(spec).cwd` and `Start(spec).host` default to it; the code unit warns when the place is dirty, busy or on the wrong branch
+  - `settings` per project: default directory, default worktree per directory, default harness, default preset
 - the pin: the deck is always pinned to one task; its project is the task's root project
   - `active` is one row and never empty once a task exists; `Scope` is derived from it
   - set through the project/task tree (`P`): one fully expanded tree of actual projects, tasks, and subtasks; no repeated `+ new` rows
@@ -173,20 +177,20 @@ Pane    = { session, id, name, state, harness, foreground, cwd, message, blocked
     - `Ctrl+s` submits every insertion and rename together, preserves the pin, and closes only on success; validation or concurrent tree changes retain the draft with an error and write nothing
     - `Escape` in normal mode discards the entire draft without writes; navigation and line editing never persist changes
     - `Enter` on a clean task pins it; on a clean project it pins the first open task or creates one if needed; dirty drafts must be saved or discarded first
-    - project creation and repository scanning remain separate palette actions with native filesystem pickers, not tree rows
+    - project creation, directory attachment and repository scanning remain separate palette actions with native filesystem pickers, not tree rows
   - almost everything the UI shows is under the pin: panes in the rail, context, captures, history, reviews, queue, vim sessions, notes
   - not scoped: the project switcher, Assign, help, palette, and settings; the tasks/projects page (`T`) follows its scope/all toggle
   - every scoped page has two modes: `scope` (rows under the pin, the default) and `all` (every row); `S` toggles, per page, and the title line reads `all` while it is on; the pin itself does not change
   - in `scope` mode, panes outside the selected project or task are not in the rail; the hidden count includes unassigned panes
   - unassigned panes, terminals, agents, and vim sessions are hidden whenever the UI is scoped to a project or task; only `all` mode shows them, in a `No Task` group at the bottom; a pane leaves that group the moment it is assigned
-- first run, no projects: the deck asks for a list of dirs (`repo_roots`), scans them for git repos, and offers each repo as a project to create; the scan is repeatable from the palette
-- inheritance: anything created with a parent takes the parent's task and project (a context item from an assigned pane, a note on a task, a queued prompt on a task, a subtask); the child stores no project of its own
+- first run, no projects: the deck asks for a list of dirs (`repo_roots`, each on a host), scans them for git repos, and offers each repo as a directory; the person names the projects and attaches repos to them, one project per repo by default; the scan is repeatable from the palette
+- inheritance: anything created with a parent takes the parent's task and project (a context item from an assigned pane, a note on a task, a queued prompt on a task, a subtask); the child stores no project of its own; a subtask also inherits its parent's place unless it sets one
 - themes
   - a project or task gets a random theme from the unassigned pool at creation
   - a theme counts as assigned while its owner is in a non-final state; final states: `done`, `skipped`
   - an unassigned pane uses the red/black theme (black text on a red background) in the rail's `No Task` group, visible only in `all` mode
 - rail row for a pane: first 4 chars of the project name in the project's theme, then the task title in the task's theme
-- task edit (`e`): title, parent (fuzzy), status; `ctrl+h` / `ctrl+l` walk the parent up and down so a task can be added under any node from anywhere
+- task edit (`e`): title, parent (fuzzy), status, place (directory, worktree, branch; blank inherits); `ctrl+h` / `ctrl+l` walk the parent up and down so a task can be added under any node from anywhere
 - rules owned here (today split ui/web)
   - `Resolve(window)` → task/project
   - `Target(task, project)` by id or name
@@ -195,7 +199,7 @@ Pane    = { session, id, name, state, harness, foreground, cwd, message, blocked
   - themes: 16 colours, free-colour pool, glyph sections
   - snoozes, `easy`, status, `MoveTask`
   - `ProjectOf(task)` walks parents to root (subtasks store no project_id)
-- commands: `work.add-project`, `work.patch-project`, `work.set-tree`, `work.pin`, `work.scan-repos`, `work.add-task`, `work.patch-task`, `work.move-task`, `work.assign`, `work.unassign`, `work.snooze`, `work.mass-add`
+- commands: `work.add-project`, `work.patch-project`, `work.set-default-place`, `work.pin`, `work.add-task`, `work.patch-task`, `work.move-task`, `work.assign`, `work.unassign`, `work.snooze`, `work.mass-add` (directories and the repo scan are `code.*`, §6.13)
 - emits: `projects.changed`, `tasks.changed`, `assignments.changed`
 - pages: tasks (`T`, scope/all); modals: project/task tree (`P`), task tree (`w`)
 - task tree modal (`w`, from any item): the lineage of that item only
@@ -204,22 +208,23 @@ Pane    = { session, id, name, state, harness, foreground, cwd, message, blocked
   - never the whole project; the tasks page is for that
 
 ```js
-Project    = { id, name, theme: Theme, status, created, repo: path, trees: [Tree], default_tree: path,
-               settings: { harness?, preset? } }
-Tree       = { kind: "worktree"|"clone"|"dir", path, repo?, branch? }
-Active     = { task_id, tree: path }                   // one row; project is ProjectOf(task)
-Settings   = { repo_roots: [dir], stale_after, … }          // scan roots for the first run and the palette scan action
-Task       = { id, parent_id, project_id, title, theme: Theme, status, easy?, snoozed_until?, created, updated }
-Assignment = { [window]: { session, task_id, project_id } }
+Project    = { id, name, theme: Theme, status, created, dir_ids: [id], default_dir?: id,
+               settings: { harness?, preset?, worktree: { [dir_id]: worktree_id } } }   // default worktree per directory
+Place      = { host, dir_id, worktree_id?, branch? }   // where work happens; task place > parent place > project defaults
+Active     = { task_id, place: Place }                 // one row; project is ProjectOf(task); place is the resolved one
+Settings   = { repo_roots: [{ host, dir }], stale_after, pr_poll, … }   // scan roots for the first run and the palette scan
+Task       = { id, parent_id, project_id, title, theme: Theme, status, easy?, snoozed_until?, place?: Place, created, updated }
+Assignment = { [window]: { host, session, task_id, project_id } }
 Theme      = { color: ansiName, glyph }
 ```
 
 - `Project has_many :tasks (top-level only)`
 - `Task belongs_to :project (root only); Task belongs_to :parent (Task); Task has_many :subtasks`
-- `Assignment belongs_to :pane (by window); belongs_to :task or :project`
+- `Assignment belongs_to :pane (by host + window); belongs_to :task or :project`
 - `Project has_one :theme; Task has_one :theme`
-- `Project has_many :trees; Project has_one :default_tree (Tree)`
-- `Active belongs_to :task; Active has_one :project (through task); Active has_one :tree`
+- `Project has_and_belongs_to_many :dirs (code); Project has_one :default_dir (Dir); Project has_one :default_worktree per dir`
+- `Task has_one :place (optional; subtasks inherit)`
+- `Active belongs_to :task; Active has_one :project (through task); Active has_one :place`
 
 ### 6.4 prompts — presets, queue, stash, dispatch, agent start
 
@@ -237,7 +242,8 @@ Theme      = { color: ansiName, glyph }
 Preset        = { id, name, prefix, cwd, created }
 QueuedPrompt  = { id, text, preset, task_id, project_id, cwd, session, agent, window, created }
 StashedPrompt = { draft_id?, text, saved }
-StartSpec     = { session, agent, name, cwd, prompt, preset?, task?, project?, attach?: [path] }
+StartSpec     = { host, session, agent, name, cwd, prompt, preset?, task?, project?, place?: Place, attach?: [path] }
+                // place: the resolved host/dir/worktree/branch the agent is expected to work in; recorded on the turn
 ```
 
 - `QueuedPrompt belongs_to :preset; belongs_to :task or :project; belongs_to :pane (window)`
@@ -282,7 +288,8 @@ Counts      = { scrollback, activity, transcript, history, total }
 - commands: `reviews.mark`, `reviews.unmark`
 - emits: `history.changed`, `reviews.changed`
 - pages: history, reviews, Turns tab
-- history is a timeline of everything the deck manages: prompt submitted, response completed, command run, session start, subagent start/stop, assignment, task status change, capture written, reminder fired
+- history is a timeline of everything the deck manages: prompt submitted, response completed, command run, session start, subagent start/stop, assignment, task status change, capture written, reminder fired, worktree dirty/clean, head moved (commit, merge, rewrite, checkout), PR opened/merged/closed, CI changed
+- a turn records the place it ran in (`HarnessTurn.place`) so a commit or dirty change can be traced back to the turn, and the turn to its task
 - review queue: a turn is listed only after it finishes, in finishing order, oldest at the top, newest at the bottom; it lives in the top section of the deck rail (§7.1), not only on its own page
   - highlighting an entry previews it in the detail area and does not mark it reviewed
   - giving the detail area focus (`l` or `right`) on an entry marks it reviewed; `r` toggles the mark by hand either way
@@ -290,8 +297,8 @@ Counts      = { scrollback, activity, transcript, history, total }
 
 ```js
 HistoryEntry   = { id, kind, at, observed, source, source_id, session?, window?, summary, detail, turn?: HarnessTurn }
-HarnessTurn    = { id, harness, conversation_id, session, window, prompt, response?,
-                   started_at, completed_at?, transcript_path?, response_message? }
+HarnessTurn    = { id, harness, conversation_id, host, session, window, prompt, response?,
+                   started_at, completed_at?, transcript_path?, response_message?, place?: Place }
 Review         = { id: promptHistoryId, turn_id?, session, window, pane, harness, prompt, response,
                    responses: [ReviewResponse], output?, started_at, completed_at, reviewed_at }
 ReviewResponse = { id, at, text }
@@ -367,17 +374,76 @@ Action = { name, mode, default, does }
 
 - a vim session is the deck's own editor: a tuios pane running `nvim` that the deck started, for editing the files of a project or task; it is the third kind of pane beside terminal and agent
   - same rail section, same row format, same assignment, same `No Task` rule; `enter` goes live on it like any pane
-  - opened in the tree it was made for, with a session file per vim session so closing and reopening restores it (`nvim -S`)
+  - opened in the worktree it was made for, with a session file per vim session so closing and reopening restores it (`nvim -S`)
   - a pane running nvim that the deck did not start is still a terminal
-- opening neovim starts it in the active project/task's tree; a form may pick another tree
+- opening neovim starts it in the active task's resolved place; a form may pick another worktree
 - commands: `vim.open`, `vim.list`, `vim.forget`
 - [ ] where sessions are discovered: a sessions dir the deck owns, or nvim's own
 
 ```js
-VimSession = { id, name, session_file: path, window?, project_id, task_id, cwd, created }   // window: the pane while it is open
+VimSession = { id, name, session_file: path, window?, project_id, task_id, place: Place, cwd, created }   // window: the pane while it is open
 ```
 
-- `VimSession belongs_to :project; VimSession belongs_to :task (optional); belongs_to :tree; has_one :pane (window, while open)`
+- `VimSession belongs_to :project; VimSession belongs_to :task (optional); belongs_to :worktree (through place); has_one :pane (window, while open)`
+
+### 6.13 code — directories, worktrees, branches, commits, PRs, CI
+
+- the source-control side of a project: where its code lives and what state that code is in; work (§6.3) owns the work, this unit owns the places the work happens and what happened to them
+- tables: `dirs`, `worktrees`, `branches`, `commits`, `head_moves`, `prs`
+- a directory is a path on a tuios host (`host` + `path`); `local` is the deck's own host; the same path on two hosts is two directories
+  - `kind: "repo"` when the path is inside a git repository, `"dir"` otherwise; a plain dir has one implicit worktree, itself, and no branch
+  - a directory may belong to more than one project (a shared library); a project lists its directories and picks a default
+  - new directories come from a native picker, the repo scan (`code.scan-repos`: first run and palette) or the CLI; the scan lists repos, the person attaches them to projects
+  - git and `gh` run on the directory's host, through that host's tuios daemon; a host the deck cannot reach leaves its rows `unknown`, never `clean`
+- worktrees: `git worktree list` per repo, refreshed by `code.refresh`, on a timer (`worktree_poll`, default 30s) and after every turn or command in a pane inside the repo; the deck records what git reports and does not create worktrees (see §10)
+  - each worktree knows its branch, `head`, and whether it is dirty; `observed` says how old that knowledge is
+  - who is on it: every pane whose `cwd` is inside the worktree, with its task and whether it is working (`WorktreeUse`), derived from the panes unit, never stored
+- dirty attribution: when a refresh sees the status change, the change is blamed on what ran in that worktree since the previous observation
+  - an agent turn (`HarnessTurn`) in a pane inside the worktree → `{ kind: "turn", turn_id }`
+  - a shell command in a terminal pane inside the worktree (history command entry) → `{ kind: "command", history_id }`
+  - nothing the deck saw → `{ kind: "unknown" }`, never a guess; every cause in the window is kept, newest first
+  - the blame list clears when the worktree is clean again; history keeps both the dirty and the clean entry
+- branches and commits: each worktree's branch, its upstream, ahead/behind, and the commits made since the deck first saw the branch
+  - a commit is blamed like a dirty change: the turn or command that moved `HEAD`
+  - a branch can be bound to a task (`code.bind-branch`); every commit, PR and dirty change on it then links to that task and its project; a turn's commit also links to the turn's task through its pane assignment, and the two must agree or the row shows both
+- head moves: every change of a worktree's `HEAD` is a row with `from`, `to` and `kind`; `kind` comes from the graph: `to` descends from `from` → `commit`, or `merge` when `to` has two parents; `from` no longer reachable → `rewrite` (rebase, amend, reset); a branch switch → `checkout`
+  - after a rewrite the deck matches the old commits to the new ones by patch id and sets `Commit.superseded_by`, so turn → commit links survive rebases and squashes; the old sha stays in history
+- PRs and CI: for every branch with an upstream, `gh pr view --json` and `gh pr checks`, polled on `pr_poll` (default 2m) and refreshed when a turn ends; the PR links to its branch, so to its task
+  - CI is one state per PR with the per-check list under it; `unknown` with a reason when `gh` is missing, offline or rate-limited
+  - a context item of kind `pr` links to the same row (`code.link-pr`)
+- starting an agent in the right place: `NewSpec` (§7.1) resolves host, directory, worktree and branch from the task's place, else the parent's, else the project's defaults; the start form shows the resolved place and warns, without blocking, when
+  - the worktree is dirty (with the blame), or another agent is already working in it
+  - the worktree's branch is not the task's bound branch, or that branch is behind its base
+  - the task's PR is merged or closed, or its CI is failing
+  - the quick bindings (`n a`, `n t`, `n v`) still spawn at once; the warning shows in the status line and on the row instead
+- polling never touches view state: no selection, scroll, filter or modal changes; stale rows say so (§0 state inventory)
+- commands: `code.attach-dir`, `code.detach-dir`, `code.scan-repos`, `code.refresh`, `code.bind-branch`, `code.unbind-branch`, `code.link-pr`
+- emits: `dirs.changed`, `worktrees.changed`, `branches.changed`, `prs.changed`
+- listens: `window-created`, `window-closed`, `history.changed` (turn and command ends drive refresh and blame)
+- page: code (`D`, scoped): one section per directory, a row per worktree: branch, short head, dirty + blame, agents on it, PR state, CI state; detail lists head moves and commits with their turns and tasks; `enter` on a PR opens it
+- depends on: panes (cwd, working), history (turns, commands), work (assignments, tasks, places)
+
+```js
+Dir         = { id, host, path, kind: "repo"|"dir", remote?: url, default_branch?, created, observed }
+Worktree    = { id, dir_id, path, branch_id?, head: sha, main: bool, dirty: Dirty | "clean" | "unknown", observed }
+Dirty       = { since, files: n, blame: [Blame] }
+Blame       = { kind: "turn"|"command"|"unknown", turn_id?, history_id?, host?, window?, task_id?, at }
+WorktreeUse = { worktree_id, host, window, task_id?, working: bool }        // derived from panes, not stored
+Branch      = { id, dir_id, name, upstream?, ahead, behind, head: sha, task_id?, observed }
+Commit      = { dir_id, sha, branch_id, subject, author, at, blame?: Blame, task_id?, superseded_by?: sha }
+HeadMove    = { id, worktree_id, from: sha, to: sha, kind: "commit"|"merge"|"rewrite"|"checkout", at, blame?: Blame }
+PR          = { id, dir_id, branch_id, number, url, title, base, state: "draft"|"open"|"merged"|"closed", head: sha,
+                ci: CI, task_id?, observed }
+CI          = { state: "pending"|"passing"|"failing"|"unknown", reason?, checks: [{ name, state, url }], observed }
+```
+
+- `Dir has_many :worktrees; Dir has_many :branches; Dir has_many :prs; Dir has_and_belongs_to_many :projects`
+- `Worktree belongs_to :dir; Worktree has_one :branch; Worktree has_many :head_moves; Worktree has_many :uses (panes, by cwd)`
+- `Branch belongs_to :dir; Branch has_many :commits; Branch has_one :pr; Branch belongs_to :task (optional)`
+- `Commit belongs_to :branch; Commit belongs_to :turn (optional, through blame); Commit has_one :task (through branch or turn)`
+- `HeadMove belongs_to :worktree; HeadMove belongs_to :turn or :history_entry (through blame)`
+- `PR belongs_to :branch; PR has_one :ci; PR has_one :task (through branch)`
+- `Blame belongs_to :turn or :history_entry; Blame has_one :task (through the pane's assignment)`
 
 ## 7. Shells
 
@@ -406,8 +472,8 @@ VimSession = { id, name, session_file: path, window?, project_id, task_id, cwd, 
   - [ ] plain text input through neovim (embedded or headless) is the ideal; the engine is the fallback
 - new pane bindings: two per kind, six in all, on every page
   - quick: `n t` terminal, `n a` agent, `n v` vim session; spawns at once from `NewSpec`, no form, no question, the pane is live-ready when the key returns
-  - with form: `N t`, `N a`, `N v`; opens the form with the same `NewSpec` prefilled, the person edits, submit spawns
-  - `NewSpec` comes from the highlighted rail row when it is a pane or a vim session: its tuios session, task, project, tree/cwd, and for an agent its harness and preset; otherwise from the pin: the current tuios session, the pinned task, its project's default tree, `settings.harness`, `settings.preset`
+  - with form: `N t`, `N a`, `N v`; opens the form with the same `NewSpec` prefilled, the person edits, submit spawns; the form shows the resolved place and the code unit's warnings (§6.13)
+  - `NewSpec` comes from the highlighted rail row when it is a pane or a vim session: its host, tuios session, task, project, place/cwd, and for an agent its harness and preset; otherwise from the pin: the current tuios session, the pinned task, its resolved place, `settings.harness`, `settings.preset`
   - the new pane is assigned to that task before the key returns, so it never lands in `No Task`
   - binding names in config: `new_terminal`, `new_agent`, `new_vim`, `new_terminal_form`, `new_agent_form`, `new_vim_form`
 - the title line always shows the pin: project glyph + name, task title, hidden pane count; `P` opens the switch modal from any page
@@ -451,8 +517,9 @@ VimSession = { id, name, session_file: path, window?, project_id, task_id, cwd, 
 ```js
 ViewState = { pin: Scope, all: { [pageId]: bool }, page: pageId, sel: { pane?: window, task?: id, ctx?: id }, scroll: { [pageId]: n },
               modal?: { def: Modal, state }, parked?: modal, confirm?, live?, status, filter?: query }
-NewSpec   = { kind: "terminal"|"agent"|"vim", session, task_id, project_id, cwd, harness?, preset?, name? }
-            // from the highlighted pane or vim row, else from the pin
+NewSpec   = { kind: "terminal"|"agent"|"vim", host, session, task_id, project_id, place: Place, cwd, harness?, preset?, name?,
+              warnings: [{ kind: "dirty"|"busy"|"branch"|"behind"|"pr"|"ci", text }] }
+            // from the highlighted pane or vim row, else from the pin; cwd is place's worktree path
 InputLib  = { modes: [name], mode: name, bindings: [{ mode, key, action }],
               actions: { [action]: (object, key) => void }, object }     // feed(key) → runs the bound action, may switch mode
 ```
@@ -472,7 +539,13 @@ InputLib  = { modes: [name], mode: name, bindings: [{ mode, key, action }],
 ## 8. Flows (who touches what)
 
 - start agent from TUI
-  - key → `Form form.start-agent` → submit `prompts.start-agent` → bus → prompts unit → daemon `start-agent` → `work.assign` (tx: assignments) → emit `assignments.changed` → shells re-read
+  - key → resolve `Place` (task → parent → project) → code unit warnings → `Form form.start-agent` → submit `prompts.start-agent` → bus → prompts unit → daemon `start-agent` on the place's host → `work.assign` (tx: assignments) → emit `assignments.changed` → shells re-read
+- turn ends in a worktree
+  - history records the turn with its place → `history.changed` → code unit refreshes that worktree → status changed: `Dirty.blame` gets the turn; `HEAD` moved: `HeadMove` + `Commit` with the turn, task through the pane's assignment → PR/CI refresh for the branch → `worktrees.changed`, `prs.changed` → code page and the rail row re-read
+- human command in a terminal pane
+  - command end → history command entry → same refresh; the blame is `{ kind: "command", history_id }`
+- rebase or squash
+  - refresh sees `HEAD` not descending from the last `head` → `HeadMove{ kind: "rewrite" }` → old commits matched by patch id → `superseded_by` set → turn → commit links still resolve
 - pane closes
   - daemon `window-closed` → runner → panes unit → `panes.changed` → work unit miss counter (2 misses → prune, tx: assignments) → `assignments.changed`
 - turn ends
@@ -500,9 +573,12 @@ InputLib  = { modes: [name], mode: name, bindings: [{ mode, key, action }],
 - [ ] command naming: `unit.verb` vs `unit/verb`
 - [ ] does `panes` unit cache or re-list on every `panes.changed`
 - [ ] where `Theme` pool lives: work or registry
-- [ ] `Tree.kind`: does the deck manage worktrees itself or only record a path
+- [ ] multiple hosts: one daemon connection per host, or the local daemon relaying to registered hosts
+- [ ] remote git: run through the host's tuios daemon, or over ssh directly
+- [ ] PR provider: `gh` only for the first build, or an interface with GitHub first
 - [ ] deck events: typed Go structs or `map[string]any` like daemon events
 - [ ] neovim as the text input engine: embedded, headless server, or not at all
 - [ ] the pin: one per deck process or one per tuios session
 - [ ] vim session discovery: deck-owned dir or nvim's
-- [ ] does the deck create worktrees (`git worktree add`) or only list and record them
+- [ ] does the deck create worktrees (`git worktree add`) and branches for a task, or only list and record them
+- [ ] dirty attribution window: blame everything since the last observation, or only panes that were active in it
