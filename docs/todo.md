@@ -959,7 +959,7 @@ notes:
 
 ### B-27 Downloads page: watch ~/Downloads, newest first, copy absolute paths
 
-status: ready · priority: p2 · size: S · owner: · branch: · verified:
+status: claimed · priority: p2 · size: S · owner: mac lane 5 · branch: night/lane-5 · verified:
 
 A page listing the files in `~/Downloads`, newest first, so a path just downloaded is one keypress
 from the clipboard. A `downloads` unit watches the directory with `fsnotify` (new dependency) and
@@ -1047,7 +1047,7 @@ notes:
 
 ### B-04 Help modal: two rows shift left and leak border glyphs
 
-status: claimed · priority: p2 · size: S · owner: mac lane 5 · branch: night/lane-5 · verified:
+status: review · priority: p2 · size: S · owner: mac lane 5 · branch: night/lane-5 · verified: /root/proj/redeck-astra-verification/runs/run.e0LEqHJM/verification.log
 
 Screenshot: [attachments/B-04-help-modal-alignment.png](attachments/B-04-help-modal-alignment.png),
 deck on a wide terminal, `?` on the Panes page, filter `all`.
@@ -1076,6 +1076,7 @@ Acceptance:
 
 notes:
 - 2026-10-19 reported from a screenshot; not to be worked on yet.
+- 2026-10-19 mac lane 5: the shifted rows were the rows whose rail line behind the modal held an emoji pane title with a variation selector (omp titles such as `π > ⌨️ VIM`, `π > 🖥️ VPS`); deck measured the cluster as 2 cells, the terminal drew 1, so the rest of the row moved one cell left. Not a help_view width bug: the tuios mirror on vps2 renders those rows aligned. Fix: `clean()` drops U+FE0E/U+FE0F. Alignment rule chosen: one key width per column (matches help-good.png). e2e help asserts borders, no inner `│`, no variation selectors and one description start per column at 80/120/200 for every tab; it fails on the old code. Commits 31ceec9 (flaky help motion wait), 833336d. Full suite: all green except `history_review` (also flaky on main) and `native_picker` (macOS only). Not checked in Ghostty itself.
 
 ## p3 · someday
 
