@@ -301,7 +301,12 @@ Action = { name, mode, default, does }
 - loses: domain logic (→ units), page enum (→ registry `Page`), closures over Model in forms (→ `Field.source`)
 - one modal slot; `replace` or close; mass-add is the one parked modal
 - pages dispatch through registry: `keys`, `rail`, `detail`, `helpLine`
-- live mode untouched (one input goroutine, lease, zoom/fullscreen)
+- live mode: `enter` on a pane goes live; the live screen draws in the detail area under a live bar, the rail stays; never full-screen on the deck side
+  - `ctrl+a` is the leader; the key after it is a command; every other key goes to the pane untouched, including `esc`
+  - `ctrl+a d` detach (back to the deck) · `ctrl+a j` / `ctrl+a k` next / prev pane · `ctrl+a Z` / `ctrl+a f` zoom / fullscreen the pane inside tuios (its own session, not the deck) · `ctrl+a ctrl+a` types a literal ctrl+a · `ctrl+a ?` keys · `esc` after the leader cancels it
+  - bindings live in config under mode `live`: leader, detach, next_pane, prev_pane, zoom_pane, fullscreen_pane, help
+  - never a bare key as the exit: no held `esc`, no `ctrl+z`; the pane's program owns those
+  - one input goroutine in order; `stream-pane` for the size lease and frames; `capture-pane` is the screen
 - presence held by shell; transcript reader takes nonce as arg
 
 ```js
