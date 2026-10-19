@@ -32,7 +32,7 @@ Item = { id: "B-01", status: "ready", priority: "p1", size: "M",   // S < half a
 
 ### B-28 Provenance on every record: turn, pane, task, project, commit, PR
 
-status: ready · priority: p1 · size: M · owner: · branch: · verified:
+status: claimed · priority: p1 · size: M · owner: vps2 lane 4 · branch: · verified:
 
 Cross-cutting. Every row that comes out of a turn or a check links back to where it came from, so a
 PR can be traced to the turn that wrote its commits, the task that turn was on, and the project.
@@ -406,7 +406,7 @@ notes:
 
 ### B-18 My PRs: open and drafts, watching, snooze until midnight, CI and status change alerts
 
-status: ready · priority: p1 · size: M · owner: · branch: · verified:
+status: claimed · priority: p1 · size: M · owner: vps2 lane 4 · branch: · verified:
 
 ```js
 MyPR = { url, number, repo, title, draft, state, ci: "pending"|"pass"|"fail"|"unknown",
@@ -480,7 +480,7 @@ notes:
 
 ### B-08 Rail height budget: sections capped by percent, one-line rows, panes get most of it
 
-status: ready · priority: p1 · size: M · owner: · branch: · verified:
+status: claimed · priority: p1 · size: M · owner: vps2 lane 4 · branch: · verified:
 
 Learned from tuios's own rail: `appearance.sidebar.sections` (default
 `sessions:25,terminals,files:25,agents:34`) gives every section a percent share of the height, a
