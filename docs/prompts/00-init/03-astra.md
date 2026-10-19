@@ -1,0 +1,17 @@
+---
+seq: 3
+type: 00-init
+agent: astra
+harness_model: omp / openai-codex gpt-6-astra:high (workers later gpt-6.1-sol)
+target: redeck-astra / 7593f7e1
+cwd: ~/proj/redeck-astra
+sent_at: 2026-10-18 19:37
+delivery: tuios start-agent --prompt
+agent_state_at_send: idle (fresh pane)
+steering_active_turn: false
+notes: Hit the Codex weekly limit ~19:52; a saved reset was spent on the person's say-so. Reported done 20:19 (13 commits).
+---
+
+Greenfield project. /Users/unixsuperhero/proj/redeck-astra is a fresh git repository holding one file, docs/outline.md: the complete spec of a Go program named deck, a terminal dashboard that drives the tuios daemon over its JSON verb socket. Build it, as fast as possible in wall-clock time.
+
+Read docs/outline.md fully first. It describes the target system; where it says unchanged or today or names a migration step, there is nothing yet, so build the target directly, in the dependency order of section 9. Section 0b holds the build rules: use the frontend-design skill for every TUI surface even though it is a terminal; fan out parallel subagents, one unit or page each, using only the openai-codex provider models (gpt-6-astra, gpt-6.1-sol, gpt-6-luna through the ChatGPT login, no API cost), never an Anthropic model or a paid API provider; no web UI. tuios is on PATH; tuios list-verbs --json is the daemon contract and tuios --skill all its documentation; verify end to end against throwaway daemons (tuios --server NAME ... and kill-server), never the daemon this pane runs in. Go module github.com/unixsuperhero/redeck-astra, Bubble Tea v2 (charm.land/bubbletea/v2, charm.land/lipgloss/v2), sqlite via modernc.org/sqlite. Commit after every working step with conventional commits; never amend. Do not ask questions; decide, and record each open decision you settled in section 10 of the outline. When done, mail a summary to session inbox-451e6dcc, window e01e2e76-582c-436a-bf24-5056d7f13b18 with: tuios send-agent-message (see tuios --skill mail).
