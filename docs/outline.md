@@ -167,12 +167,13 @@ Pane    = { session, id, name, state, harness, foreground, cwd, message, blocked
   - almost everything the UI shows is under the pin: panes in the rail, context, captures, history, reviews, queue, vim sessions, notes
   - not scoped, ever: the tasks/projects page (`T`), the help, the palette, the settings
   - a pane assigned to another task is not in the rail; a count in the title line says how many are hidden
+  - a pane with no assignment is always in the rail, under every pin, in a `No Task` group at the bottom; its rows draw in the red/white theme; it leaves the group the moment it is assigned
 - first run, no projects: the deck asks for a list of dirs (`repo_roots`), scans them for git repos, and offers each repo as a project to create; the scan is repeatable from the switch modal
 - inheritance: anything created with a parent takes the parent's task and project (a context item from an assigned pane, a note on a task, a queued prompt on a task, a subtask); the child stores no project of its own
 - themes
   - a project or task gets a random theme from the unassigned pool at creation
   - a theme counts as assigned while its owner is in a non-final state; final states: `done`, `skipped`
-  - a pane with no assignment draws in the obnoxious red/white theme
+  - a pane with no assignment draws in the obnoxious red/white theme, inside the rail's `No Task` group
 - rail row for a pane: first 4 chars of the project name in the project's theme, then the task title in the task's theme
 - task edit (`e`): title, parent (fuzzy), status; `ctrl+h` / `ctrl+l` walk the parent up and down so a task can be added under any node from anywhere
 - rules owned here (today split ui/web)
@@ -359,7 +360,7 @@ VimSession = { id, name, path, project_id, task_id, cwd, created }
 - modal input library: every modal and form runs on one engine; a config of modes, bindings (key → action) and actions (action → method on the object); fed keys one at a time, it tracks the mode and the object
   - [ ] plain text input through neovim (embedded or headless) is the ideal; the engine is the fallback
 - the title line always shows the pin: project glyph + name, task title, hidden pane count; `P` opens the switch modal from any page
-- deck page keys: `h` / `l` move between rail and detail; `{` / `}` jump by group; `o` / `O` cycle the grouping; `w` the task tree modal from any item; `e` edit
+- deck page keys: `h` / `l` move between rail and detail; `{` / `}` jump by group (`No Task` is one); `o` / `O` cycle the grouping; `w` the task tree modal from any item; `e` edit
 - stale panes: no activity past `stale_after` marks the row stale and groups them; a palette command closes them
 - pages dispatch through registry: `keys`, `rail`, `detail`, `helpLine`
 - live mode: `enter` on a pane goes live; the live screen draws in the detail area under a live bar, the rail stays; never full-screen on the deck side
@@ -425,6 +426,5 @@ InputLib  = { modes: [name], mode: name, bindings: [{ mode, key, action }],
 - [ ] deck events: typed Go structs or `map[string]any` like daemon events
 - [ ] neovim as the text input engine: embedded, headless server, or not at all
 - [ ] the pin: one per deck process or one per tuios session
-- [ ] a pane assigned to no task: hidden under every pin, or shown under every pin in the red/white theme
 - [ ] vim session discovery: deck-owned dir or nvim's
 - [ ] does the deck create worktrees (`git worktree add`) or only list and record them
