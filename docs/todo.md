@@ -60,7 +60,7 @@ notes:
 
 ### B-35 Replace the one-off orchestrator with a stuck-pane check that raises action items
 
-status: ready · priority: p1 · size: M · owner: · branch: · verified:
+status: review · priority: p1 · size: M · owner: claude (redeck-astra pane) · branch: matomeru main · verified: vps2 outline case stuck_check
 
 The overnight orchestrator landed in main as a second program (`cmd/orchestrator` plus
 `internal/orchestrator`, about 1,300 lines). It parses znbu's todo.md, edits owner strings and keeps
@@ -84,6 +84,7 @@ Acceptance:
 
 notes:
 - 2026-10-19 the user asked why the orchestrator is so specific; agreed to drop it for this.
+- 2026-10-19 built as `panes.stuck-check` (outline §16): stateless over the daemon's `agent_state_at`, so the CLI and a schedule agree; `same-state` and `waiting-input` only. The repeat-failure rule is not carried (it needs the pane tail and harness `meta.now`); add it as a third rule if wanted. Nothing is scheduled by default: palette `Watch for stuck panes` adds a one-minute schedule. Orchestrator directories, its e2e suite and the todomd edit helpers are removed.
 
 ### B-31 Forms redesign: precise, modal, hierarchy-aware, replaces the top-8-lines box
 
