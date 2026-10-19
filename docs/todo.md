@@ -314,7 +314,7 @@ notes:
 
 ### B-15 ActionItem unit, page and the one-character global indicator
 
-status: ready · priority: p1 · size: M · owner: · branch: · verified:
+status: claimed · priority: p1 · size: M · owner: vps2 lane 3 · branch: night/lane-3 · verified:
 
 Everything that needs the user's attention, from any source, in one place.
 
