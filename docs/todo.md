@@ -25,6 +25,20 @@ Item = { id: "B-01", status: "ready", priority: "p1", size: "M",   // S < half a
 
 ## p1 · tonight
 
+### B-21 Settings: a page plus per-service config areas, reachable by one key or one command
+
+status: ready · priority: p1 · size: M · owner: · branch: · verified:
+
+B-16 to B-20 need identity and preferences the user must type once: GitHub username (`instajosh`),
+Slack username and user id, oncall weeks and channels, poll intervals, notification on or off. These
+live in the store (not only config.toml), with a settings page listing every section, and each
+service page (slack, github, linear, schedules) opening its own section with one key and one palette
+command (`settings…`, `slack settings…`). Empty required settings show on the page as a visible
+"needs: github username" line so nothing silently does not run.
+
+notes:
+- 2026-10-19 stub; a background agent is expanding the shape and acceptance.
+
 ### B-12 Deck as an MCP server, configured into every agent deck starts
 
 status: ready · priority: p1 · size: L · owner: · branch: · verified:
