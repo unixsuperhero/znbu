@@ -16,6 +16,8 @@ outline's done list when it ships.
   name and the verification log path, and the human or the orchestrator moves it to `done`.
 - Keep notes under the item, dated, newest last. Decisions go there, not in chat.
 - Work the list top to bottom inside a priority. `p1` is tonight, `p2` is this week, `p3` is someday.
+- Anything that changes existing behaviour (as opposed to adding new) ships behind a toggle on the
+  settings page (B-21), default on or off as the item says; the Neovim input engine is the model case.
 
 ```js
 Item = { id: "B-01", status: "ready", priority: "p1", size: "M",   // S < half a day, M a day, L more
@@ -24,6 +26,16 @@ Item = { id: "B-01", status: "ready", priority: "p1", size: "M",   // S < half a
 ```
 
 ## p1 · tonight
+
+### B-25 Command palette opens in search mode
+
+status: ready · priority: p1 · size: S · owner: · branch: · verified:
+
+`:` opens the palette already typing into the filter; `esc` once leaves search and once more closes.
+Toggle in settings (B-21) since it changes existing behaviour.
+
+notes:
+- 2026-10-19 stub; expanded by a background agent.
 
 ### B-21 Settings: a page plus per-service config areas, reachable by one key or one command
 
@@ -712,6 +724,56 @@ notes:
 
 ## p2 · this week
 
+### B-22 Feature inventory with review marks, growing into an in-app registry
+
+status: ready · priority: p2 · size: L · owner: · branch: · verified:
+
+Port `~/proj/tuios-deck/docs/plans/2026-10-18-feature-inventory.md` to deck: every page, action,
+palette command, modal, grouping, command, struct and concept gets a stable id, a generated
+`docs/inventory.json`, and a keep/cut/unreviewed mark; stage 2 makes the registry (§5) gate cut
+features and adds a Features page. Deck's registry already enumerates pages, commands and actions, so
+stage 1 is mostly the struct and concept extractor.
+
+notes:
+- 2026-10-19 stub; expanded by a background agent.
+
+### B-23 Neovim as the input engine behind form fields, behind a settings toggle
+
+status: ready · priority: p2 · size: L · owner: · branch: · verified:
+
+Port `~/proj/redeck-astra2/docs/plans/neovim-input-engine.md`: one embedded headless Neovim with a
+vendored vim-rsi, Msgpack-RPC remote UI rendered inside deck's field layout, buffers per field, an
+ordered request worker, host navigation keys kept separate. Off by default; the toggle lives in
+settings (B-21); with it off the current shared engine stays exactly as is.
+
+notes:
+- 2026-10-19 stub; expanded by a background agent.
+
+### B-26 Changelog and release script in the tuios-deck style
+
+status: ready · priority: p2 · size: S · owner: · branch: · verified:
+
+Adopt the Changelog section of `~/proj/tuios-deck/AGENTS.md` and the `CHANGELOG2.md` shape: one entry
+per tag, one `###` list per concept in a fixed order (Store · CLI · Settings · Pages · Modals · Forms ·
+Actions and keybindings · Palette · Groupings · Rail and detail · Live mode · API · Events · Scripts
+and suites · Docs), one line per change starting with `added:` / `changed: …; was …` / `removed:` /
+`fixed:`. Port `scripts/release.sh` including the refuse-without-entry rule and the
+`.dev/changelog-prompt.md` it writes.
+
+notes:
+- 2026-10-19 stub; expanded by a background agent.
+
+### B-27 Downloads page: watch ~/Downloads, newest first, copy absolute paths
+
+status: ready · priority: p2 · size: S · owner: · branch: · verified:
+
+A page listing files in `~/Downloads` newest first, refreshed on a filesystem watch; `y` copies the
+absolute path of the selected row; `space` marks several and `y` then copies every marked path, one
+per line. New files since the page was last viewed are styled unread.
+
+notes:
+- 2026-10-19 stub; expanded by a background agent.
+
 ### B-05 Notes on almost anything, shown in the detail pane of every page
 
 status: ready · priority: p2 · size: L · owner: · branch: · verified:
@@ -755,6 +817,7 @@ history entry; whether a closed pane's notes surface anywhere besides history.
 
 notes:
 - 2026-10-19 asked for notes on "almost anything", displayed in the right pane on that item's page.
+- 2026-10-19 repeated: notes can be added to almost anything; the downloads page (B-27), documents (B-11) and action items (B-15) are owners too.
 
 ### B-04 Help modal: two rows shift left and leak border glyphs
 
