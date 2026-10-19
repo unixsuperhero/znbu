@@ -938,7 +938,7 @@ tag>..HEAD` and the diff. Both sections go into redeck-astra's `AGENTS.md` betwe
 
 `scripts/release.sh [patch|minor|major|vX.Y.Z] [--dry-run] [--changelog-prompt]` ported with:
 
-- remote `vps2` (`ssh://vps2/root/proj/redeck-astra.git`) wherever tuios-deck's says `origin`; there
+- remote `vps2` (the hub repo on that host) wherever tuios-deck's says `origin`; there
   is no GitHub remote, so the ahead/behind check and the pushes target `vps2/main`
 - the proxy priming block and the `deck update` hint removed; nothing goes to proxy.golang.org
 - kept: newest tag by semantic version (`v0.0.0` when none; the repo has no tag yet), refuse to tag a
