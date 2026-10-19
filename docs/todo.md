@@ -915,7 +915,7 @@ notes:
 
 ### B-26 Changelog and release script in the tuios-deck style
 
-status: ready · priority: p2 · size: S · owner: · branch: · verified:
+status: claimed · priority: p2 · size: S · owner: mac lane 5 · branch: night/lane-5 · verified:
 
 Adopt the `## Changelog` and `## Commits and releases` sections of `~/proj/tuios-deck/AGENTS.md` and
 the `CHANGELOG2.md` shape. `CHANGELOG.md` is a diff of deck between two tags, not a story: one entry
