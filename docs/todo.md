@@ -25,6 +25,151 @@ Item = { id: "B-01", status: "ready", priority: "p1", size: "M",   // S < half a
 
 ## p1 · tonight
 
+### B-08 Rail height budget: sections capped by percent, one-line rows, panes get most of it
+
+status: ready · priority: p1 · size: M · owner: · branch: · verified:
+
+Learned from tuios's own rail: `appearance.sidebar.sections = sessions:25,terminals,files:25,agents:34`
+gives every section a percent share of the height, a section scrolls inside its share, and
+`agent_rest_fold` folds a resting agent row to one line after a duration. Deck's rail today lets the
+review queue grow without limit and spends two lines on every row, so half the value takes all the
+space.
+
+- each rail section gets a percent cap of the rail height from config, with a default that hands the
+  majority to the panes section (for example `review:25,panes:60,working:15`); a section scrolls
+  within its share and shows `+N more` or a scroll mark, never pushes the next section down
+- rows are one line unless the second line carries something the first does not; the rule for when a
+  row earns a second line is written in the outline (for example: selected row, agent with a message,
+  row that is stale) and applies to every page
+- the panes section keeps the grouping headings from §7.1; headings count against the section's share
+
+Acceptance:
+
+- with 40 finished turns and 3 panes on a 40-row terminal, the review section takes at most its share
+  and the panes are all visible; `j` inside the review section scrolls it
+- a resting pane row is one line; a selected or messaging row is two; `deck config init` writes the
+  default shares and the e2e layout case asserts both
+
+notes:
+- 2026-10-19 from the comparison with tuios's sidebar.
+
+### B-09 Pane lifecycle in the rail: working at the bottom and locked, review at the top, rest in the middle
+
+status: ready · priority: p1 · size: L · owner: · branch: · verified:
+
+The rail becomes three sections that a pane moves through. Replaces the two-section rule in §7.1.
+
+```js
+RailSection = "review" | "panes" | "working"
+Lifecycle   = submit prompt → "working" (bottom, locked, oldest first, newest at the very bottom)
+            → turn ends → "review" (top; jumps to the bottom of that section; pronounced style:
+              background colour and a glyph)
+            → every accordion opened (= reviewed) → "panes" (middle), but only once the rail focus
+              moves to a different pane
+```
+
+- working section: a pane goes there the moment its state turns working or any active state after a
+  prompt (agents for sure; terminals after a command are undecided, see below). Rows are locked:
+  moving the cursor over a locked row shows no preview, the detail says `press u to unlock`; `u`
+  unlocks that row until focus leaves it, then it locks again on its own
+- review section: one row per pane that produced review records, never one per turn. Focusing the row
+  shows the review accordion (B-10) as the default detail, not the Screen tab; the pane's screen is
+  still reachable through the tab bar (B-06)
+- panes section: everything else, grouped as `o`/`O` say
+- a pane with nothing left to review returns to the middle only after the user moves rail focus off
+  it, so the row does not jump from under the cursor
+
+Acceptance:
+
+- submitting a prompt through `p` moves the row to the bottom section within one refresh, locked, and
+  `j` onto it shows the unlock hint and no screen; `u` shows the screen; `k` away then `j` back shows
+  the hint again
+- `turn_end` moves the row to the top section with the review style; opening every accordion then
+  moving to another row returns it to the middle; it does not move while focused
+- order in the working section is submission time, oldest first; in the review section, finishing
+  time, oldest first
+- §7.1 rewritten for three sections; `history_review` and `shared_navigation` cases updated
+
+Open before claiming: do terminals enter the working section after a command, or agents only; the key
+`u` is free today but check `deck list-actions`.
+
+notes:
+- 2026-10-19 the human called this the important one.
+
+### B-10 Review accordion: the detail for a pane with unreviewed turns
+
+status: ready · priority: p1 · size: L · owner: · branch: · verified:
+
+Modelled on tuios-deck's Turns tab (`~/proj/tuios-deck` README "The Turns tab", `internal/ui/turns.go`):
+an accordion, one row per thing to review, oldest at the top, everything collapsed on open.
+
+```js
+Accordion     = { pane, rows: [TurnRow], context: [ContextItem], auto_reviewable_count }
+TurnRow       = { turn_id, prompts: [Prompt], response, started_at, completed_at,
+                  reviewed_at?, auto_reviewable: bool, starred: bool, project_id, task_id }
+// several review records on one turn_id (steering prompts, one response) collapse into one TurnRow
+```
+
+- opening a row marks it reviewed; a row stays open until the accordion closes. All opened → the pane
+  is reviewed and B-09 lets it leave the review section
+- auto-reviewable: a turn that has later prompts after it was most likely read outside deck. Those
+  rows get a different background, a line above the list names the key that marks all of them
+  reviewed at once; the most recent turn is never auto-marked
+- several review records with the same turn id are one row with all its prompts listed and the one
+  response
+- `*` (or the key the outline picks) stars a row for finding later; starred rows are listed first on
+  the reviews page
+- every row carries the project and task of the pane that produced it
+- under the turn rows, the context items extracted from those responses, sorted and uniq'd, most
+  recent first, auto-associated with the pane's project and task; starrable in place. A starred
+  context item shows in the detail of the task it is directly on and of that task's direct parents
+  (the parent task chain and the project), not of siblings or cousins
+
+Acceptance:
+
+- a pane with three finished turns opens an accordion with three collapsed rows, oldest first;
+  `enter` on one marks only it reviewed (`deck review list` shows `reviewed_at`)
+- two review records with one turn id render as one row; opening it marks both
+- turns 1 and 2 of 3 are flagged auto-reviewable, the mass key marks exactly those two
+- a context item extracted from turn 3 appears under the rows, starring it makes it appear in the
+  detail of the pane's task and project, and in no sibling task
+- the review page lists starred rows first
+
+notes:
+- 2026-10-19 defined together with B-09; B-09 owns the rail movement, this owns the detail.
+
+### B-11 Documents page: starred docs, glow preview, live mode, unread theme
+
+status: ready · priority: p2 · size: M · owner: · branch: · verified:
+
+Reviewable documents already exist as review entries (§6.6: an md or html the agent wrote). Give them
+a page and a star.
+
+```js
+Document = { id, path, kind: "md"|"html", written_by: { session, window, turn_id }, project_id,
+             task_id, starred, read_at?, created }
+```
+
+- a documents page, key to be chosen (`A` captures, `C` context, `H` history, `D` panes, `R` reviews,
+  `T` tasks are taken), listing every agent-written document under the pin; starred first
+- a starred document is also a context item on its direct parents, so it shows in the task's and
+  project's detail (same parent rule as B-10) and in the context page
+- highlighting an md row previews it in the detail with `glow -tln` style rendering (the exact glow
+  flags to be confirmed against the installed glow); html rows show the source or a text rendering
+- `enter` goes live on the preview the same way as a pane: keys go to glow, `ctrl+a d` comes back
+- until a document has been opened live once, its row uses an "unread" theme that stands out;
+  opening live sets `read_at` and the row goes quiet
+
+Acceptance:
+
+- the page lists the two documents the `history_review` case writes, unread-styled; `enter` then
+  `ctrl+a d` round-trips and the row is no longer unread
+- starring one shows it in the owning task's detail and the project's detail, and on the context page
+- `deck document list --task ID` returns the rows with `starred` and `read_at`
+
+notes:
+- 2026-10-19 asked for with the review lifecycle; glow must be present on the host for the preview.
+
 ### B-06 Pane detail: tab bar with a live Screen tab first, learned from tuios-deck
 
 status: ready · priority: p1 · size: L · owner: · branch: · verified:
