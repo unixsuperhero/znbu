@@ -64,7 +64,7 @@ notes:
 
 ### B-25 Command palette opens in search mode
 
-status: claimed · priority: p1 · size: S · owner: vps2 lane 2 · branch: · verified:
+status: review · priority: p1 · size: S · owner: vps2 lane 2 · branch: night/lane-2 · verified: /root/proj/night/logs/lane-2-B-25.log
 
 Today `:` (`palette`, normal mode) opens the modal navigating and `/` (`search`, modal mode) sets
 `searching`; in `modalKeyAction` a searching modal closes on `esc` and `enter` leaves search and picks.
@@ -104,6 +104,13 @@ Acceptance:
 
 notes:
 - 2026-10-19 stub; expanded by a background agent the same day.
+- 2026-10-19 vps2 lane 2: shipped (commits f9f215e, 9aeb501; a misplaced check in the new e2e case was fixed in
+  413be4e; outline §14). `:` opens searching behind `palette.open_in_search` (default on); esc leaves search
+  once when a filter is typed and closes at once when nothing is typed (so `:` then esc still closes, which the
+  help and TUI suites rely on); `/` typed into an empty palette filter is ignored. The shared e2e `palette()`
+  helper only sends `/` when the palette opened navigating; scenarios that sent `:` then `/` now type straight
+  away. Verified: `palette_search` outline case green; the log is the branch-tip run shared with B-12 (suites
+  run one by one because `e2e-all.sh` stops at the host's flaky daemon/TUI suites, see B-21 note).
 
 ### B-21 Settings: a page plus per-service config areas, reachable by one key or one command
 
@@ -167,7 +174,7 @@ notes:
 
 ### B-12 Deck as an MCP server, configured into every agent deck starts
 
-status: claimed · priority: p1 · size: L · owner: vps2 lane 2 · branch: night/lane-2 · verified:
+status: review · priority: p1 · size: L · owner: vps2 lane 2 · branch: night/lane-2 · verified: /root/proj/night/logs/lane-2-B-12.log
 
 `deck mcp serve` speaks MCP over stdio from the same binary (Claude Code, Codex, OMP, opencode all
 take a stdio command); an HTTP transport comes second only if a harness refuses stdio. One tool
@@ -235,6 +242,21 @@ notes:
 - 2026-10-19 requested with the action-item and slack work; a subagent is checking what
   `~/work/ch/vaim` exposes as tools so the first list can borrow from it.
 - 2026-10-19 vaim survey folded in: env-bound identity, stdio bridge, versioned status with evidence, document auto-link.
+- 2026-10-19 vps2 lane 2: shipped as `internal/mcp` (commits 413be4e, da17ee4, db391e5; outline §15 = §7.4).
+  Hand-rolled stdio JSON-RPC, no SDK dependency. Identity from `TUIOS_SESSION`/`TUIOS_PANE_ID` (deck sets them
+  on every pane), task resolved per call through work.Resolve; `DECK_SESSION`/`DECK_WINDOW` override for bridges
+  and tests; no token, stdio needs none. Each call is a locally written `command-run` entry `mcp.<tool>` under
+  the pane's task (survives with no TUI running); the live TUI reload comes from the harness hooks' own
+  `tool_done` report of the MCP call, since the daemon emits `agent-state` only on a state change, not on a
+  message (probed on a throwaway daemon). Documents land in the reviews list, the existing document mechanism,
+  until B-11 exists. `todo_*` and `action_item_create` are passthrough tools listed only once `todo.*` /
+  `actions.create` register (B-13, B-15); names provisional. Harness recipes: claude `--mcp-config
+  <data dir>/mcp/claude-deck.json`; codex `-c mcp_servers.deck.*`; omp `~/.omp/agent/mcp.json` merge; opencode
+  `opencode.json` merge. `~/bin/h-mcp` is not on vps2, so AGENT_TARGETS was not consulted. Verified: `mcp_server`
+  outline case green (it starts a fake `claude` and sees `--mcp-config` arrive); full-suite log at the tip,
+  suites run one by one for the reason in the B-21 note; `context`, `native_picker` are macOS-only, and
+  `shared_navigation`, `readline`, `history_review`, `vim_sessions` timed out under load 6-8 in cases this
+  lane did not touch.
 
 ### B-13 Todo unit and page: items that are not yet tasks
 
