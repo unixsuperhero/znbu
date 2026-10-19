@@ -544,6 +544,37 @@ InputLib  = { modes: [name], mode: name, bindings: [{ mode, key, action }],
               actions: { [action]: (object, key) => void }, object }     // feed(key) → runs the bound action, may switch mode
 ```
 
+### 7.1a Lessons from tuios's Bubble Tea use
+
+Read against tuios (`charm.land/bubbletea/v2` v2.0.8, the version the deck pins) on 2026-10-18. herdr is Rust on ratatui and is not a reference for any of this.
+
+- same skeleton: one pointer-receiver model, `Init`/`Update`/`View`, a type switch over messages, a re-armed `tea.Cmd` per channel (their `ListenForPTYData`, our `waitLive` and the events tap); nothing structural to copy
+- modes: tuios's `Mode` enum holds two values; every other state is a `ShowX` boolean or pointer, routed by a fixed priority chain of ~20 `if`s plus eight prefix flags; their own comments record overlay kinds left out of that chain and clicks landing on the panel behind
+  - keep: one `mode` enum (eight values today) with the mutually exclusive modals exclusive by construction; never add a `ShowX` boolean beside it; the registry's `Modal` table is the one list of kinds
+  - keep: pointer gates (`help`, `focus`, `live`) checked before the mode, in a fixed order, and only those three
+- modal stacking: both codebases built a stack piecemeal; deck has `formStack` (one slot), `confirm.Back`, the deferred `reshowTree` and `resumeProto`; tuios has `sidebarReturnMode` and `scratchReturnMode` for its modes, and for overlays the real thing: `OverlayZOrder`, reconciled every frame from a gate table, raised on click, topmost dismissed by a click outside every panel, with a test that every kind has a place in the table
+  - §7.1's one modal slot plus one parked modal is the right size; if a third layer ever appears, replace the four return paths with one explicit stack, not a fifth path
+  - a check that every registered modal kind is drawable and routable, the way tuios tests its gate table
+- paste goes through the same router as keys: tuios overlays answer `pasteTakenByOverlay`; the deck's `Update` has a second mode switch for `tea.PasteMsg` mirroring `handleKey`, so a new modal needs both edited; the input library's `feed` takes a key or a paste
+- `esc` dismisses notifications without being consumed: tuios clears its dock message on any `esc` and lets the key go on to whatever owns it; the deck's status line should do the same
+- one settle point after every handler: tuios computes its sync commands (files, git, dock, motion, next tick) once in `update` after `handleMsg`, not in each of fifty handlers; the deck's three `defer`s in `Update` are the same move; keep one such point, never per-handler hooks
+- ticks: tuios arms one deadline timer for the earliest due job (`nextWake`) and has no standing tick; the deck runs a fixed one-second `tea.Tick` for the detail re-read even on pages that never read it; with `worktree_poll`, `pr_poll`, reminders and the detail re-read all wanting a timer, one `nextWake` over them is the shape
+- per-message panic recovery: tuios recovers inside its message handler, puts up a crash overlay and returns the model unchanged, so one bad event does not end the program; a panic in the deck's loop exits the deck (the emptied-detail-with-kept-scroll case was one); worth a `recover` in `Update` that sets the status line and keeps the model
+- not needed: a shared `ProgramOptions()` enforced by a test (tuios has five `tea.NewProgram` sites, the deck has one), the frame cache and `renderSkipped` (nothing in the deck composes an emulator frame), the mouse-motion whitelist until something hovers
+- mouse: the deck has none; tuios's shape if it is added
+  - mouse reporting in Bubble Tea v2 is a field on the view, not a program option: `view.MouseMode = tea.MouseModeAllMotion` in `View`
+  - View records hit rectangles, Update consumes them: every panel appends one `Hit` per frame, reset at the start of the frame, so click handlers never re-derive layout; the deck's rail rows, tree rows and palette rows are already lists with a y range each
+  - click dispatch order mirrors z-order: context menu, overlays (highest z containing the cell, raised on click), rail, dock, panes; a click on no panel dismisses the topmost
+  - a `tea.WithFilter` whitelist drops motion before `Update` unless a named feature is waiting for it; clicks, releases and wheel always pass, one handler file each; drag state lives on the model
+  - first build: clicks and wheel only (select a rail row, click a tab, scroll the detail, click a palette row); no motion filter until something hovers; in live mode a click inside the pane is forwarded through `send-keys` like a key
+
+```js
+Hit     = { kind: modalId | "rail" | "detail" | "palette", x, y, z, w, h,
+            rows: [{ y, h, idx, dec?: Rect, inc?: Rect }] }   // appended by View, cleared per frame
+Hits    = [Hit]                                                // Update: highest z containing (x, y) wins
+Wake    = { at, job: "detail" | "worktree_poll" | "pr_poll" | "reminder" }   // one timer, earliest job
+```
+
 ### 7.2 web — removed for now
 
 - not used; delete `internal/web`, `scripts/e2e-web.sh`, `scripts/wscheck`
@@ -609,3 +640,5 @@ InputLib  = { modes: [name], mode: name, bindings: [{ mode, key, action }],
 - [ ] dirty attribution window: blame everything since the last observation, or only panes that were active in it
 - [ ] shared-place messages when a recipient is not an agent (a human terminal): tuios mail to the pane, a deck notification, or both
 - [ ] should a claim on the same paths by two agents stay a warning, or should the start form refuse the quick `n a` and require the form
+- [ ] mouse support in the tui: clicks and wheel over recorded hit rectangles (§7.1a), or keyboard only
+- [ ] one deadline timer over every poll (§7.1a) or a tick per unit
