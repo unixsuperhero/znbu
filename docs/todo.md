@@ -29,15 +29,50 @@ Item = { id: "B-01", status: "ready", priority: "p1", size: "M",   // S < half a
 
 status: ready · priority: p1 · size: M · owner: · branch: · verified:
 
-B-16 to B-20 need identity and preferences the user must type once: GitHub username (`instajosh`),
-Slack username and user id, oncall weeks and channels, poll intervals, notification on or off. These
-live in the store (not only config.toml), with a settings page listing every section, and each
-service page (slack, github, linear, schedules) opening its own section with one key and one palette
-command (`settings…`, `slack settings…`). Empty required settings show on the page as a visible
-"needs: github username" line so nothing silently does not run.
+B-16 to B-20 need identity and preferences the user types once. They are rows in a `settings` table
+keyed by section + key, read through the store like reminders (§6.9); config.toml (§6.10) only
+supplies defaults and is never written by the app. Secrets (Slack, GitHub, Linear tokens) are never
+stored: `gh` and the MCP servers carry their own credentials, and anything else comes from the
+environment or the harness configs B-12 writes.
+
+```js
+Setting = { section: "identity"|"slack"|"github"|"linear"|"schedules"|"notify", key, value, updated }
+// identity:  github_user ("instajosh"), slack_user, slack_user_id, name
+// slack:     oncall_weeks (list of Monday dates), oncall_channels, oncall_group, watch_dms,
+//            watch_mentions                                                        (B-16)
+// github:    review_query, oncall_review_query, watch_interval_seconds (300),
+//            my_prs_poll_seconds (300)                                             (B-17, B-18)
+// linear:    enabled                                                               (B-19)
+// schedules: default_timeout_seconds                                               (B-20)
+// notify:    os_enabled (false), indicator_char                                    (B-15, B-18)
+```
+
+- settings page on `E` (normal mode; `S` is scope-toggle, `M`/`W` are B-11's, `U` is B-09's, `J`/`K`
+  are B-06's), listing every section with its keys and current values; `enter` on a row edits it
+- `settings…` in the palette on every page lands on the settings page; `slack settings…`,
+  `github settings…`, `linear settings…`, `schedules settings…` open that section
+- on each service page `,` (free in every mode as of 2026-10-19) opens the page's own section as
+  a form prefilled with the current values; forms use the shared form engine (`internal/ui/forms`), one field per
+  key, list keys as multi-line fields, saving writes only the changed rows
+- a required setting that is empty (github_user for B-17/B-18, slack_user_id and oncall_weeks for
+  B-16) renders as a `needs: github username` line at the top of the service page, and the same
+  row is highlighted on the settings page; the lookup that depends on it is skipped, not errored
+- CLI: `deck settings list [--section identity]`; `deck settings set --json
+  '{"section":"identity","key":"github_user","value":"instajosh"}'`; `deck settings init` writes
+  every default from config.toml without overwriting a row that exists
+
+Acceptance:
+
+- `deck settings set` of identity.github_user makes the github page's `needs:` line disappear on
+  the next refresh, and `deck github check` (B-17) runs instead of skipping
+- `,` on the slack page opens a form prefilled with the stored oncall_weeks and channels; saving
+  one field and reopening shows the new value and `updated` moved
+- `settings…` from the panes page lands on the settings page with every section listed
+- `deck settings list --section identity` prints only the identity rows as `section key value
+  updated`, and `deck settings init` run twice leaves `updated` unchanged
 
 notes:
-- 2026-10-19 stub; a background agent is expanding the shape and acceptance.
+- 2026-10-19 stub; expanded by a background agent the same day.
 
 ### B-12 Deck as an MCP server, configured into every agent deck starts
 
