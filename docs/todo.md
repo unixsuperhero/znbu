@@ -860,7 +860,7 @@ notes:
 
 ### B-22 Feature inventory with review marks, growing into an in-app registry
 
-status: ready · priority: p2 · size: L · owner: · branch: · verified:
+status: claimed · priority: p2 · size: L · owner: mac lane 5 · branch: night/lane-5 (redeck-astra2) · verified:
 
 Port `~/proj/tuios-deck/docs/plans/2026-10-18-feature-inventory.md`: nobody can say which features
 were reviewed or are worth keeping. Deck is ahead here: the registry (outline §5) already holds pages,
