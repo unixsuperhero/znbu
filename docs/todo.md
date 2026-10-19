@@ -747,7 +747,7 @@ notes:
 
 ### B-01 Orchestrator agent that catches agents spinning their wheels
 
-status: ready · priority: p1 · size: M · owner: · branch: · verified:
+status: claimed · priority: p1 · size: M · owner: vps2 lane 4 · branch: · verified:
 
 An always-on agent in its own tuios pane on vps2. It watches every worker agent in its fleet, decides
 whether each one is still making progress, and talks to the ones that are not. It never edits code.
