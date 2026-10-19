@@ -445,7 +445,7 @@ notes:
 
 ### B-20 Schedules: recurring prompts and lookups on an interval, results back through the MCP server
 
-status: ready · priority: p1 · size: M · owner: · branch: · verified:
+status: claimed · priority: p1 · size: M · owner: vps2 lane 3 · branch: night/lane-3 · verified:
 
 The reminders unit (§6.9) already runs a scheduler with intervals. Extend it so a schedule can be:
 
