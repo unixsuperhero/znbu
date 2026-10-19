@@ -572,7 +572,9 @@ notes:
 
 ### B-10 Review accordion: the detail for a pane with unreviewed turns
 
-status: claimed · priority: p1 · size: L · owner: vps2 lane 1 · branch: night/lane-1 · verified: Modelled on tuios-deck's Turns tab (`~/proj/tuios-deck` README "The Turns tab", `internal/ui/turns.go`):
+status: claimed · priority: p1 · size: L · owner: vps2 lane 1 · branch: night/lane-1 · verified:
+
+Modelled on tuios-deck's Turns tab (`~/proj/tuios-deck` README "The Turns tab", `internal/ui/turns.go`):
 an accordion, one row per thing to review, oldest at the top, everything collapsed on open.
 
 ```js
@@ -654,6 +656,8 @@ notes:
 ### B-06 Pane detail: tab bar with a live Screen tab first, learned from tuios-deck
 
 status: review · priority: p1 · size: L · owner: vps2 lane 1 · branch: night/lane-1 · verified: /root/proj/night/logs/lane-1-B-06.log
+
+Today a pane row's detail opens on the transcript (`TRANSCRIPT · ] Turns`), so moving `j`/`k` down
 the rail shows text that looks the same for every agent. Telling panes apart means `enter` into live
 mode and `ctrl+a d` back out, for every pane. tuios-deck solved this: the main area is a tab bar and
 the first tab is the pane's screen.
