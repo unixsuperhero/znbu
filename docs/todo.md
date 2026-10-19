@@ -638,7 +638,7 @@ notes:
 
 ### B-06 Pane detail: tab bar with a live Screen tab first, learned from tuios-deck
 
-status: ready · priority: p1 · size: L · owner: · branch: · verified:
+status: claimed · priority: p1 · size: L · owner: vps2 lane 1 · branch: · verified:
 
 Today a pane row's detail opens on the transcript (`TRANSCRIPT · ] Turns`), so moving `j`/`k` down
 the rail shows text that looks the same for every agent. Telling panes apart means `enter` into live
