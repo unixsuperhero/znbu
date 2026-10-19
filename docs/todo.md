@@ -85,7 +85,7 @@ notes:
 
 ### B-31 Forms redesign: precise, modal, hierarchy-aware, replaces the top-8-lines box
 
-status: claimed · priority: p1 · size: L · owner: forms agent (Opus, redeck-forms clone) · branch: feat/forms · verified:
+status: review · priority: p1 · size: L · owner: forms agent (Opus, redeck-forms clone) · branch: feat/forms (redeck-forms clone, not pushed; rebase onto matomeru pending) · verified: vps2:/root/proj/redeck-astra-verification/runs/run.WiIfR2kY/verification.log
 
 Research: [docs/research/tui-forms.md](research/tui-forms.md) recommends rebuilding deck's own engine on
 `internal/input`, taking huh's `OptionsFunc(fn, bindings)` dependencies, `Validate` and theme struct, tuios's
@@ -133,6 +133,7 @@ Acceptance:
 notes:
 - 2026-10-19 stub; expanded by a background agent the same day.
 - 2026-10-19 claimed by the forms agent (Opus) in the redeck-forms clone, branch `feat/forms`.
+- 2026-10-19 review: one engine, five layouts (`list` default, `split`, `modal`, `inline`, `box`) chosen by `forms.layout`; kinds and declared `parent`/`exclude` drive child-sets-parent, parent-scopes-child and re-check; ranked fuzzy, current first; `+ new <kind>: <text>`; keys j/k, letters, 1-9, `'`, c. Per-layout e2e cases `form_*`. Full suite green except Linux-excluded `native_picker`/`context` and `vim_sessions` (fixed separately). Not pushed: the rebase onto matomeru/main was refused by the permission system; the user must allow it or rebase by hand. Acceptance gaps: 80/200-column renders not checked (harness is 150 cols).
 
 ### B-32 Preset prompts: a dedicated start-with-preset action and a page of asked questions
 

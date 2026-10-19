@@ -117,8 +117,13 @@ Page           = { id, key, title, unit, rail: fnName, detail: fnName, keys: tab
 PaletteCommand = { id, group, label, hint, key?, run: Command }
 Grouping       = { id, levels: ["harness","project","top-task"] }
 Modal          = { id, kind: "list"|"form"|"tree", source: sourceId, onPick: { replace: id } | { command } }
-Form           = { id, submit: commandName, fields: [Field], box: "top" }   // drawn in the top ~8 lines, content pushed down
-Field          = { name, key: char, source: sourceId, preview?: sourceId, add?: "task"|"project", multi?: bool, hint? }
+Form           = { id, submit: commandName, fields: [Field] }   // drawn by the forms.layout presentation (§7.1)
+Field          = { name, key: char, kind?: "task"|"parent"|"project"|"directory"|"file"|"bool"|"number"|"json"|"multiline"|…,
+                   source: sourceId, preview?: sourceId, add?: "task"|"project", parent?: fieldName, exclude?: fieldName,
+                   validate?: "number"|"json"|"required", multi?: bool, hint? }
+                 // kind: picks source, completion, path picker and validation; empty falls back to type, then source
+                 // parent: picking this field sets that one to the record's ancestor of its kind; that one's value scopes this field's options
+                 // exclude: never list that field's record or its descendants (a task is never its own parent)
                  // add: text matching no option is taken as the name of a new one, created on submit under the form's context
                  // key: the one highlighted char in the field's button; pressing it focuses the field
 Action         = { name, mode, defaultKey, does }     // from config/keys.go today
@@ -481,11 +486,14 @@ Preamble    = { place: Place, others: [{ window, task_id?, working, claims: [Cla
 - text inputs use readline bindings for line-wise navigation and editing: `ctrl+a` / `ctrl+e` go to the start / end of the line; `ctrl+f` / `ctrl+b` move forward / back one character; `ctrl+h` is backspace
   - input mode keeps printable characters as text and gives readline bindings priority over list or form actions; `ctrl+n` / `ctrl+p` still navigate suggestions
   - live mode keeps its own leader and key forwarding rules below
-- forms: a box in the top ~8 lines of the window; the content below is pushed down and shrinks by that much
-  - a field is a button with one highlighted char; that char focuses the field and enters input mode
-  - a form opens in normal mode (keys pick fields, `esc` closes, `/` filters); `esc` in input mode returns to normal; `tab` / `shift+tab` cycle fields
-  - every option list is fuzzy; `ctrl+n` / `ctrl+p` move in it; moving through options previews the option's object: the rail selects it, the detail shows it
-  - a task, project or parent field with no exact match creates one on submit: the typed text is the name; a new task goes under the form's parent (the pinned task, or the field's chosen parent), a new project is a new project; the hint reads `new: <text>` so it is never a surprise
+- forms: one engine (`internal/ui/forms`), drawn by the layout the setting `forms.layout` names (B-31; design in the app repo at `docs/plans/forms-redesign.md`); the next form opened uses a changed value, no restart
+  - layouts: `list` (default: every field a row with its value, full width), `split` (field list left, the focused field's editor and options right), `modal` (centred panel over the dashboard), `inline` (the list in the detail area beside the rail; full width under 100 columns), `box` (the pre-B-31 compact form in the top eight lines with tab cycling, kept for compatibility); a layout is presentation only and one file implementing `Layout`
+  - a form shows a title with the mode, a status line (the focused field's full value and hint, `new: <text> under <parent>`, `cleared: <child> not under <parent>`, or `! error`), one row per field `› t  label  value  path`, the focused field's options or editor under its row, and a key line
+  - normal mode (`form-list`): `j` / `k` move the field cursor, `g` / `G` first / last; a field's letter edits it (letters skip `j k g G u d h l i c ' / ?`); `1`–`9` move the cursor to the Nth field; `'` labels every field and the next key edits it; `enter` / `i` / `/` edit the cursor field; `c` clears it and edits; `ctrl+s` submit; `esc` close
+  - input mode: `tab` / `shift+tab` next / previous field; `ctrl+n` / `ctrl+p` move options; `enter` picks (or ends a one-line text) and returns to normal on the next field; `esc` normal
+  - completion is fuzzy and ranked (exact, prefix, word, substring, subsequence over label, path and id), the current value first; moving through options previews the option's object: the rail selects it, the detail shows it
+  - linkage is declared on fields: picking a child sets its `parent` field to the child's ancestor of that kind (a task sets the project to its root project); an explicitly chosen parent limits the child's options to records under it, direct children first, and clears a child outside it; a pinned default parent only sorts its children first
+  - a task, project or parent field with no exact (case-insensitive) match shows `+ new <kind>: <text>` last and creates it on submit, parents first: the typed text is the name; a new task goes under the form's parent (the pinned task, or the field's chosen parent), a new project is a new project; the status reads `new: <text>` so it is never a surprise
   - `+ add new…` opens the mass-add outline (parked form) for more than one at a time; in it `tab` / `shift+tab` change the nesting level
   - delete confirmation defaults to `y`; `esc` closes the palette so `ctrl+p` can move up in it
 - modal input library: every modal and form runs on one engine; a config of modes, bindings (key → action) and actions (action → method on the object); fed keys one at a time, it tracks the mode and the object
