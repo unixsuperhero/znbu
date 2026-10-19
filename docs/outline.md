@@ -426,6 +426,17 @@ VimSession = { id, name, session_file: path, window?, project_id, task_id, cwd, 
   - use one [status legend and inventory](ui-state-visibility.md#indicator-contract) across pane, agent and vim rows; color supplements text, never replaces it
   - a new backend state is incomplete until its visible cue, transition, failure behavior and verification are documented
 - help line (last row): the bindings that apply to the current mode and the highlighted row, not a fixed list; `F1` / `?` open the full help modal
+- keybinding help follows the [approved visual reference](images/help-good.png): a centered, thin-bordered panel titled `Keys`, with the deck still visible behind it
+  - use two balanced columns on wide terminals; group shortcuts under readable uppercase headings: Pages, Move, Shell, Live, Selection, List & Palette, Form
+  - separate groups with a blank line and leave a clear gutter between columns; keep each group together where it fits
+  - each group has an aligned key column and a description column; size key columns for the longest chord so descriptions never collide with keys
+  - use an accent for keys, normal foreground for descriptions and a secondary foreground for headings and border; headings remain legible, not nearly invisible
+  - write short, concrete action descriptions; wrap longer descriptions beneath their description column rather than clipping the meaning with ellipses
+  - derive the displayed keys and descriptions from effective registry/config bindings, including remaps and mode-specific actions; the screenshot sets appearance, not binding semantics
+  - distinguish the current mode and selection-specific actions; group shortcuts by context so identical keys in different modes are not ambiguous
+  - collapse to one column when two columns cannot fit readable descriptions; scroll when height is insufficient, with a visible position/overflow cue and a fixed `esc close` footer
+  - retain keyboard navigation and section jumps in help; closing restores the previous selection, filter, scroll and modal state without sending keys to a pane
+  - acceptance: compare wide-terminal rendering with the reference, then check narrow/short terminals, long descriptions, multi-key chords and remapped bindings; no clipped keys, overlapping columns or inaccessible entries
 - deck page keys: `h` / `l` move between rail and detail; `{` / `}` jump by group (`No Task` is one); `o` / `O` cycle the grouping; `w` the task tree modal (lineage only, see §6.3); `e` edit
 - stale panes: no activity past `stale_after` marks the row stale and groups them; a palette command closes them
 - pages dispatch through registry: `keys`, `rail`, `detail`, `helpLine`
