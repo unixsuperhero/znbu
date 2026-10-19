@@ -237,7 +237,7 @@ notes:
 
 ### B-13 Todo unit and page: items that are not yet tasks
 
-status: claimed · priority: p1 · size: M · owner: vps2 lane 4 · branch: · verified:
+status: review · priority: p1 · size: M · owner: vps2 lane 4 · branch: night/lane-4 · verified: /root/proj/night/logs/lane-4-B-13.log
 
 A todo is lighter than a task: no project required, no panes, a priority and free text, promotable
 to a task. Agents browse todos for easy ones, do research and leave notes on them (through B-12), or
@@ -821,6 +821,7 @@ whole pane.
 notes:
 - 2026-10-19 asked for so a batch of features can run on vps2 overnight without the human watching.
 - 2026-10-19 10:12 vps2 lane 4: shipped as cmd/orchestrator + internal/orchestrator on night/lane-4 (commit cc89f45), verified by scripts/e2e-orchestrator.sh; outline §13. go test is green. e2e-all stops at scripts/e2e.sh (tui_suite form navigation waits), which also fails for lanes 2 and 3 and on the untouched base commit 646e587 under tonight's load (12-14 on 4 vCPU); evidence in the log. Not launched on the deck-night session tonight (no daemon or session may be touched); run it with `tuios new-window -s deck-night orchestrator --no-focus -- ./orchestrator run -todo /root/proj/znbu/docs/todo.md -sessions deck-night`.
+- 2026-10-19 10:42 vps2 lane 4: shipped on night/lane-4 (commits fc997fc, e5a54bb): todos table in the work unit, `deck todo add|patch|claim|promote|delete|import`, page on `B` with enter promoting under the pin and notes moved to the task, import of docs/todo.md keyed by B-nn, task status rule todo→active on assignment (DECK_NEW_TASK_STATUS stubs the B-21 toggle). Outline §14, suite scripts/e2e-todos.sh. The full-suite log's outline failures are macOS-only cases plus order/load-dependent cases that behave the same on the base commit (evidence in the log). Open: `deck trace`/settings toggle belong to lane 2's files; the todo concept and page are registered from the work unit because cmd/deck is lane 2's.
 
 ## p2 · this week
 
