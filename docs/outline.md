@@ -106,7 +106,7 @@ Tap         = chan Event   // one per shell; never closes on reconnect
 
 ```js
 Page           = { id, key, title, unit, rail: fnName, detail: fnName, keys: tableId, help: id, tick: bool,
-                   scoped: bool }   // true: the page shows only rows under the pin; tasks page is false
+                   scoped: bool }   // true: the page has the scope/all modes (`S`); tasks page is false
 PaletteCommand = { id, group, label, hint, key?, run: Command }
 Grouping       = { id, levels: ["harness","project","top-task"] }
 Modal          = { id, kind: "list"|"form"|"tree", source: sourceId, onPick: { replace: id } | { command } }
@@ -166,6 +166,7 @@ Pane    = { session, id, name, state, harness, foreground, cwd, message, blocked
     - `enter` on a task pins it; `enter` on a project pins its first open task, or creates one if it has none
   - almost everything the UI shows is under the pin: panes in the rail, context, captures, history, reviews, queue, vim sessions, notes
   - not scoped, ever: the tasks/projects page (`T`), the help, the palette, the settings
+  - every scoped page has two modes: `scope` (rows under the pin, the default) and `all` (every row); `S` toggles, per page, and the title line reads `all` while it is on; the pin itself does not change
   - a pane assigned to another task is not in the rail; a count in the title line says how many are hidden
   - a pane with no assignment is always in the rail, under every pin, in a `No Task` group at the bottom; its rows draw in the red/white theme; it leaves the group the moment it is assigned
 - first run, no projects: the deck asks for a list of dirs (`repo_roots`), scans them for git repos, and offers each repo as a project to create; the scan is repeatable from the switch modal
@@ -186,7 +187,11 @@ Pane    = { session, id, name, state, harness, foreground, cwd, message, blocked
   - `ProjectOf(task)` walks parents to root (subtasks store no project_id)
 - commands: `work.add-project`, `work.patch-project`, `work.set-tree`, `work.pin`, `work.scan-repos`, `work.add-task`, `work.patch-task`, `work.move-task`, `work.assign`, `work.unassign`, `work.snooze`, `work.mass-add`
 - emits: `projects.changed`, `tasks.changed`, `assignments.changed`
-- pages: tasks (`T`, unscoped), tree modal (`w`); modal: switch (`P`)
+- pages: tasks (`T`, unscoped); modals: switch (`P`), task tree (`w`)
+- task tree modal (`w`, from any item): the lineage of that item only
+  - rows: the project, then each ancestor down to the item's task, then that task's own subtasks
+  - siblings at every ancestor level are hidden; a hidden count on the ancestor row (`+19`) expands them on `l`, `h` folds again
+  - never the whole project; the tasks page is for that
 
 ```js
 Project    = { id, name, theme: Theme, status, created, repo: path, trees: [Tree], default_tree: path,
@@ -360,7 +365,7 @@ VimSession = { id, name, path, project_id, task_id, cwd, created }
 - modal input library: every modal and form runs on one engine; a config of modes, bindings (key → action) and actions (action → method on the object); fed keys one at a time, it tracks the mode and the object
   - [ ] plain text input through neovim (embedded or headless) is the ideal; the engine is the fallback
 - the title line always shows the pin: project glyph + name, task title, hidden pane count; `P` opens the switch modal from any page
-- deck page keys: `h` / `l` move between rail and detail; `{` / `}` jump by group (`No Task` is one); `o` / `O` cycle the grouping; `w` the task tree modal from any item; `e` edit
+- deck page keys: `h` / `l` move between rail and detail; `{` / `}` jump by group (`No Task` is one); `o` / `O` cycle the grouping; `w` the task tree modal (lineage only, see §6.3); `e` edit
 - stale panes: no activity past `stale_after` marks the row stale and groups them; a palette command closes them
 - pages dispatch through registry: `keys`, `rail`, `detail`, `helpLine`
 - live mode: `enter` on a pane goes live; the live screen draws in the detail area under a live bar, the rail stays; never full-screen on the deck side
@@ -372,7 +377,7 @@ VimSession = { id, name, path, project_id, task_id, cwd, created }
 - presence held by shell; transcript reader takes nonce as arg
 
 ```js
-ViewState = { pin: Scope, page: pageId, sel: { pane?: window, task?: id, ctx?: id }, scroll: { [pageId]: n },
+ViewState = { pin: Scope, all: { [pageId]: bool }, page: pageId, sel: { pane?: window, task?: id, ctx?: id }, scroll: { [pageId]: n },
               modal?: { def: Modal, state }, parked?: modal, confirm?, live?, status, filter?: query }
 InputLib  = { modes: [name], mode: name, bindings: [{ mode, key, action }],
               actions: { [action]: (object, key) => void }, object }     // feed(key) → runs the bound action, may switch mode
