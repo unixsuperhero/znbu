@@ -63,7 +63,7 @@ notes:
 
 ### B-25 Command palette opens in search mode
 
-status: ready · priority: p1 · size: S · owner: · branch: · verified:
+status: claimed · priority: p1 · size: S · owner: vps2 lane 2 · branch: · verified:
 
 Today `:` (`palette`, normal mode) opens the modal navigating and `/` (`search`, modal mode) sets
 `searching`; in `modalKeyAction` a searching modal closes on `esc` and `enter` leaves search and picks.
