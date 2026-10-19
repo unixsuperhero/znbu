@@ -106,7 +106,7 @@ notes:
 
 ### B-21 Settings: a page plus per-service config areas, reachable by one key or one command
 
-status: claimed · priority: p1 · size: M · owner: vps2 lane 2 · branch: · verified:
+status: review · priority: p1 · size: M · owner: vps2 lane 2 · branch: night/lane-2 · verified: /root/proj/night/logs/lane-2-B-21.log
 
 B-16 to B-20 need identity and preferences the user types once. They are rows in a `settings` table
 keyed by section + key, read through the store like reminders (§6.9); config.toml (§6.10) only
@@ -152,10 +152,21 @@ Acceptance:
 
 notes:
 - 2026-10-19 stub; expanded by a background agent the same day.
+- 2026-10-19 vps2 lane 2: shipped as `internal/settings` (commits 796dd19, 28ca937 on night/lane-2; outline §13).
+  Page on `E`, `,` opens the current page's section form (a page whose id or unit names a section; elsewhere
+  it lands on the settings page), palette `Settings…` / `<section> settings…`, CLI `deck settings
+  list|set|save|unset|init` with a generic `--section` read filter. Page keys live in `config/keys.go`
+  (the `actions` table), not `registry/catalog.go`; appended there. The `needs:` line on service pages and
+  `deck github check` belong to lane 3's pages: the `settings.needs` source and `required` rows are ready for
+  them. The help suite asserted an exact page-key map; it now checks a subset plus uniqueness.
+  Verification: `go test ./...` green; outline case `settings` green; the full suite log records
+  `e2e.sh` (TUI) failing at `task_first_forms` under a load average of 13: the base commit 646e587 fails the
+  same step 3/3 under that load (prompt composer form walk near the 30 s background refresh), so it is a
+  pre-existing load flake, not this change. `context` and `native_picker` are macOS-only per outline §12.
 
 ### B-12 Deck as an MCP server, configured into every agent deck starts
 
-status: ready · priority: p1 · size: L · owner: · branch: · verified:
+status: claimed · priority: p1 · size: L · owner: vps2 lane 2 · branch: night/lane-2 · verified:
 
 `deck mcp serve` speaks MCP over stdio from the same binary (Claude Code, Codex, OMP, opencode all
 take a stdio command); an HTTP transport comes second only if a harness refuses stdio. One tool
