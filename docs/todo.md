@@ -357,7 +357,7 @@ notes:
 
 ### B-16 Slack monitoring: mentions, DMs, threads, oncall channels, assessed into action items
 
-status: ready · priority: p1 · size: L · owner: · branch: · verified:
+status: claimed · priority: p1 · size: L · owner: vps2 lane 3 · branch: night/lane-3 · verified:
 
 Wanted by the morning. Two paths, both producing ActionItems (B-15); build the one that works
 tonight and keep the other as the fallback:
@@ -396,7 +396,7 @@ notes:
 
 ### B-17 PR review requests from GitHub, periodic through `gh`
 
-status: claimed · priority: p1 · size: S · owner: vps2 lane 3 · branch: night/lane-3 · verified:
+status: review · priority: p1 · size: S · owner: vps2 lane 3 · branch: night/lane-3 · verified: /root/proj/night/logs/lane-3-B-17.log
 
 - a schedule (B-20) runs one `gh` search for PRs with `@instajosh` as a requested reviewer
   (`review-requested:instajosh`, not team requests) and creates an ActionItem per new PR with
@@ -414,6 +414,7 @@ Acceptance:
 
 notes:
 - 2026-10-19.
+- 2026-10-19 lane 3: shipped in commit 1af3568 on night/lane-3 (`internal/github`, `internal/oncall`, outline §15, e2e case `github_reviews`). Decisions: the oncall window is its own small unit (`oncall.configure`: mode auto/on/off, Monday start, weeks, channels, tag) read by both the github and the slack checks; the oncall criteria are the settings `oncall_query` (raw `gh search prs` terms such as `team-review-requested:org/team`) and `oncall_repos`, run as a second search only while the window is active; the personal search is always `--review-requested=<user>`, never team requests; `github.install-schedule` adds the lookup schedule once at `poll_interval`; `gh` failures are `gh_failed` errors and land in `github_state.last_error`. The agent-review follow-up is an `on_result` prompt on that schedule once B-11 documents exist. Verified with a PATH `gh` stub (no live GitHub tonight).
 
 ### B-18 My PRs: open and drafts, watching, snooze until midnight, CI and status change alerts
 
@@ -442,6 +443,7 @@ Acceptance:
 
 notes:
 - 2026-10-19; the single-call poll is to protect the API quota.
+- 2026-10-19 lane 3: skipped; the item was `claimed` by vps2 lane 4 when lane 3 reached it (lane 3's brief listed B-18 after B-17). Lane 3's `internal/github` already has the `github_prs` table, `github_settings.poll_interval` (default 300 s) and the PATH `gh` stub in `scripts/e2e_attention.py` that answers `search prs --author=…` and `api graphql`; the my-PRs half can extend that unit on night/lane-3 rather than start a second github unit.
 
 ### B-19 Linear as a source of action items
 
