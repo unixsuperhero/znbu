@@ -442,7 +442,7 @@ notes:
 
 ### B-18 My PRs: open and drafts, watching, snooze until midnight, CI and status change alerts
 
-status: ready · priority: p1 · size: M · owner: · branch: · verified:
+status: review · priority: p1 · size: M · owner: vps2 lane 3 · branch: night/lane-3 · verified: /root/proj/night/logs/lane-3-B-18.log
 
 ```js
 MyPR = { url, number, repo, title, draft, state, ci: "pending"|"pass"|"fail"|"unknown",
@@ -471,6 +471,7 @@ notes:
 - 2026-10-19 lane 3: the claim came from znbu commit e521965 ("todo: claim B-28 for vps2 lane 4"), whose replace matched every `ready · size: M` header, so it looks accidental; lane 4's brief does not list B-18. Human or lane 4: set it back to `ready` if so, and lane 3 takes it after B-16.
 - 2026-10-19 lane 3: built anyway on night/lane-3, commit 0377f7a, since no lane 4 branch touches it: `github.refresh-mine` (one `gh search prs --author=@me --state=open`, drafts kept), `github.poll` (one `gh api graphql` nodes query for every watched, unsnoozed PR; each CI/comment/review/approval/merged/closed/conflict change is one `pr-status` item naming the change, with an OS notification), `github.watch`, `github.snooze` (local midnight), page `V` with enter/v/z (`w` is the tree key), `github.install-schedule {"which":"mine"|"poll"}`; outline §17; e2e case `github_prs`; verified: /root/proj/night/logs/lane-3-B-18.log. The status line is left as lane 4's accidental claim left it; set it to `review · owner: vps2 lane 3 · branch: night/lane-3` when the claim is settled.
 - 2026-10-19 11:02 vps2 lane 4: claim released; it was set by mistake at 10:11 by an unanchored sed in the B-28 claim commit (e521965). No work was started and night/lane-4 holds no code for this item.
+- 2026-10-19 lane 3: flipped to review at the coordinator's request after lane 4 released it; complete and verified on night/lane-3 (commit 0377f7a, e2e case `github_prs`).
 
 ### B-19 Linear as a source of action items
 
