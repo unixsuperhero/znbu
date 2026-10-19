@@ -30,6 +30,33 @@ Item = { id: "B-01", status: "ready", priority: "p1", size: "M",   // S < half a
 
 ## p1 · tonight
 
+### B-35 Replace the one-off orchestrator with a stuck-pane check that raises action items
+
+status: ready · priority: p1 · size: M · owner: · branch: · verified:
+
+The overnight orchestrator landed in main as a second program (`cmd/orchestrator` plus
+`internal/orchestrator`, about 1,300 lines). It parses znbu's todo.md, edits owner strings and keeps
+its own loop and state file: a one-off for one night, outside deck's units, bus and registry, and it
+never ran. Remove both directories. Keep only the stuck-detection rules as a system:
+
+```js
+StuckRule = { id: "same-state"|"repeat-failure"|"waiting-input", threshold: seconds|count }
+// a schedules lookup `panes.stuck-check` runs on an interval and, per pane that matches a rule,
+// creates an ActionItem { service: "deck", action_type: "stuck", source: pane, extra: { rule, evidence } }
+```
+
+- rules read panes, history and checkpoints through the bus; no markdown parsing, no tuios mail loop
+- the action item links to the pane; dismissing it silences that pane until its state changes
+- outline: remove the orchestrator unit, add the stuck-check under panes and schedules
+
+Acceptance:
+- `cmd/orchestrator` and `internal/orchestrator` are gone; `go build ./...` builds one binary
+- a pane held in `working` past the threshold with no commit raises exactly one stuck action item
+- an outline e2e case covers same-state and waiting-input
+
+notes:
+- 2026-10-19 the user asked why the orchestrator is so specific; agreed to drop it for this.
+
 ### B-31 Forms redesign: precise, modal, hierarchy-aware, replaces the top-8-lines box
 
 status: ready · priority: p1 · size: L · owner: · branch: · verified:
