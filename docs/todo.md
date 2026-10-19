@@ -358,7 +358,7 @@ notes:
 
 ### B-16 Slack monitoring: mentions, DMs, threads, oncall channels, assessed into action items
 
-status: claimed · priority: p1 · size: L · owner: vps2 lane 3 · branch: night/lane-3 · verified:
+status: review · priority: p1 · size: L · owner: vps2 lane 3 · branch: night/lane-3 · verified: /root/proj/night/logs/lane-3-B-16.log
 
 Wanted by the morning. Two paths, both producing ActionItems (B-15); build the one that works
 tonight and keep the other as the fallback:
@@ -394,6 +394,7 @@ Acceptance:
 notes:
 - 2026-10-19 "i need this by the morning"; no MCP server is available to test tonight, so the fixture
   path and the agent-prompt path are what can be proven.
+- 2026-10-19 lane 3: shipped in commit 1bc2f37 on night/lane-3 (`internal/slack`, outline §16, e2e case `slack_monitoring`). Delivered: path 2 (`slack.install-schedule` adds a prompt schedule whose text `slack.prompt` generates from the current queries: @user, DMs, threads, plus the oncall channels and tag inside the window; the agent answers only through `action_item_create`) and the fixture-driven assessment (`slack.check` reads `fixture_path`, captures and classifies, creates items with the permalink as `source_url`, lights the indicator; the oncall window changes which channels the next check keeps and queries). `deck slack settings` prints the settings with the oncall window; page `B`. Open: captured messages live in `slack_messages`, not as context items of kind `slack`, because the context unit has no add command tonight; a live run against the real slack MCP is still owed the first morning it exists.
 
 ### B-17 PR review requests from GitHub, periodic through `gh`
 
