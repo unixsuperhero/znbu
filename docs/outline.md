@@ -59,7 +59,10 @@ Wiring = { client, store, config?, registry, bus, runner,
 - one database, per-table repos, one transaction API
 - SQLite only; no JSON-per-table backend
 - units declare tables; store does not know fields
-- `Tx(tables, fn)` — only touched tables saved
+- `Tx(tables, fn)` — only touched tables saved; begins with the write lock
+- `View(tables, fn)` — a deferred read transaction; in WAL mode it takes no write lock, so a reader in one process never waits on `busy_timeout` behind another process and never holds a writer back; `Put` / `Delete` fail inside it
+  - every observation (`inspect`, scope, target, tree snapshot, the pin when it needs no repair) is a `View`; only mutations and an actual pin repair are a `Tx`
+  - nothing holds either kind of transaction across a daemon call, a git command or a process spawn
 - history append-only, never rewrites other tables
 
 ```js
@@ -417,7 +420,8 @@ VimSession = { id, name, session_file: path, window?, project_id, task_id, place
   - the task's PR is merged or closed, or its CI is failing
   - the quick bindings (`n a`, `n t`, `n v`) still spawn at once; the warning shows in the status line and on the row instead
 - shared places: two panes are in the same place when they are in the same worktree, or on the same branch in different worktrees; the deck knows this from `WorktreeUse` and `Branch`, and it is the one standard way agents in a shared place talk to each other
-  - the channel is tuios mail (`tuios send-agent-message`), addressed by host + session + pane; the deck never types into a pane to talk to it
+  - the deck owns the record (`PlaceMessage`, `Claim`) and the routing (who is in the place); tuios mail is only the transport, addressed by host + session + pane; the deck never types into a pane to talk to it
+  - with the deck server (§10) the server delivers directly to the pane's client and writes the row in the same step; the mail transport remains for panes the server does not reach
   - every message is a `PlaceMessage`: one kind, the place it is about, the paths it names, free text, and the turn it came from; the deck sends it to every other pane in the place and records it in history under the sender's task
   - kinds: `claim` (I am editing these paths), `release` (done with them), `heads-up` (I am about to commit, rebase, switch branch, run a migration), `handoff` (take this over, with what is done and what is left), `question`, `answer`
   - a claim is also a row (`Claim`) on the worktree, so the code page, the start form and a later agent see it without reading mail; a claim ends on `release`, when the turn ends, or when the pane closes
@@ -591,6 +595,7 @@ InputLib  = { modes: [name], mode: name, bindings: [{ mode, key, action }],
 ## 10. Open decisions
 
 - [ ] command naming: `unit.verb` vs `unit/verb`
+- [ ] deck server: one long-lived process owns the store and the daemon subscription, like the tuios daemon; the TUI and the CLI are clients over a unix socket and never open the database. Removes cross-process locking entirely (today both processes open the same SQLite file; `View` only removes the read side of the contention), gives agent mail one router, and makes `deck <concept> <command>` a request to the server instead of a second writer. An earlier version of the deck ran this way; recommended as the next structural step
 - [ ] does `panes` unit cache or re-list on every `panes.changed`
 - [ ] where `Theme` pool lives: work or registry
 - [ ] multiple hosts: one daemon connection per host, or the local daemon relaying to registered hosts
