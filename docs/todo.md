@@ -29,9 +29,11 @@ Item = { id: "B-01", status: "ready", priority: "p1", size: "M",   // S < half a
 
 status: ready · priority: p1 · size: M · owner: · branch: · verified:
 
-Learned from tuios's own rail: `appearance.sidebar.sections = sessions:25,terminals,files:25,agents:34`
-gives every section a percent share of the height, a section scrolls inside its share, and
-`agent_rest_fold` folds a resting agent row to one line after a duration. Deck's rail today lets the
+Learned from tuios's own rail: `appearance.sidebar.sections` (default
+`sessions:25,terminals,files:25,agents:34`) gives every section a percent share of the height, a
+section scrolls inside its share, `appearance.sidebar.agent_rest_fold` (default `1h`) folds a resting
+agent row to one line after a duration, and `appearance.sidebar.subagent_max_rows` caps the rows one
+group may take. Deck's rail today lets the
 review queue grow without limit and spends two lines on every row, so half the value takes all the
 space.
 
@@ -90,8 +92,11 @@ Acceptance:
   time, oldest first
 - §7.1 rewritten for three sections; `history_review` and `shared_navigation` cases updated
 
-Open before claiming: do terminals enter the working section after a command, or agents only; the key
-`u` is free today but check `deck list-actions`.
+Open before claiming: do terminals enter the working section after a command, or agents only.
+
+Checked 2026-10-19 with `deck list-actions`: `u` is taken (half-page-up in normal, form, help and
+modal modes). `U` is unbound everywhere, so the unlock key is `U` unless the outline picks another;
+other free letters in normal mode are `b c f i t v x z` and `B E F I J K L M N Q V W X Y Z`.
 
 notes:
 - 2026-10-19 the human called this the important one.
@@ -119,6 +124,11 @@ TurnRow       = { turn_id, prompts: [Prompt], response, started_at, completed_at
   response
 - `*` (or the key the outline picks) stars a row for finding later; starred rows are listed first on
   the reviews page
+- how tuios-deck keeps it stable (`internal/ui/turns.go`): rows have a stable id per source, expanded
+  state is a map keyed by that id so a re-read never closes a row, a re-read is skipped when a
+  fingerprint (count, last id, last body length) is unchanged, selection is re-found by id unless
+  follow mode is on, `g` turns follow off and `G` on, `enter`/`space` toggle, `y` copies through
+  OSC 52, `{`/`}` jump by group
 - every row carries the project and task of the pane that produced it
 - under the turn rows, the context items extracted from those responses, sorted and uniq'd, most
   recent first, auto-associated with the pane's project and task; starrable in place. A starred
@@ -150,12 +160,16 @@ Document = { id, path, kind: "md"|"html", written_by: { session, window, turn_id
              task_id, starred, read_at?, created }
 ```
 
-- a documents page, key to be chosen (`A` captures, `C` context, `H` history, `D` panes, `R` reviews,
-  `T` tasks are taken), listing every agent-written document under the pin; starred first
+- a documents page listing every agent-written document under the pin, starred first. Key to be
+  chosen from the unbound uppercase letters (`B E F I J K L M N Q V W X Y Z` as of 2026-10-19;
+  `U` is reserved by B-09); `M` for markdown or `W` for writings are the obvious candidates
 - a starred document is also a context item on its direct parents, so it shows in the task's and
   project's detail (same parent rule as B-10) and in the context page
-- highlighting an md row previews it in the detail with `glow -tln` style rendering (the exact glow
-  flags to be confirmed against the installed glow); html rows show the source or a text rendering
+- highlighting an md row previews it in the detail through glow; html rows show the source or a text
+  rendering. Installed glow is 3.0.0: `-t` TUI, `-l` line numbers (TUI only), `-p` pager, `-w` width,
+  `-n` preserve new lines; there is no local-only flag. `glow -tln` is valid and means TUI with line
+  numbers and preserved newlines. The read-only preview should render with `glow -w <detail width>`
+  and the live mode should run `glow -tl <path>`
 - `enter` goes live on the preview the same way as a pane: keys go to glow, `ctrl+a d` comes back
 - until a document has been opened live once, its row uses an "unread" theme that stands out;
   opening live sets `read_at` and the row goes quiet
