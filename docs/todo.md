@@ -791,6 +791,34 @@ notes:
 
 ## p2 · this week
 
+### B-29 UI/UX pass on every page with Fable 5.1 and the frontend-design skill
+
+status: ready · priority: p2 · size: M · owner: · branch: · verified:
+
+Run Claude Fable 5.1 with the `frontend-design` skill over each deck page and modal: dashboard rail +
+detail, the tabs from B-06, the help modal, forms, the palette, the tree editor, the accordion from
+B-10, documents, downloads, action items, settings. The brief is
+`redeck-astra/docs/research/tui-design-samples.md` (B-03) and its "Patterns worth adopting" list.
+
+```js
+DesignNote = { page: "help-modal", path: "znbu/docs/design/help-modal.md",
+               before: "ascii mockup", after: "ascii mockup",
+               tokens: { colour_roles, borders, row_density, selected_row } }
+```
+
+- output is one design note per page under `znbu/docs/design/<page>.md` with before/after ASCII
+  mockups and the exact style tokens: colour roles, borders, row density, selected-row style
+- then the code changes, behind the settings toggle rule where they change existing looks (B-21)
+
+Acceptance:
+
+- every page has a design note under `znbu/docs/design/`
+- the help modal fix from B-04 is included
+- screenshots of before and after at 120 and 200 columns are attached under `docs/attachments`
+
+notes:
+- 2026-10-19 asked for after the design-sample research.
+
 ### B-22 Feature inventory with review marks, growing into an in-app registry
 
 status: ready · priority: p2 · size: L · owner: · branch: · verified:
