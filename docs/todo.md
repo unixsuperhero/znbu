@@ -34,43 +34,139 @@ Item = { id: "B-01", status: "ready", priority: "p1", size: "M",   // S < half a
 
 status: ready · priority: p1 · size: L · owner: · branch: · verified:
 
-The current form (a box in the top ~8 lines, outline §4 Form shape and §7.1 "forms") goes. Research
-tuios's forms, Bubble Tea's own options (huh, bubbles textinput/list) and other TUI form examples,
-then rebuild the one shared form engine:
-- a visible list of every field (data point) with its value; a binding jumps straight to a field,
-  vim/modal style, not tab-cycling
-- completion that is actually useful: fuzzy over real records, previews, current value first
-- related fields stay consistent: picking a child sets its parent field to that child's parent;
-  opening a child field after a parent is chosen scopes the choices to that parent's children
-- typing a value that matches nothing creates a new record with that name on submit
-- every form uses it; behind a settings toggle while it replaces the old box (file rule)
-Remove the "top ~8 lines" form rule from znbu's outline as part of this item.
+Research: [docs/research/tui-forms.md](research/tui-forms.md) recommends rebuilding deck's own engine on
+`internal/input`, taking huh's `OptionsFunc(fn, bindings)` dependencies, `Validate` and theme struct, tuios's
+row shape and lazygit's "no match creates"; not huh (sequential focus, second key system, no free-text select).
+
+```js
+Field     = { name, key, kind: "task", source, dependsOn: ["project", "parent"], validate, hint }
+Completer = { task: "work.tasks fuzzy(title, path), scoped", project: "work.projects", parent: "work.tasks − self, descendants",
+              window: "panes.windows", preset: "prompts.presets", agent: "AI page catalog (B-34)", status: "enum",
+              path | directory | repo: "fs completion + ctrl+o native picker", bool: "true/false", number | json: "validated",
+              text: "this field's past values", multiline: "`@` paths, `/` skills and commands" }
+Row       = { key: "t", label: "task", value: "Fix login ▸ deck", state: "set | default | new | error" }
+Setting   = { section: "forms", key: "layout", value: "list" }   // "box" = today's form; default "box" until done
+```
+
+Bindings (form normal mode): `j`/`k` move the field cursor; a field's letter focuses it and enters input;
+`1`–`9` jump to the Nth field; `'` overlays jump labels when fields outnumber free letters; `enter`/`i`
+input at the cursor field, `c` clear then input; `ctrl+s` submit, `esc` close. Field letters skip
+`j k g G u d h l i c ' / ?`. Input mode: `tab`/`shift+tab` next/previous field, `ctrl+n`/`ctrl+p` move
+options, `enter` picks and returns to normal on the next field, `esc` normal.
+
+Linkage: picking a task or parent sets the project to its `root_project_id`; a chosen parent scopes the
+child list to its descendants (direct children first, path shown); a parent never lists itself or its
+descendants; changing the project or parent re-checks the child and clears it with `cleared: <child> not
+under <parent>` in the hint line; `ctrl+h`/`ctrl+l` (`alt+h` in input) walk the lineage as today.
+
+Create-on-no-match: no exact (case-insensitive) match pins `+ new <kind>: <text>` last, selected when
+nothing matches, hint `new: <text> under <parent>`; submit creates parents first via `NewTarget`.
+
+Build order:
+- registry `Field.kind`, `dependsOn`, `validate`; ranked fuzzy, current value first; the `forms.layout` setting (B-21 settings page)
+- list layout in the detail area (the rail stays to follow previews; full width under 100 columns); linkage; create row
+- move every form to kinds; default `list`; delete from znbu's `docs/outline.md` line 120 (`Form = { id, submit:
+  commandName, fields: [Field], box: "top" }   // drawn in the top ~8 lines, content pushed down`; drop `box`) and
+  line 484 (`- forms: a box in the top ~8 lines of the window; the content below is pushed down and shrinks by that much`)
+
+Acceptance:
+- an e2e PTY case opens `form.start-agent` and sees one row per field with its value, at 80 and 200 columns
+- a field's letter shows `INPUT` on that row; `3` focuses the third row
+- picking a task under project X shows project X; choosing parent P lists only P's descendants
+- typing `zzq-new` in the task field shows `+ new task: zzq-new`; after `ctrl+s`, `deck task list` has it
+- `deck settings set --json '{"section":"forms","key":"layout","value":"box"}'` restores today's box
+- `grep -c 'top ~8 lines' docs/outline.md` prints 0
 
 notes:
-- 2026-10-19 stub; a background agent is researching and expanding it.
+- 2026-10-19 stub; expanded by a background agent the same day.
 
 ### B-32 Preset prompts: a dedicated start-with-preset action and a page of asked questions
 
 status: ready · priority: p1 · size: M · owner: · branch: · verified:
 
-One binding/action that starts a prompt in preset mode: pick a preset such as "answer in 10 words or
-less, or if necessary 3 paragraphs or less", which is prepended or appended to what the user types.
-Presets and every prompt sent with them get their own unit and page, so all asked questions are
-browsable with their answers.
+`i` (ask, normal mode, free today) opens the composer in preset mode: a preset picker first, then the
+text. The preset's text is prepended or appended to what the user types. Every prompt sent with a
+preset is recorded with its answer; the Questions page (`Y`, free today) lists them. `P` stays `switch`.
+
+```js
+Preset      = { id, name, prefix, cwd, created,                        // existing (§6.4)
+                position: "prepend" | "append", text, kind: "agent" | "ask" }
+// e.g. { name: "brief", position: "append", kind: "ask",
+//        text: "Answer in 10 words or less, or if necessary 3 paragraphs or less." }
+AskedPrompt = { id, preset_id, typed, sent,                            // sent = typed with preset applied
+                session, window, turn_id, task_id, project_id,        // provenance (B-28 provenance on every record)
+                sent_at, answer, answer_turn_id, answered_at }
+Action      = { name: "ask", mode: "normal", key: "i" }
+Page        = { id: "questions", key: "Y", rail: "prompts.asked", detail: "prompts.asked-detail" }
+```
+
+Build order:
+- `prompt_presets` gains `position`, `text`, `kind`; existing rows read as `prepend` + `prefix`, `agent`
+- `prompts.ask` command: apply the preset once (prepend: `text\n\n typed`; append: `typed\n\n text`),
+  send to the target pane like the composer, insert an `asked_prompts` row
+- answer capture: on the target pane's turn end (history unit), the turn's final assistant message
+  fills `answer`, `answer_turn_id`, `answered_at`
+- `i` action, composer preset mode (preset field first, `+ new preset…` creates one), `form.add-preset`
+  gains `position`
+- Questions page: rail of asked prompts newest first (`typed`, preset name, pane, answered or waiting),
+  detail with sent text and answer; `/` filters over typed and answer text
+- `deck prompt ask` and `deck prompt asked` CLI verbs from the registry
+
+Acceptance:
+- `deck list-actions | grep -w ask` shows `normal  i`
+- `deck prompt ask --json '{"preset":"brief","text":"what is 2+2","window":"<id>"}'`, then
+  `deck prompt asked` shows a row whose `sent` ends with the preset text
+- after the agent's turn ends, the same row has a non-empty `answer`
+- an e2e PTY case presses `Y` and sees the question in the rail and its answer in the detail
+- a preset with `position: "prepend"` puts its text before the typed text in `sent`
 
 notes:
-- 2026-10-19 stub; expansion in the background.
+- 2026-10-19 stub; expanded by a background agent the same day.
 
 ### B-33 Nested command palette: styled like the help modal, sub-palettes per kind
 
 status: ready · priority: p1 · size: M · owner: · branch: · verified:
 
-The palette looks like the fixed keybinding help modal, single column. It nests: a Pages palette
-lists only pages; similar palettes list panes, projects, tasks and other records, each reachable by
-its own binding; choosing a row offers that row's verbs (`show`, `open`, `tag`, …) from the registry.
+The palette becomes a stack of single-column lists drawn like the help modal (centred panel, thin
+border, group headings, muted pink key column, aligned descriptions, footer with position and close
+hint). The root lists commands plus one `›` row per sub-palette; a record row opens its verbs.
+
+```js
+PaletteStack = [ { id: "root", filter: "" },
+                 { id: "panes", filter: "dec" },
+                 { id: "verbs", of: { kind: "pane", id: "w-123" } } ]     // title: Palette › Panes › deck-review
+SubPalette   = { id: "panes", kind: "pane", source: "panes.windows", key: "w" }
+Verb         = { kind: "pane", name: "show", key: "s", label: "Show in detail", command: "ui.show" }
+```
+
+Sub-palettes and their verbs (registry kind `verb`, `deck docs` lists them):
+- pages (`g`): no verb level; `enter` opens the page
+- panes (`w`): show, live, capture, star, rename, close
+- projects (`j`): show, pin, edit, new task, tree
+- tasks (`t`): show, pin, edit, done, assign pane, note
+- documents (`d`): open, star, copy path
+- skills (`k`, after B-34 AI page): show, open file, copy name
+
+Bindings: `;` is a normal-mode leader (free today); `;g` `;w` `;j` `;t` `;d` `;k` open each sub-palette
+directly, `;;` reopens the last one. In the palette: `enter` descends (record → verbs, verb → run),
+`h`/`left` pops one level, `esc` follows B-25 palette search mode (leave search, then close the whole
+stack). Each opens in search mode per `palette.open_in_search`.
+
+Build order:
+- `Verb` and `SubPalette` registry kinds; units register their own; `deck docs` shows them
+- leader support in `internal/input.Engine` (a pending-prefix state, as live mode's `ctrl+a`)
+- palette state becomes a stack; breadcrumb title; pop and descend actions in `config/keys.go`
+- restyle on the help modal's renderer (one column at every width; key column width from the widest key)
+
+Acceptance:
+- `deck list-actions` lists `palette-pages` … `palette-skills` under `normal` with `;g` … `;k`
+- an e2e PTY case types `;w`, sees `Palette › Panes` and only pane rows; `enter` shows that pane's verbs;
+  `h` returns to the pane list with the filter kept
+- `;g` then `enter` on `Tasks` switches to the Tasks page
+- at 80, 120 and 200 columns every palette row keeps both borders in place (the help modal check)
 
 notes:
-- 2026-10-19 stub; expansion in the background.
+- 2026-10-19 stub; expanded by a background agent the same day.
 
 ### B-28 Provenance on every record: turn, pane, task, project, commit, PR
 
@@ -936,13 +1032,50 @@ notes:
 
 status: ready · priority: p2 · size: L · owner: · branch: · verified:
 
-A two-panel page: the left nav lists subpages (harnesses, agents, skills, commands, marketplaces,
-MCPs, …), the right shows the selected list and detail. Every harness has the same sections. Skills
-also get their own top-level page for system-wide search. Filled by scanning the disk (Claude Code,
-Codex, OMP and other harness config and plugin folders) and recording what each thing is.
+A two-panel page (`X`, free today): left, harnesses and under each the same sections (agents, skills,
+commands, plugins, marketplaces, MCPs, hooks, config); right, the list for the selected section with a
+detail of the selected thing. Skills also get a top-level page (`W`, free today) searching every
+harness. Filled by a scanner that reads the disk; nothing is hand-entered.
+
+Scan sources found on this Mac (2026-10-19):
+- Claude Code: `~/.claude/{skills (391 entries), agents (32), commands (20), hooks, rules, settings.json}`,
+  `~/.claude/plugins/{installed_plugins.json, known_marketplaces.json, marketplaces/claude-plugins-official,
+  cache/claude-plugins-official/*}`, MCPs in `~/.claude.json` (`mcpServers`) and per-project `.mcp.json`
+- Codex: `~/.codex/{config.toml ([mcp_servers.*]), skills, plugins/cache/{claude-cowork,
+  claude-plugins-official, openai-bundled, openai-curated-remote, openai-primary-runtime}, hooks.json, AGENTS.md}`
+- OMP: `~/.omp/agent/{config.yml, skills, extensions, keybindings.yml}`, `~/.omp/plugins/package.json`,
+  `~/.omp/marketplaces.json`
+- others: `~/.gemini/{settings.json, skills}`, `~/.cursor/{mcp.json, skills, agents, plugins}`,
+  `~/.config/opencode/{opencode.json, skills, plugins}`, `~/.agents/{skills, agents}`, `~/.pi/agent`
+- the user's catalog: `~/proj/ai-tools/catalog/{skills, agents, commands, hooks, extensions}` (symlink targets)
+
+```js
+Harness = { id: "claude-code", name, root: "~/.claude", config: [path], scanned_at }
+Skill   = { id, harness, name, description, path, source: "user | plugin:<name> | catalog", link_target? }
+Agent   = { id, harness, name, description, model?, tools: [name], path, source }
+Command = { id, harness, name, description, path, source }
+Plugin  = { id, harness, name, version, marketplace, path, provides: { skills, agents, commands, mcps } }
+Market  = { id, harness, name, url, path }
+MCP     = { id, harness, name, transport: "stdio | http", command?, url?, scope: "user | project", path }
+```
+
+Build order:
+- `internal/ai` unit: one scanner per harness reading frontmatter (`name`, `description`) and config
+  files; tables per shape; `ai.scan` command, re-run on demand and at startup
+- registry `Page` `ai` with left nav section list and right list/detail; `Page` `skills` across harnesses
+- detail shows path, source, frontmatter and the first lines of the file; `enter` opens in Neovim
+- composer `/` completion and B-33 nested palette's skills sub-palette read this catalog
+
+Acceptance:
+- after `deck ai scan`, `deck ai list --json '{"kind":"skill","harness":"claude-code"}' | jq length`
+  equals `ls ~/.claude/skills/*/SKILL.md | wc -l`
+- `deck ai list --json '{"kind":"mcp"}'` includes `tuios` from `~/.claude.json`
+- an e2e PTY case presses `X`, sees every scanned harness in the left panel with the same section names
+- `W` then `/` `tuios` lists skills from more than one harness
+- a symlinked skill shows its `link_target` under `~/proj/ai-tools/catalog`
 
 notes:
-- 2026-10-19 stub; expansion in the background.
+- 2026-10-19 stub; expanded by a background agent the same day.
 
 ### B-29 UI/UX pass on every page with Fable 5.1 and the frontend-design skill
 
