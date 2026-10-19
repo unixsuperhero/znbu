@@ -444,6 +444,7 @@ Acceptance:
 notes:
 - 2026-10-19; the single-call poll is to protect the API quota.
 - 2026-10-19 lane 3: skipped; the item was `claimed` by vps2 lane 4 when lane 3 reached it (lane 3's brief listed B-18 after B-17). Lane 3's `internal/github` already has the `github_prs` table, `github_settings.poll_interval` (default 300 s) and the PATH `gh` stub in `scripts/e2e_attention.py` that answers `search prs --author=…` and `api graphql`; the my-PRs half can extend that unit on night/lane-3 rather than start a second github unit.
+- 2026-10-19 lane 3: the claim came from znbu commit e521965 ("todo: claim B-28 for vps2 lane 4"), whose replace matched every `ready · size: M` header, so it looks accidental; lane 4's brief does not list B-18. Human or lane 4: set it back to `ready` if so, and lane 3 takes it after B-16.
 
 ### B-19 Linear as a source of action items
 
