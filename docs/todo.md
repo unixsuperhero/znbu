@@ -90,6 +90,38 @@ notes:
 
 ## p2 · this week
 
+### B-04 Help modal: two rows shift left and leak border glyphs
+
+status: ready · priority: p2 · size: S · owner: · branch: · verified:
+
+Screenshot: [attachments/B-04-help-modal-alignment.png](attachments/B-04-help-modal-alignment.png),
+deck on a wide terminal, `?` on the Panes page, filter `all`.
+
+What is wrong, visible in the screenshot:
+
+- two rows are one cell left of every other row, in both columns at once: the row holding `}` / `h`
+  ("Fold tree or return to parent (also Left)") and the row holding `d` / `l` ("Expand tree or
+  inspect option (also Right)"). The same rows show a stray `│` at the left edge of the modal and
+  another just inside the right edge, so the row is being rendered one cell wider than the panel.
+  Probable cause, unverified: those two right-column descriptions are the widest in their group and
+  overflow the column by one cell, so the joined row breaks the border. Check the width measurement
+  on a row whose description is exactly the column width.
+- the description column starts at a different x in every group (PAGES at the key + 1 cell, MOVE
+  padded to `shift+tab`, SHELL to `ctrl+r`, SELECTION to `delete`, FORM narrower again), so the two
+  columns read as a ragged stack of tables rather than one. Decide whether descriptions align per
+  column (one key width per column) or per group, and apply it everywhere; the approved reference is
+  `images/help-good.png`.
+
+Acceptance:
+
+- no row in the help modal is offset from its neighbours and no border glyph appears inside a row, at
+  80, 120 and 200 columns, for every tab filter
+- descriptions line up according to the chosen rule, and the e2e help case asserts the rule on at
+  least one wide and one narrow capture
+
+notes:
+- 2026-10-19 reported from a screenshot; not to be worked on yet.
+
 ## p3 · someday
 
 ### B-02 Deck-owned agent messaging (shared places)
