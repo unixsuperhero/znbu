@@ -226,7 +226,7 @@ notes:
 
 ### B-13 Todo unit and page: items that are not yet tasks
 
-status: ready · priority: p1 · size: M · owner: · branch: · verified:
+status: claimed · priority: p1 · size: M · owner: vps2 lane 4 · branch: · verified:
 
 A todo is lighter than a task: no project required, no panes, a priority and free text, promotable
 to a task. Agents browse todos for easy ones, do research and leave notes on them (through B-12), or
