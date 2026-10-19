@@ -106,7 +106,7 @@ notes:
 
 ### B-21 Settings: a page plus per-service config areas, reachable by one key or one command
 
-status: ready · priority: p1 · size: M · owner: · branch: · verified:
+status: claimed · priority: p1 · size: M · owner: vps2 lane 2 · branch: · verified:
 
 B-16 to B-20 need identity and preferences the user types once. They are rows in a `settings` table
 keyed by section + key, read through the store like reminders (§6.9); config.toml (§6.10) only
