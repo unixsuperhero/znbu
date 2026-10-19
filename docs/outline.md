@@ -389,7 +389,7 @@ VimSession = { id, name, session_file: path, window?, project_id, task_id, place
 ### 6.13 code — directories, worktrees, branches, commits, PRs, CI
 
 - the source-control side of a project: where its code lives and what state that code is in; work (§6.3) owns the work, this unit owns the places the work happens and what happened to them
-- tables: `dirs`, `worktrees`, `branches`, `commits`, `head_moves`, `prs`
+- tables: `dirs`, `worktrees`, `branches`, `commits`, `head_moves`, `prs`, `claims`, `place_messages`
 - a directory is a path on a tuios host (`host` + `path`); `local` is the deck's own host; the same path on two hosts is two directories
   - `kind: "repo"` when the path is inside a git repository, `"dir"` otherwise; a plain dir has one implicit worktree, itself, and no branch
   - a directory may belong to more than one project (a shared library); a project lists its directories and picks a default
@@ -416,9 +416,18 @@ VimSession = { id, name, session_file: path, window?, project_id, task_id, place
   - the worktree's branch is not the task's bound branch, or that branch is behind its base
   - the task's PR is merged or closed, or its CI is failing
   - the quick bindings (`n a`, `n t`, `n v`) still spawn at once; the warning shows in the status line and on the row instead
+- shared places: two panes are in the same place when they are in the same worktree, or on the same branch in different worktrees; the deck knows this from `WorktreeUse` and `Branch`, and it is the one standard way agents in a shared place talk to each other
+  - the channel is tuios mail (`tuios send-agent-message`), addressed by host + session + pane; the deck never types into a pane to talk to it
+  - every message is a `PlaceMessage`: one kind, the place it is about, the paths it names, free text, and the turn it came from; the deck sends it to every other pane in the place and records it in history under the sender's task
+  - kinds: `claim` (I am editing these paths), `release` (done with them), `heads-up` (I am about to commit, rebase, switch branch, run a migration), `handoff` (take this over, with what is done and what is left), `question`, `answer`
+  - a claim is also a row (`Claim`) on the worktree, so the code page, the start form and a later agent see it without reading mail; a claim ends on `release`, when the turn ends, or when the pane closes
+  - starting an agent into a shared place prepends a standard preamble to its prompt: who else is there (pane, task, working or idle), their open claims, the paths touched by uncommitted changes with their blame, and the exact mail commands to claim, release, hand off and ask; the agent is told to claim before editing and to send `heads-up` before any head move
+  - a human in the shared place gets the same information on the pane's rail row and detail; the `n a` quick start shows the preamble's summary in the status line
+  - conflicts are warnings, never locks: a claim on a path another pane claims, a head move during another pane's open turn, or a commit touching paths another pane claims shows on both rows with the two turns named; the person decides
+  - CLI: `deck code message --json '{ kind, worktree_id|branch_id, paths?, text }'` and `deck code claim|release --json` so any harness can take part; `deck code place --window W` prints the preamble for a running pane
 - polling never touches view state: no selection, scroll, filter or modal changes; stale rows say so (§0 state inventory)
-- commands: `code.attach-dir`, `code.detach-dir`, `code.scan-repos`, `code.refresh`, `code.bind-branch`, `code.unbind-branch`, `code.link-pr`
-- emits: `dirs.changed`, `worktrees.changed`, `branches.changed`, `prs.changed`
+- commands: `code.attach-dir`, `code.detach-dir`, `code.scan-repos`, `code.refresh`, `code.bind-branch`, `code.unbind-branch`, `code.link-pr`, `code.claim`, `code.release`, `code.message`, `code.place`
+- emits: `dirs.changed`, `worktrees.changed`, `branches.changed`, `prs.changed`, `claims.changed`, `place_messages.changed`
 - listens: `window-created`, `window-closed`, `history.changed` (turn and command ends drive refresh and blame)
 - page: code (`D`, scoped): one section per directory, a row per worktree: branch, short head, dirty + blame, agents on it, PR state, CI state; detail lists head moves and commits with their turns and tasks; `enter` on a PR opens it
 - depends on: panes (cwd, working), history (turns, commands), work (assignments, tasks, places)
@@ -435,6 +444,11 @@ HeadMove    = { id, worktree_id, from: sha, to: sha, kind: "commit"|"merge"|"rew
 PR          = { id, dir_id, branch_id, number, url, title, base, state: "draft"|"open"|"merged"|"closed", head: sha,
                 ci: CI, task_id?, observed }
 CI          = { state: "pending"|"passing"|"failing"|"unknown", reason?, checks: [{ name, state, url }], observed }
+Claim       = { id, worktree_id, host, window, task_id?, turn_id?, paths: [path], text?, since, until? }   // until: released, turn ended or pane closed
+PlaceMessage = { id, kind: "claim"|"release"|"heads-up"|"handoff"|"question"|"answer", from: { host, session, window, task_id?, turn_id? },
+                 place: { worktree_id?, branch_id? }, to: [{ host, session, window }], paths?: [path], text, reply_to?: id, at, delivered: [{ window, at, error? }] }
+Preamble    = { place: Place, others: [{ window, task_id?, working, claims: [Claim] }], dirty: Dirty?, head: sha, branch, pr?: PR,
+                commands: { claim, release, handoff, ask } }   // rendered as text at the top of a new agent's prompt
 ```
 
 - `Dir has_many :worktrees; Dir has_many :branches; Dir has_many :prs; Dir has_and_belongs_to_many :projects`
@@ -444,6 +458,8 @@ CI          = { state: "pending"|"passing"|"failing"|"unknown", reason?, checks:
 - `HeadMove belongs_to :worktree; HeadMove belongs_to :turn or :history_entry (through blame)`
 - `PR belongs_to :branch; PR has_one :ci; PR has_one :task (through branch)`
 - `Blame belongs_to :turn or :history_entry; Blame has_one :task (through the pane's assignment)`
+- `Claim belongs_to :worktree; Claim belongs_to :pane (host + window); Claim belongs_to :turn (optional); Claim has_one :task (through the pane's assignment)`
+- `PlaceMessage belongs_to :sender (pane); PlaceMessage belongs_to :worktree or :branch; PlaceMessage has_many :recipients (panes); PlaceMessage belongs_to :reply_to (PlaceMessage, optional); PlaceMessage has_one :history_entry`
 
 ## 7. Shells
 
@@ -546,6 +562,10 @@ InputLib  = { modes: [name], mode: name, bindings: [{ mode, key, action }],
   - command end → history command entry → same refresh; the blame is `{ kind: "command", history_id }`
 - rebase or squash
   - refresh sees `HEAD` not descending from the last `head` → `HeadMove{ kind: "rewrite" }` → old commits matched by patch id → `superseded_by` set → turn → commit links still resolve
+- second agent into a worktree another agent is working in
+  - `n a` → resolve `Place` → `WorktreeUse` shows the other pane → `Preamble` built from its claims, the dirty blame and the branch → prepended to the prompt → `prompts.start-agent` → the new agent sends `claim` through `deck code message` → `code.message` → tuios mail to the first pane + `place_messages` row + history entry under the sender's task → `claims.changed` → both rail rows show the two claims; overlapping paths show a warning on both
+- agent about to rebase in a shared worktree
+  - `heads-up` message → delivered to every other pane in the place → the deck records it; the following `HeadMove{ kind: "rewrite" }` is blamed on that turn and carries the heads-up id, so the other agent's next turn sees why its base moved
 - pane closes
   - daemon `window-closed` → runner → panes unit → `panes.changed` → work unit miss counter (2 misses → prune, tx: assignments) → `assignments.changed`
 - turn ends
@@ -582,3 +602,5 @@ InputLib  = { modes: [name], mode: name, bindings: [{ mode, key, action }],
 - [ ] vim session discovery: deck-owned dir or nvim's
 - [ ] does the deck create worktrees (`git worktree add`) and branches for a task, or only list and record them
 - [ ] dirty attribution window: blame everything since the last observation, or only panes that were active in it
+- [ ] shared-place messages when a recipient is not an agent (a human terminal): tuios mail to the pane, a deck notification, or both
+- [ ] should a claim on the same paths by two agents stay a warning, or should the start form refuse the quick `n a` and require the form
