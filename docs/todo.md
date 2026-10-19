@@ -65,11 +65,44 @@ notes:
 
 status: ready · priority: p1 · size: S · owner: · branch: · verified:
 
-`:` opens the palette already typing into the filter; `esc` once leaves search and once more closes.
-Toggle in settings (B-21) since it changes existing behaviour.
+Today `:` (`palette`, normal mode) opens the modal navigating and `/` (`search`, modal mode) sets
+`searching`; in `modalKeyAction` a searching modal closes on `esc` and `enter` leaves search and picks.
+The palette is the one modal nobody navigates before typing, so open it searching.
+
+```js
+// openPalette() today:        modalState{ id: "palette", searching: false }
+// with the setting on:        modalState{ id: "palette", searching: true, filterCursor: 0 }
+Setting = { section: "palette", key: "open_in_search", value: true }     // B-21, default true
+```
+
+Keys with the setting on:
+
+- `:` opens the palette with the filter focused and empty; the first keystroke filters, no `/` needed
+- `ctrl+n` / `ctrl+p` (`option-next`/`option-previous`, modal mode) move the highlight while typing
+- `enter` runs the highlighted command (`pick`), as after `/` today
+- `esc` once leaves search, keeping the filter and highlight so `j`/`k` and the other modal keys
+  work; `esc` again closes. This changes today's "esc while searching closes" for the palette only;
+  other modals keep their behaviour
+- `/` in navigation re-enters search with the cursor at the end of the filter, as today
+- with the setting off, `:` behaves exactly as before
+
+Build order:
+
+1. `openPalette()` reads the setting and sets `searching` on the new `modalState`
+2. `modalKeyAction` treats `esc` as leave-search when `d.id == "palette"` and `d.searching`
+3. `scripts/e2e_outline.py` `palette()` stops sending `/` when the setting is on; the `palette-filter`
+   `search_edit` case types straight after `:`
+
+Acceptance:
+
+- the e2e palette check types a letter right after `:` and sees ` / <letter>▏` in the filter line
+  with the option list already narrowed
+- `:` `foo` `esc` leaves the filter `foo` showing and `j` moves the highlight; a second `esc` closes
+- `deck settings set --json '{"section":"palette","key":"open_in_search","value":false}'` then `:`
+  opens with no filter line and `/` is needed, matching the current screenshots
 
 notes:
-- 2026-10-19 stub; expanded by a background agent.
+- 2026-10-19 stub; expanded by a background agent the same day.
 
 ### B-21 Settings: a page plus per-service config areas, reachable by one key or one command
 
@@ -762,51 +795,182 @@ notes:
 
 status: ready · priority: p2 · size: L · owner: · branch: · verified:
 
-Port `~/proj/tuios-deck/docs/plans/2026-10-18-feature-inventory.md` to deck: every page, action,
-palette command, modal, grouping, command, struct and concept gets a stable id, a generated
-`docs/inventory.json`, and a keep/cut/unreviewed mark; stage 2 makes the registry (§5) gate cut
-features and adds a Features page. Deck's registry already enumerates pages, commands and actions, so
-stage 1 is mostly the struct and concept extractor.
+Port `~/proj/tuios-deck/docs/plans/2026-10-18-feature-inventory.md`: nobody can say which features
+were reviewed or are worth keeping. Deck is ahead here: the registry (outline §5) already holds pages,
+actions, palette commands, modals, groupings and forms as data (`deck docs`, `deck list-actions`, `deck
+commands`), so stage 1 for those kinds is a registry dump; only two kinds need the go/ast program.
+
+```js
+Feature = { id: "grouping.cwd",            // <kind>.<name>, lower case, never renamed once written
+            kind: "page"|"action"|"palette"|"modal"|"grouping"|"form"|"command"|"struct"|"concept",
+            name, desc, surfaces: ["tui:o/O"], file, line, hash,     // hash: of the defining text
+            fields?: [{ name, type, doc }] }                           // structs only
+Mark    = { id, status: "keep"|"cut", on, note? }   // no mark = unreviewed; stale hash = "changed"
+```
+
+- free from the registry: page, action (one per mode), palette, modal, grouping, form; `command`
+  from `bus.List()`; `file`/`line` via `runtime.Caller` at register time
+- go/ast + go/doc (`scripts/inventory/`): `struct` for every exported struct under `internal/` with
+  field docs; `concept` from `// feature: concept.<area>.<name>` comments on code that is not one symbol
+
+Build order:
+
+1. `scripts/inventory/`: registry dump plus the two ast extractors → `docs/inventory.json`, sorted by
+   id, stable across two runs; a pre-commit hook regenerates it so its diff is the feature changelog
+2. `docs/review.yaml` holds marks; `go run ./scripts/inventory -review` prints unreviewed, then changed
+3. stage 2: `Status(id)` (§5) reads marks from a `features` store table; `o`/`O` skip cut groupings,
+   palette and help skip cut commands, `config init` writes every action; code stays until deleted
+4. Features page: rows by kind, `k` keep, `x` cut, `u` unreview, `?` opens the feature's help row;
+   help and palette show a glyph on anything unreviewed. Page key from the free letters in B-11
+
+Acceptance:
+
+- `go run ./scripts/inventory | jq length` is equal on two runs and covers every registry kind plus
+  structs and concepts; every id in it appears in `deck docs` output
+- with an empty review file `-review` lists every id; marking one `cut` removes it; editing that
+  feature's defining text brings it back as `changed`
+- an e2e check seeding a grouping as cut asserts `o`/`O` never show it in the title line
+
+Open before claiming (the plan's two questions): verdict per machine (store), per repo (`docs/review.yaml`)
+or both? Should `cut` ever delete code? The plan says no: the cut list is the deletion backlog.
 
 notes:
-- 2026-10-19 stub; expanded by a background agent.
+- 2026-10-19 stub; expanded by a background agent the same day.
 
 ### B-23 Neovim as the input engine behind form fields, behind a settings toggle
 
 status: ready · priority: p2 · size: L · owner: · branch: · verified:
 
-Port `~/proj/redeck-astra2/docs/plans/neovim-input-engine.md`: one embedded headless Neovim with a
-vendored vim-rsi, Msgpack-RPC remote UI rendered inside deck's field layout, buffers per field, an
-ordered request worker, host navigation keys kept separate. Off by default; the toggle lives in
-settings (B-21); with it off the current shared engine stays exactly as is.
+Port `~/proj/redeck-astra2/docs/plans/neovim-input-engine.md`: one app-owned headless Neovim
+(`--embed --headless`, controlled profile, no user config, swap or network) behind the shared form
+fields, vendored vim-rsi at `45540637` for Readline-style insert bindings, a Msgpack-RPC remote UI
+drawn inside deck's field layout, one scratch buffer per live field (hidden buffers keep undo). Neovim
+owns text, cursor, mode and undo; deck holds snapshots. Picker queries and filters stay on the shared engine.
+
+```js
+EditorSnapshot = { owner: "form-instance-42", field: "description", activation: 7, changedtick: 19,
+                   lines: ["Prepare release", "Check migrations"],
+                   cursor: { row: 1, byteColumn: 6 }, mode: "insert",
+                   presentation: { cells: [], cursorCell: { row: 1, column: 6 } } }
+// activation changes on focus, changedtick on text; events from closed forms are dropped
+```
+
+Setting `editor.engine = "shared"|"neovim"`, default `shared`, on the settings page (B-21); with
+`shared` the current engine is untouched and no Neovim process starts. Neovim 0.11 is installed on
+vps2, so the spike and every check run there through `scripts/verify-vps.sh`.
+
+Build order (the plan's seven steps):
+
+1. spike on vps2: buffer attach, remote UI redraw, completion, Visual block, key encoding,
+   input-drain-before-read; record version, cold start and input-to-render latency
+2. `internal/editor/`: pinned vim-rsi runtime with licence, deck init embedded, minimum version check
+3. ordered RPC worker, finite deadlines, field identities, lifecycle, bounded shutdown, undo per field
+4. presentation in the field box: cells, highlights, cursor, mode, command-line, messages, completion
+5. migrate form editing: text, paste API, reads, acceptance; single-line fields reject newlines
+6. keys: a configurable host action leaves editing for form navigation (Escape goes to Normal, never
+   discards the form); mass-add through the same adapter; picker and filter callers kept deliberately
+7. e2e cases in the existing suites; docs and outline updated only after behaviour is proven
+
+Acceptance (from the plan's evidence table):
+
+- counts, operators, text objects and dot-repeat produce the exact expected text after compound edits
+- returning to a field retains its undo history; switching fields does not merge their undo stacks
+- rapid input followed by save persists every completed edit before the accept action
+- another form cannot be overwritten by stale events; after engine failure the last acknowledged
+  draft remains recoverable
+- save, cancel, field switching and native file or directory pickers remain reachable while editing
 
 notes:
-- 2026-10-19 stub; expanded by a background agent.
+- 2026-10-19 stub; expanded by a background agent the same day.
 
 ### B-26 Changelog and release script in the tuios-deck style
 
 status: ready · priority: p2 · size: S · owner: · branch: · verified:
 
-Adopt the Changelog section of `~/proj/tuios-deck/AGENTS.md` and the `CHANGELOG2.md` shape: one entry
-per tag, one `###` list per concept in a fixed order (Store · CLI · Settings · Pages · Modals · Forms ·
-Actions and keybindings · Palette · Groupings · Rail and detail · Live mode · API · Events · Scripts
-and suites · Docs), one line per change starting with `added:` / `changed: …; was …` / `removed:` /
-`fixed:`. Port `scripts/release.sh` including the refuse-without-entry rule and the
-`.dev/changelog-prompt.md` it writes.
+Adopt the `## Changelog` and `## Commits and releases` sections of `~/proj/tuios-deck/AGENTS.md` and
+the `CHANGELOG2.md` shape. `CHANGELOG.md` is a diff of deck between two tags, not a story: one entry
+per release, newest first, `## vX.Y.Z — YYYY-MM-DD`, under it one `###` list per concept, only the
+concepts that changed, in this fixed order adapted to deck (no Web page; Units and MCP are ours):
+
+Store · CLI · Settings · Units · Pages · Modals · Forms · Actions and keybindings · Palette ·
+Groupings · Rail and detail · Live mode · MCP · Events and recorders · Scripts and suites · Docs
+
+```js
+Line = { verb: "added"|"changed"|"removed"|"fixed", text }
+// added: <thing> + the facts to use it (key, default, flag, path, unit)
+// changed: <thing>, <now>; was <before>   removed: <thing> and its replacement   fixed: the symptom
+```
+
+Rules, copied: one line per change, no paragraphs or sentences that only explain; names in backticks;
+a number only where it changes what the reader does; a key as the help shows it; a glyph quoted as the
+character; a change spanning concepts is listed once under the concept met first and named from the
+others; invisible internals go under Scripts and suites or nowhere; written from `git log <last
+tag>..HEAD` and the diff. Both sections go into redeck-astra's `AGENTS.md` between `# Driving deck` and
+`## Remote verification`; the commits one keeps conventional commits, no amending, `main` on `vps2`.
+
+`scripts/release.sh [patch|minor|major|vX.Y.Z] [--dry-run] [--changelog-prompt]` ported with:
+
+- remote `vps2` (`ssh://vps2/root/proj/redeck-astra.git`) wherever tuios-deck's says `origin`; there
+  is no GitHub remote, so the ahead/behind check and the pushes target `vps2/main`
+- the proxy priming block and the `deck update` hint removed; nothing goes to proxy.golang.org
+- kept: newest tag by semantic version (`v0.0.0` when none; the repo has no tag yet), refuse to tag a
+  version with no `## vX.Y.Z` entry, write `.dev/changelog-prompt.md` from the AGENTS.md section plus
+  commits and `--stat` since the last tag, clean-tree and `main` checks, `go build` + `go vet`,
+  annotated tag `deck vX.Y.Z`; `.dev/` added to `.gitignore`
+
+Acceptance:
+
+- `--dry-run` with no matching entry prints `CHANGELOG.md has no entry for v0.0.1`, writes
+  `.dev/changelog-prompt.md` with the rules and the commit list, tags nothing; without `--dry-run` it exits 1
+- with a `## v0.0.1` entry committed, `scripts/release.sh` creates annotated tag `v0.0.1` and
+  `git ls-remote vps2 refs/tags/v0.0.1` shows it; `git tag -n1 v0.0.1` reads `deck v0.0.1`
+- `grep -c proxy.golang.org scripts/release.sh` prints 0
 
 notes:
-- 2026-10-19 stub; expanded by a background agent.
+- 2026-10-19 stub; expanded by a background agent the same day.
 
 ### B-27 Downloads page: watch ~/Downloads, newest first, copy absolute paths
 
 status: ready · priority: p2 · size: S · owner: · branch: · verified:
 
-A page listing files in `~/Downloads` newest first, refreshed on a filesystem watch; `y` copies the
-absolute path of the selected row; `space` marks several and `y` then copies every marked path, one
-per line. New files since the page was last viewed are styled unread.
+A page listing the files in `~/Downloads`, newest first, so a path just downloaded is one keypress
+from the clipboard. A `downloads` unit watches the directory with `fsnotify` (new dependency) and
+rescans on page open, so a missed event never leaves the list stale; subdirectories are one row each,
+not walked; dotfiles hidden.
+
+```js
+Download = { path: "/Users/me/Downloads/report.pdf", name: "report.pdf", size: 18233,
+             modified: "2026-10-19T21:04:11Z", seen: false, marked: false }
+// seen persists in the store keyed by path + modified; marked is page state and clears on leave
+```
+
+- page key `L` (downLoads), proposed here from the free uppercase letters in B-11/B-21
+  (`B F I L N Q V X Y Z` remain after E settings, M/W B-11, U B-09, J/K B-06); registered like every
+  page with a rail row per file: name, size, age; detail shows the full path, size, modified and the
+  `NOTES` section (B-05 owner kind `download`, id = path)
+- rows sorted by `modified` descending; a new file inserts at the top without moving the selection
+  (the refresh rule); unread style (the unread theme from B-11) until the row has been selected
+  once, then `seen: true`
+- `y` on a row runs `context.copy` with the absolute path; `space` toggles `marked`, shown with a
+  glyph; `y` with any marks copies every marked path, one per line, in list order, and clears the
+  marks. `context.copy` already requires `pbcopy` on PATH and reports to the status line otherwise
+- `enter` opens the file with the OS opener (`open` on macOS, `xdg-open` elsewhere) through the
+  existing context `open` action
+- `downloads.dir` setting (B-21), default `~/Downloads`, so checks point the page at a temp dir
+- CLI: `deck download list` prints `modified size seen path` newest first
+
+Acceptance:
+
+- touching two files in the `downloads.dir` temp dir while the page is open shows both within a
+  second, newest on top, both styled unread; moving the selection onto one clears its unread style
+  and `deck download list` shows `seen` for it only
+- `y` on a row puts its absolute path on the clipboard (a `pbcopy` stub on PATH writes to a file the
+  check reads); `space` on two rows then `y` writes both absolute paths, one per line
+- `deck note add --json '{"owner":{"kind":"download","id":"<path>"},"text":"…"}'` shows under the
+  row's detail `NOTES`
 
 notes:
-- 2026-10-19 stub; expanded by a background agent.
+- 2026-10-19 stub; expanded by a background agent the same day.
 
 ### B-05 Notes on almost anything, shown in the detail pane of every page
 
