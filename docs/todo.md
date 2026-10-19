@@ -615,7 +615,7 @@ notes:
 
 ### B-11 Documents page: starred docs, glow preview, live mode, unread theme
 
-status: ready · priority: p2 · size: M · owner: · branch: · verified:
+status: claimed · priority: p2 · size: M · owner: mac lane 5 · branch: night/lane-5 · verified:
 
 Reviewable documents already exist as review entries (§6.6: an md or html the agent wrote). Give them
 a page and a star.
