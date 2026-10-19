@@ -960,7 +960,7 @@ notes:
 
 ### B-27 Downloads page: watch ~/Downloads, newest first, copy absolute paths
 
-status: claimed · priority: p2 · size: S · owner: mac lane 5 · branch: night/lane-5 · verified:
+status: review · priority: p2 · size: S · owner: mac lane 5 · branch: night/lane-5 · verified: /root/proj/redeck-astra-verification/runs/run.85RFtc62/verification.log
 
 A page listing the files in `~/Downloads`, newest first, so a path just downloaded is one keypress
 from the clipboard. A `downloads` unit watches the directory with `fsnotify` (new dependency) and
@@ -1000,6 +1000,7 @@ Acceptance:
 
 notes:
 - 2026-10-19 stub; expanded by a background agent the same day.
+- 2026-10-19 mac lane 5: built in b01c06b (help race fix 38d7da2). Deviations: the directory comes from `DECK_DOWNLOADS_DIR` until B-21's `downloads.dir` setting exists; `deck download list` returns JSON rows (`modified size seen path` among the fields) like every concept list; enter uses a new `downloads.open` (open/xdg-open) because `context.open` only opens stored context items and only knows `open`; the unread style is a local bold style plus a `new ·` prefix on the meta line since B-11's unread theme does not exist yet. Not done: the notes acceptance (needs B-05's `download` owner kind). The `downloads` outline case covers watch-within-1s, newest first, dotfiles, unread until selected, `y`, `space`+`y`, `enter` and the CLI. Full outline run on vps2 (run.85RFtc62): downloads passes; context and native_picker are macOS-only; prompt_composer and history_review failed under load and passed twice when rerun alone (run.19saMM5w, run.ELUg9Fu5); e2e-review and e2e.sh flake the same way on the base code.
 
 ### B-05 Notes on almost anything, shown in the detail pane of every page
 
