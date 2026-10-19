@@ -2,6 +2,8 @@
 
 Working outline of the redesign in [the modular report](../reports/2026-10-18-modular-redesign.md). Nested lists, shapes, relationships. Fill in details under each node.
 
+Phase 2 follow-ups, not needed for the first build: [outline-phase2.md](outline-phase2.md).
+
 Conventions: shapes are js-style; `?` = optional; relationships read like Rails (`belongs_to`, `has_many`, `has_one`, `through`). `[ ]` marks a decision still open.
 
 ## 0. Rules every unit follows
