@@ -10,10 +10,12 @@ Conventions: shapes are js-style; `?` = optional; relationships read like Rails 
 - talks to others only via: command bus (writes), event runner (reads), narrow interfaces it was handed
 - never imports a shell (`tui`, `cli`)
 - never touches view state (selection, scroll, modal)
+- every list read takes a `Scope`; a unit answers only the rows under it (`Scope{}` is everything)
 - registers definitions (pages, commands, palette, groupings) with the registry at startup
 - verified by e2e suites only; no unit tests
 
 ```js
+Scope = { task_id, project_id }     // the pin: a task and its project; a unit filters by task subtree, else by project
 Unit = { id, tables: [name], commands: [name], emits: [type], listens: [daemonType],
          pages: [id], palette: [id], cli: [spec] }
 // Go: interface { ID() string; Register(*Registry) }
@@ -103,7 +105,8 @@ Tap         = chan Event   // one per shell; never closes on reconnect
 - catalog modal: `Modal{ kind: "catalog", source: "registry.kinds" }`; picking a kind replaces the modal with that kind's list; the meta catalog is the catalog of catalogs; still one modal at a time
 
 ```js
-Page           = { id, key, title, unit, rail: fnName, detail: fnName, keys: tableId, help: id, tick: bool }
+Page           = { id, key, title, unit, rail: fnName, detail: fnName, keys: tableId, help: id, tick: bool,
+                   scoped: bool }   // true: the page shows only rows under the pin; tasks page is false
 PaletteCommand = { id, group, label, hint, key?, run: Command }
 Grouping       = { id, levels: ["harness","project","top-task"] }
 Modal          = { id, kind: "list"|"form"|"tree", source: sourceId, onPick: { replace: id } | { command } }
@@ -156,9 +159,15 @@ Pane    = { session, id, name, state, harness, foreground, cwd, message, blocked
   - on pick the deck lists the repo's worktrees (`git worktree list`) into `trees`; the person picks the default
   - every new agent or terminal starts in the active project's chosen tree unless the form says otherwise; `Start(spec).cwd` defaults to it
   - `settings` per project: default tree, default harness, default preset
-- one active project, and at most one active task, at a time
-  - `active` is one row; the switch-project modal lists projects with `+ new project…` at the end; the switch-task modal the same for tasks
-  - the deck page, the prompt composer and the vim-session opener all read `active`
+- the pin: the deck is always pinned to one task; its project is the task's root project
+  - `active` is one row and never empty once a task exists; `Scope` is derived from it
+  - set only through the switch modal (`P`): projects, then their tasks and subtasks, as one fuzzy tree
+    - every level ends with `+ new…`; typing a name that matches nothing offers to create it there, under the highlighted node, without leaving the modal
+    - `enter` on a task pins it; `enter` on a project pins its first open task, or creates one if it has none
+  - almost everything the UI shows is under the pin: panes in the rail, context, captures, history, reviews, queue, vim sessions, notes
+  - not scoped, ever: the tasks/projects page (`T`), the help, the palette, the settings
+  - a pane assigned to another task is not in the rail; a count in the title line says how many are hidden
+- first run, no projects: the deck asks for a list of dirs (`repo_roots`), scans them for git repos, and offers each repo as a project to create; the scan is repeatable from the switch modal
 - inheritance: anything created with a parent takes the parent's task and project (a context item from an assigned pane, a note on a task, a queued prompt on a task, a subtask); the child stores no project of its own
 - themes
   - a project or task gets a random theme from the unassigned pool at creation
@@ -174,15 +183,16 @@ Pane    = { session, id, name, state, harness, foreground, cwd, message, blocked
   - themes: 16 colours, free-colour pool, glyph sections
   - snoozes, `easy`, status, `MoveTask`
   - `ProjectOf(task)` walks parents to root (subtasks store no project_id)
-- commands: `work.add-project`, `work.patch-project`, `work.set-tree`, `work.activate`, `work.add-task`, `work.patch-task`, `work.move-task`, `work.assign`, `work.unassign`, `work.snooze`, `work.mass-add`
+- commands: `work.add-project`, `work.patch-project`, `work.set-tree`, `work.pin`, `work.scan-repos`, `work.add-task`, `work.patch-task`, `work.move-task`, `work.assign`, `work.unassign`, `work.snooze`, `work.mass-add`
 - emits: `projects.changed`, `tasks.changed`, `assignments.changed`
-- pages: tasks (`T`), tree modal (`w`)
+- pages: tasks (`T`, unscoped), tree modal (`w`); modal: switch (`P`)
 
 ```js
 Project    = { id, name, theme: Theme, status, created, repo: path, trees: [Tree], default_tree: path,
                settings: { harness?, preset? } }
 Tree       = { kind: "worktree"|"clone"|"dir", path, repo?, branch? }
-Active     = { project_id, task_id?, tree: path }      // one row
+Active     = { task_id, tree: path }                   // one row; project is ProjectOf(task)
+Settings   = { repo_roots: [dir], stale_after, … }          // scan roots for the first run and the switch modal
 Task       = { id, parent_id, project_id, title, theme: Theme, status, easy?, snoozed_until?, created, updated }
 Assignment = { [window]: { session, task_id, project_id } }
 Theme      = { color: ansiName, glyph }
@@ -193,7 +203,7 @@ Theme      = { color: ansiName, glyph }
 - `Assignment belongs_to :pane (by window); belongs_to :task or :project`
 - `Project has_one :theme; Task has_one :theme`
 - `Project has_many :trees; Project has_one :default_tree (Tree)`
-- `Active belongs_to :project; Active belongs_to :task (optional); Active has_one :tree`
+- `Active belongs_to :task; Active has_one :project (through task); Active has_one :tree`
 
 ### 6.4 prompts — presets, queue, stash, dispatch, agent start
 
@@ -348,6 +358,7 @@ VimSession = { id, name, path, project_id, task_id, cwd, created }
   - delete confirmation defaults to `y`; `esc` closes the palette so `ctrl+p` can move up in it
 - modal input library: every modal and form runs on one engine; a config of modes, bindings (key → action) and actions (action → method on the object); fed keys one at a time, it tracks the mode and the object
   - [ ] plain text input through neovim (embedded or headless) is the ideal; the engine is the fallback
+- the title line always shows the pin: project glyph + name, task title, hidden pane count; `P` opens the switch modal from any page
 - deck page keys: `h` / `l` move between rail and detail; `{` / `}` jump by group; `o` / `O` cycle the grouping; `w` the task tree modal from any item; `e` edit
 - stale panes: no activity past `stale_after` marks the row stale and groups them; a palette command closes them
 - pages dispatch through registry: `keys`, `rail`, `detail`, `helpLine`
@@ -360,7 +371,7 @@ VimSession = { id, name, path, project_id, task_id, cwd, created }
 - presence held by shell; transcript reader takes nonce as arg
 
 ```js
-ViewState = { page: pageId, sel: { pane?: window, task?: id, ctx?: id }, scroll: { [pageId]: n },
+ViewState = { pin: Scope, page: pageId, sel: { pane?: window, task?: id, ctx?: id }, scroll: { [pageId]: n },
               modal?: { def: Modal, state }, parked?: modal, confirm?, live?, status, filter?: query }
 InputLib  = { modes: [name], mode: name, bindings: [{ mode, key, action }],
               actions: { [action]: (object, key) => void }, object }     // feed(key) → runs the bound action, may switch mode
@@ -386,6 +397,8 @@ InputLib  = { modes: [name], mode: name, bindings: [{ mode, key, action }],
   - daemon `window-closed` → runner → panes unit → `panes.changed` → work unit miss counter (2 misses → prune, tx: assignments) → `assignments.changed`
 - turn ends
   - daemon `agent-activity` → runner → history (batch insert) + autocapture (file) → `history.changed` → reviews page re-reads `Turns`
+- switch pin
+  - `P` → switch modal (tree of projects → tasks, `+ new…` at every level) → `work.pin` → tx: active → `active.changed` → every scoped page re-reads with the new `Scope`; tasks page unchanged
 - cli patch task
   - `deck work patch-task --json` → bus → tx: tasks → `tasks.changed` → TUI re-reads
 
@@ -411,6 +424,7 @@ InputLib  = { modes: [name], mode: name, bindings: [{ mode, key, action }],
 - [ ] `Tree.kind`: does the deck manage worktrees itself or only record a path
 - [ ] deck events: typed Go structs or `map[string]any` like daemon events
 - [ ] neovim as the text input engine: embedded, headless server, or not at all
-- [ ] active project/task: one per deck process or one per tuios session
+- [ ] the pin: one per deck process or one per tuios session
+- [ ] a pane assigned to no task: hidden under every pin, or shown under every pin in the red/white theme
 - [ ] vim session discovery: deck-owned dir or nvim's
 - [ ] does the deck create worktrees (`git worktree add`) or only list and record them
