@@ -522,6 +522,7 @@ Acceptance:
 
 notes:
 - 2026-10-19 from the comparison with tuios's sidebar.
+- 2026-10-19 vps2 lane 1: skipped; it was already `claimed` by vps2 lane 4 when this lane reached it.
 
 ### B-09 Pane lifecycle in the rail: working at the bottom and locked, review at the top, rest in the middle
 
@@ -571,9 +572,7 @@ notes:
 
 ### B-10 Review accordion: the detail for a pane with unreviewed turns
 
-status: ready · priority: p1 · size: L · owner: · branch: · verified:
-
-Modelled on tuios-deck's Turns tab (`~/proj/tuios-deck` README "The Turns tab", `internal/ui/turns.go`):
+status: claimed · priority: p1 · size: L · owner: vps2 lane 1 · branch: night/lane-1 · verified: Modelled on tuios-deck's Turns tab (`~/proj/tuios-deck` README "The Turns tab", `internal/ui/turns.go`):
 an accordion, one row per thing to review, oldest at the top, everything collapsed on open.
 
 ```js
@@ -654,9 +653,7 @@ notes:
 
 ### B-06 Pane detail: tab bar with a live Screen tab first, learned from tuios-deck
 
-status: claimed · priority: p1 · size: L · owner: vps2 lane 1 · branch: · verified:
-
-Today a pane row's detail opens on the transcript (`TRANSCRIPT · ] Turns`), so moving `j`/`k` down
+status: review · priority: p1 · size: L · owner: vps2 lane 1 · branch: night/lane-1 · verified: /root/proj/night/logs/lane-1-B-06.log
 the rail shows text that looks the same for every agent. Telling panes apart means `enter` into live
 mode and `ctrl+a d` back out, for every pane. tuios-deck solved this: the main area is a tab bar and
 the first tab is the pane's screen.
@@ -702,6 +699,25 @@ Acceptance:
 notes:
 - 2026-10-19 asked for after comparing with tuios-deck; this is the one the human called out as most
   important.
+- 2026-10-19 vps2 lane 1: built on night/lane-1 (commits 55c747a, f3488d0, 6232b00, 89b21ef); outline
+  §13. Tabs `1 Screen · 2 Activity · 3 Transcript · 4 Turns`; keys `1`–`4`, `[` `]`, `tab`/`shift+tab`,
+  `J`/`K` registered as `panes` page keys in `registry/catalog.go`; Screen redraws on the daemon's
+  `output` events for the selected pane plus a one-second re-read; `enter` / `ctrl+a d` round-trips on
+  the Screen tab; tab remembered per pane. The live lease shrank by the tab bar (3 rows): the live
+  case now expects `SIZE 107 38` / `SIZE 64 21`.
+- 2026-10-19 verification: `go test ./...` green; `e2e-run.sh live` green; outline `pane_tabs`,
+  `history_review`, `shared_navigation`, `grouping_stale`, `switch_creation`, `catalogs_help` green when
+  run alone; `e2e-run.sh events` green. `scripts/e2e-all.sh` never completed on the shared host (load
+  average 7–16 with four lanes building): the daemon, setup, review and tui suites each failed once on
+  timing waits in untouched code and passed on rerun, and the same failures reproduce with a build of
+  main (`/root/proj/night/logs/lane-1-B-06-*-base.log`). Side fixes that were blocking: review documents
+  are now listed in a stable order (they came out of a map), the daemon smoke tolerates the first
+  transcript reads after a presence close (lane 4 pushed the same fix in 8f9e2ff), and the
+  `shared_navigation` fixture no longer depends on reaching the panes page inside the three-second
+  review linger. Rerun `scripts/e2e-all.sh` on a quiet host before merging; `context` and
+  `native_picker` still need macOS.
+- 2026-10-19 open question: a pane taller than the detail follows its bottom rows while on the Screen
+  tab (`g` scrolls up, `G` follows again); the item did not say which end to show.
 
 ### B-07 Mass-add outline: prefill the existing tree and reuse names, learned from tuios-deck
 
