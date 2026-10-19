@@ -25,6 +25,95 @@ Item = { id: "B-01", status: "ready", priority: "p1", size: "M",   // S < half a
 
 ## p1 · tonight
 
+### B-06 Pane detail: tab bar with a live Screen tab first, learned from tuios-deck
+
+status: ready · priority: p1 · size: L · owner: · branch: · verified:
+
+Today a pane row's detail opens on the transcript (`TRANSCRIPT · ] Turns`), so moving `j`/`k` down
+the rail shows text that looks the same for every agent. Telling panes apart means `enter` into live
+mode and `ctrl+a d` back out, for every pane. tuios-deck solved this: the main area is a tab bar and
+the first tab is the pane's screen.
+
+What to take from `~/proj/tuios-deck` (README "The deck page", "Live: typing into a pane";
+`internal/ui/model.go` tabs, `view.go` detailLines, `live.go`):
+
+- tabs `1 Screen · 2 Activity · 3 Transcript · 4 Turns`, drawn as a bar at the top of the detail with
+  the pane's `session › name`, its assignment glyph and path, stale age and last message beside it.
+  `1`–`4`, `[` `]`, `tab` / `shift+tab` switch from the rail or the detail; the bar brightens and
+  underlines the shown tab when the detail has focus
+- Screen is the default and is read-only: the pane's rendered screen from `capture-pane`, redrawn when
+  the stream says the pane printed, with a one-second safety re-read; keeps the scroll unless
+  following the bottom; `G` follows newest output again; `j`/`k` scroll a line with the detail
+  focused, `J`/`K` half a page
+- `enter` on a pane goes live, which is the same Screen tab with the keyboard routed to the pane:
+  the only visual change is the live bar and the cursor. `ctrl+a d` drops the keyboard and the Screen
+  stays. `ctrl+a j`/`k` go live on the next or previous rail pane without leaving
+- the rail never changes shape between browsing and live; the detail is never full-screen except
+  `ctrl+a z`
+- the detail re-reads once a second and the list refreshes on daemon events; selection, tab and
+  scroll survive both
+
+Keep from the current deck: the review-queue rows in the rail, the transcript and turns content, the
+leader semantics in §7.1, and the stream lease rules already in the outline.
+
+```js
+PaneDetail = { tab: "screen"|"activity"|"transcript"|"turns", follow: bool, scroll: int,
+               live: { keyboard: bool, view: "normal"|"zoomed"|"fullscreen" } }
+```
+
+Acceptance:
+
+- selecting any pane row shows its actual screen within one second, without going live; two agents
+  with the same name are distinguishable from the rail alone
+- `1`–`4`, `[` `]` switch tabs from both the rail and the detail; the chosen tab persists per pane
+  across refreshes and across re-selection
+- `enter` then `ctrl+a d` leaves the detail on the Screen tab with the same scroll; the rail did not
+  move or resize at any point
+- outline §7.1 updated with the tab bar; the `shared_navigation` and live e2e cases assert the Screen
+  tab and the detach round trip
+
+notes:
+- 2026-10-19 asked for after comparing with tuios-deck; this is the one the human called out as most
+  important.
+
+### B-07 Mass-add outline: prefill the existing tree and reuse names, learned from tuios-deck
+
+status: ready · priority: p2 · size: M · owner: · branch: · verified:
+
+The current mass-add (`alt+m` / `+ add new…`, outline §6.3 and §7.1) is a parked form where
+`tab` / `shift+tab` nest new lines. tuios-deck's "Adding many at once" (README) is still a
+plain outline but gets more right. Adopt:
+
+- opens prefilled with every existing project (by name) and its tasks and subtasks nested beneath,
+  drawn dim with their mark and status (`deck  ✓ done`), cursor on an empty line after them. The
+  user sees where a new line lands and never retypes a parent
+- existing names are reused, never duplicated: a line equal to an existing title under the same parent
+  is the existing item, so new lines under it become its children. A top-level line may also name a
+  task by path, `deck / command palette`, to add under it
+- blank lines and `#` comments are skipped; the hint shows an example outline when the store is empty
+- `ctrl+s` validates the whole outline first and refuses with the line number: indent under nothing,
+  indent that jumps more than one level, odd spaces. Nothing is created on refusal; on success the
+  status says `added N projects, M tasks` and the tasks page keeps its selection
+- mass-add only adds: deleting a prefilled line deletes nothing, editing one renames nothing (the
+  edited text is a new item). The hint says so
+- line editing: `enter` splits and keeps the indent, `backspace` at line start joins, `ctrl+u` clears
+  the line, `tab`/`shift+tab` indent and outdent without leaving the field, 14 lines visible with the
+  cursor kept in view
+
+Keep deck's rule that every root task needs a project (a bare top-level task line is a project, as in
+tuios-deck, or is rejected; decide in the outline) and the one-parked-modal rule.
+
+Acceptance:
+
+- opening mass-add on a store with two projects and nested tasks shows them dim in the outline, and
+  typing one indented line under an existing task creates exactly one task under it
+- an invalid indent is refused with its line number and no row is written
+- `deck task list` after a save shows the new rows in outline order with the right parents
+- the `mass_add` outline case covers prefill, reuse, path lines, refusal and the status message
+
+notes:
+- 2026-10-19 "not great, but better than ours".
+
 ### B-03 Gather TUI design samples for every deck screen and widget
 
 status: review · priority: p1 · size: S · owner: Claude Fable subagent (session_01Cg7zBUciGaMHsqweicyuGP) · branch: main (redeck-astra) · verified: file reviewed by the parent session; 55 samples, 73 unique links
