@@ -379,6 +379,15 @@ VimSession = { id, name, session_file: path, window?, project_id, task_id, cwd, 
 - keeps: `Model` as view state only (selection, scroll, modal slot, page, live)
 - loses: domain logic (→ units), page enum (→ registry `Page`), closures over Model in forms (→ `Field.source`)
 - one modal slot; `replace` or close; mass-add is the one parked modal
+- shared list navigation applies to every list: rail, pages, modals, trees, palette, help, pickers, and auto-complete suggestions
+  - in normal mode, `j` / `k` move down / up one item; `h` / `l` move left / right between areas or fold / expand tree nodes
+  - `d` / `u` move down / up half a page; `ctrl+f` / `ctrl+b` move down / up a full page
+  - `g` / `G` jump to the top / bottom of the list
+  - `{` / `}` jump to the previous / next section or group, rather than a single item
+  - `ctrl+n` / `ctrl+p` move down / up lists, especially auto-complete suggestions, including while typing in the associated input
+- text inputs use readline bindings for line-wise navigation and editing: `ctrl+a` / `ctrl+e` go to the start / end of the line; `ctrl+f` / `ctrl+b` move forward / back one character; `ctrl+h` is backspace
+  - input mode keeps printable characters as text and gives readline bindings priority over list or form actions; `ctrl+n` / `ctrl+p` still navigate suggestions
+  - live mode keeps its own leader and key forwarding rules below
 - forms: a box in the top ~8 lines of the window; the content below is pushed down and shrinks by that much
   - a field is a button with one highlighted char; that char focuses the field and enters input mode
   - a form opens in normal mode (keys pick fields, `esc` closes, `/` filters); `esc` in input mode returns to normal; `tab` / `shift+tab` cycle fields
