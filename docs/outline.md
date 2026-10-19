@@ -8,16 +8,24 @@ Conventions: shapes are js-style; `?` = optional; relationships read like Rails 
 
 - a unit = one package, one concept, its tables, its rules
 - talks to others only via: command bus (writes), event runner (reads), narrow interfaces it was handed
-- never imports a shell (`tui`, `web`, `cli`)
+- never imports a shell (`tui`, `cli`)
 - never touches view state (selection, scroll, modal)
-- registers definitions (pages, commands, routes, palette, groupings) with the registry at startup
+- registers definitions (pages, commands, palette, groupings) with the registry at startup
 - verified by e2e suites only; no unit tests
 
 ```js
 Unit = { id, tables: [name], commands: [name], emits: [type], listens: [daemonType],
-         pages: [id], palette: [id], routes: [Route], cli: [spec] }
+         pages: [id], palette: [id], cli: [spec] }
 // Go: interface { ID() string; Register(*Registry) }
 ```
+
+## 0b. How to build it
+
+- design every TUI surface (rail, detail, page, modal, form, help) with the `/frontend-design` skill; a terminal is still a UI
+- parallel subagents, one unit or page each; optimize for wall-clock speed
+- subagent models: opus or sonnet only; never fable
+- web UI removed for now (not used); nothing is built for `internal/web`
+- commit after every green step; `scripts/e2e-all.sh` before the last commit
 
 ## 1. Orchestrator — `cmd/deck`
 
@@ -37,7 +45,7 @@ Unit = { id, tables: [name], commands: [name], emits: [type], listens: [daemonTy
 ```js
 Wiring = { client, store, config?, registry, bus, runner,
            units: [work, prompts, context, history, reviews, captures, notes, reminders, panes],
-           shells: [tui | web | cli] }
+           shells: [tui | cli] }
 ```
 
 ## 2. Store — `internal/store`
@@ -62,7 +70,7 @@ t.<table> = { get(id), put(row), delete(id), all(), where(fn) }
 
 - synchronous dispatch table, not a queue
 - every mutation = named command + json payload, handled by owning unit
-- served by: TUI keys, `POST /api/call`, `deck <unit> <cmd> --json`
+- served by: TUI keys, `deck <unit> <cmd> --json`
 - one log line per dispatch: name, args hash, duration, error
 
 ```js
@@ -81,14 +89,14 @@ Bus     = { register(name, Handler), call(Command) => Result, list() => [name] }
 DaemonEvent = { seq, type, session, window, data }
 DeckEvent   = { type: "tasks.changed", source: "deck", ids: [id], at }
 Handler     = { Types(): [type], Handle(ctx, ev), Resync(ctx, bootID), Close?() }
-Tap         = chan Event   // one per shell / browser tab; never closes on reconnect
+Tap         = chan Event   // one per shell; never closes on reconnect
 ```
 
 ## 5. Registry — `internal/registry`
 
 - definition tables; shells read, units write at register
 - `All(kind)`, `Status(id)` (review marks from the inventory plan)
-- kinds: page, action, palette, modal, grouping, route, form, feature
+- kinds: page, action, palette, modal, grouping, form, feature
 
 ```js
 Page           = { id, key, title, unit, rail: fnName, detail: fnName, keys: tableId, help: id, tick: bool }
@@ -97,7 +105,6 @@ Grouping       = { id, levels: ["harness","project","top-task"] }
 Modal          = { id, kind: "list"|"form"|"tree", source: sourceId, onPick: { replace: id } | { command } }
 Form           = { id, submit: commandName, fields: [Field] }
 Field          = { name, source: sourceId, preview?: sourceId, add?: "task"|"project", multi?: bool, hint? }
-Route          = { method, path, command?: name, read?: tableName }
 Action         = { name, mode, defaultKey, does }     // from config/keys.go today
 ```
 
@@ -105,7 +112,6 @@ Action         = { name, mode, defaultKey, does }     // from config/keys.go tod
   - `Page belongs_to :unit`
   - `PaletteCommand has_one :command`
   - `Form has_many :fields; Form has_one :command (submit)`
-  - `Route belongs_to :command or :table`
   - `Modal has_one :source; Modal may replace :modal`
 
 ## 6. Units
@@ -140,20 +146,25 @@ Pane    = { session, id, name, state, harness, foreground, cwd, message, blocked
 ### 6.3 work — projects, tasks, assignments
 
 - tables: `projects`, `tasks`, `assignments`
+- a project has a tree: the worktree, clone or folder its work happens in
+  - `Start(spec).cwd` defaults to the assigned project's tree path
+  - [ ] one tree per project or many (one per branch)
+  - [ ] who creates it: the deck (`git worktree add`) or the person
 - rules owned here (today split ui/web)
   - `Resolve(window)` → task/project
   - `Target(task, project)` by id or name
   - assign new window
-  - two-miss pruning, fed by `panes.changed` (web gets it)
+  - two-miss pruning, fed by `panes.changed`
   - themes: 16 colours, free-colour pool, glyph sections
   - snoozes, `easy`, status, `MoveTask`
   - `ProjectOf(task)` walks parents to root (subtasks store no project_id)
-- commands: `work.add-project`, `work.patch-project`, `work.add-task`, `work.patch-task`, `work.move-task`, `work.assign`, `work.unassign`, `work.snooze`, `work.mass-add`
+- commands: `work.add-project`, `work.patch-project`, `work.set-tree`, `work.add-task`, `work.patch-task`, `work.move-task`, `work.assign`, `work.unassign`, `work.snooze`, `work.mass-add`
 - emits: `projects.changed`, `tasks.changed`, `assignments.changed`
 - pages: tasks (`T`), tree modal (`w`)
 
 ```js
-Project    = { id, name, theme: Theme, status, created }
+Project    = { id, name, theme: Theme, status, created, tree?: Tree }
+Tree       = { kind: "worktree"|"clone"|"dir", path, repo?, branch? }
 Task       = { id, parent_id, project_id, title, theme: Theme, status, easy?, snoozed_until?, created, updated }
 Assignment = { [window]: { session, task_id, project_id } }
 Theme      = { color: ansiName, glyph }
@@ -163,6 +174,7 @@ Theme      = { color: ansiName, glyph }
 - `Task belongs_to :project (root only); Task belongs_to :parent (Task); Task has_many :subtasks`
 - `Assignment belongs_to :pane (by window); belongs_to :task or :project`
 - `Project has_one :theme; Task has_one :theme`
+- `Project has_one :tree`
 
 ### 6.4 prompts — presets, queue, stash, dispatch, agent start
 
@@ -297,17 +309,15 @@ ViewState = { page: pageId, sel: { pane?: window, task?: id, ctx?: id }, scroll:
               modal?: { def: Modal, state }, parked?: modal, confirm?, live?, status }
 ```
 
-### 7.2 web — `internal/web`
+### 7.2 web — removed for now
 
-- routes generated from registry `Route` (≈20 reads + `/api/call`)
-- SSE from tap; WebSocket bridge to `stream-pane`; one presence for lifetime
-- page (`static/index.html`) reads same json shapes as units emit
-- [ ] forms generated from `Form` defs (later)
+- not used; delete `internal/web`, `scripts/e2e-web.sh`, `scripts/wscheck`
+- reinstate later as a shell over the bus and registry
 
 ### 7.3 cli (new)
 
 - `deck <unit> <command> --json '{…}'` generated from bus `list()`
-- reads: `deck <unit> list` from `Route.read`
+- reads: `deck <unit> list` per table
 
 ## 8. Flows (who touches what)
 
@@ -317,18 +327,19 @@ ViewState = { page: pageId, sel: { pane?: window, task?: id, ctx?: id }, scroll:
   - daemon `window-closed` → runner → panes unit → `panes.changed` → work unit miss counter (2 misses → prune, tx: assignments) → `assignments.changed`
 - turn ends
   - daemon `agent-activity` → runner → history (batch insert) + autocapture (file) → `history.changed` → reviews page re-reads `Turns`
-- web PATCH task
-  - `PATCH /api/tasks/{id}` → `Route.command = work.patch-task` → bus → tx: tasks → `tasks.changed` → SSE → page
+- cli patch task
+  - `deck work patch-task --json` → bus → tx: tasks → `tasks.changed` → TUI re-reads
 
 ## 9. Migration (from the report, step → verify)
 
-1. `internal/core`: dedupe ui/web helpers → e2e.sh, e2e-web.sh
-2. pruning into core, both shells → e2e.sh + new web check
+0. delete `internal/web` and its suites → e2e-all minus web
+1. `internal/core`: move the duplicated helpers out of ui → e2e.sh
+2. pruning into core → e2e.sh
 3. registry: pages/palette/groupings/modals/actions → e2e-help.py, palette checks
 4. pages from table → e2e.sh page switches
 5. one modal slot + field sources → e2e.sh forms, e2e-prompt-stash.sh
 6. store per-table `Tx`, history append-only → every suite (seed helper updated once)
-7. command bus + `/api/call` + generated routes → e2e-web.sh
+7. command bus + generated cli → new e2e-cli.sh
 8. panes registry unit + `panes.changed` → e2e.sh, e2e-history.sh, e2e-review.py
 9. wiring to cmd/deck, reminders as unit → e2e-all
 
@@ -337,6 +348,6 @@ ViewState = { page: pageId, sel: { pane?: window, task?: id, ctx?: id }, scroll:
 - [ ] json-per-table vs keep sqlite as the only backend
 - [ ] command naming: `unit.verb` vs `unit/verb`
 - [ ] does `panes` unit cache or re-list on every `panes.changed`
-- [ ] web forms from `Form` defs or stay hand-written
 - [ ] where `Theme` pool lives: work or registry
+- [ ] `Tree.kind`: does the deck manage worktrees itself or only record a path
 - [ ] deck events: typed Go structs or `map[string]any` like daemon events
