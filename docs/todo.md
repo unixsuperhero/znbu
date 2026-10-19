@@ -27,7 +27,7 @@ Item = { id: "B-01", status: "ready", priority: "p1", size: "M",   // S < half a
 
 ### B-03 Gather TUI design samples for every deck screen and widget
 
-status: claimed · priority: p1 · size: S · owner: Claude Fable subagent (session_01Cg7zBUciGaMHsqweicyuGP) · branch: main · verified:
+status: review · priority: p1 · size: S · owner: Claude Fable subagent (session_01Cg7zBUciGaMHsqweicyuGP) · branch: main (redeck-astra) · verified: file reviewed by the parent session; 55 samples, 73 unique links
 
 Research only, no code. For each screen type and widget deck uses (dashboard rail + detail, two-line
 rows and group headings, detail key/value blocks, fuzzy filter and palette, forms and pickers, prompt
@@ -43,6 +43,7 @@ Acceptance:
 
 notes:
 - 2026-10-19 started in the background by a subagent while the rest of the backlog is written.
+- 2026-10-19 done, committed in redeck-astra. Not found: a public assign-flow sample with snapshot + approval, a composer showing the target pane's scrollback, stable images for Telescope/Textual/lazygit dialogs, an authoritative TUI design article. Waiting on the human to read it and move it to done.
 
 ### B-01 Orchestrator agent that catches agents spinning their wheels
 
