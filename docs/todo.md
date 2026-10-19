@@ -50,7 +50,36 @@ todo_note_add     = { todo_id, text }                                           
 todo_claim        = { todo_id }                                                    // → B-13
 action_item_create= ActionItem                                                     // → B-15
 context_add       = { kind, text, task_id? }                                       // → context.extract
+whoami            = {}                                                             // session, window, task, project, origin
+task_status       = { task_id, expected_version, status, summary?, verification?, commit?, blocker? }
+report_progress   = { message }                                                    // status line on the pane row
 ```
+
+Learned from vaim (`~/work/ch/vaim/apps/server/src`):
+
+- vaim mounts in-process SDK servers (`createSdkMcpServer` from @anthropic-ai/claude-agent-sdk) on
+  `query({ mcpServers: { t3_app, t3_todo, t3_action_items, t3_context } })` per thread and mirrors
+  the same specs as Codex `dynamicTools`; for non-SDK runtimes it injects `T3_PIPELINE_BASE_URL`,
+  `T3_PIPELINE_THREAD_ID`, `T3_PIPELINE_TOKEN` into the agent env and `t3 pipeline-agent mcp` is a
+  stdio JSON-RPC bridge that POSTs to loopback HTTP with the bearer token. Deck should do the env +
+  stdio bridge variant: `DECK_SESSION`, `DECK_WINDOW`, `DECK_TASK_ID`, `DECK_TOKEN` in the pane env,
+  `deck mcp serve` reads them, so an agent can never address another pane's task through arguments.
+- identity is bound server-side at construction, never passed as a tool argument.
+- task lifecycle worth copying: `set_status { item_id, expected_version, status, completion_summary?,
+  verification?, commit?, blocker_reason? }` with an optimistic version check and evidence fields
+  required on done, plus `reopen_item`; the minimal agent-facing trio is `report_progress { message }`,
+  `complete_phase { summary?, resultJson? }`, `fail_phase { reason }`.
+- documents: `create_document { title, markdown }` returns a stable id and route and auto-links the
+  doc to the originating thread; `update_document { id, title, markdown }`; `list_documents`,
+  `get_document`.
+- notes: `create_action_item_note { action_item_id, text, important? }` and
+  `create_action_item_context { label, content, important? }`, a one-shot "add a note to the thing I
+  am on" with an important flag.
+- `get_current_thread_action_item_origin {}` ("what spawned me") is the first tool an agent calls;
+  deck's equivalent is `whoami {}` returning session, window, task, project, and the todo or action
+  item that spawned the pane.
+- skip from vaim: loops, tags, Slack/calendar/PR polling and typecheck-watcher tools; those belong to
+  B-16 to B-20 as scheduled lookups, not agent tools.
 
 Acceptance:
 
@@ -65,6 +94,7 @@ Acceptance:
 notes:
 - 2026-10-19 requested with the action-item and slack work; a subagent is checking what
   `~/work/ch/vaim` exposes as tools so the first list can borrow from it.
+- 2026-10-19 vaim survey folded in: env-bound identity, stdio bridge, versioned status with evidence, document auto-link.
 
 ### B-13 Todo unit and page: items that are not yet tasks
 
