@@ -927,7 +927,7 @@ notes:
 
 ### B-26 Changelog and release script in the tuios-deck style
 
-status: claimed · priority: p2 · size: S · owner: mac lane 5 · branch: night/lane-5 · verified:
+status: review · priority: p2 · size: S · owner: mac lane 5 · branch: night/lane-5 · verified: /root/proj/redeck-astra-verification/runs/run.eXZQmt1e/verification.log
 
 Adopt the `## Changelog` and `## Commits and releases` sections of `~/proj/tuios-deck/AGENTS.md` and
 the `CHANGELOG2.md` shape. `CHANGELOG.md` is a diff of deck between two tags, not a story: one entry
@@ -970,6 +970,7 @@ Acceptance:
 
 notes:
 - 2026-10-19 stub; expanded by a background agent the same day.
+- 2026-10-19 mac lane 5: shipped on night/lane-5 (fc56be8). Deviations: the repo does have a GitHub remote, so per the lane brief release.sh checks ahead/behind against and pushes main and the tag to both `origin` (github.com/unixsuperhero/redeck-astra) and `vps2`, not vps2 alone; CHANGELOG.md starts with a `## v0.1.0 — 2026-10-19` entry written from main's log (nothing tagged). `scripts/release.sh --dry-run` was run locally as pure bash + git (the vps2 runner copies source without .git or CHANGELOG.md, so it cannot see tags or log): it printed `CHANGELOG.md has no entry for v0.0.1`, wrote .dev/changelog-prompt.md with the rules and 69 commits, tagged nothing; `minor --dry-run` finds the v0.1.0 entry; without --dry-run it exits 1; grep -c proxy.golang.org prints 0. Full suite on vps2: every suite passed except outline flakes unrelated to these script/doc changes (shared_navigation, history_review timing under load; native_picker needs macOS); an earlier run (run.0ECzfuoB) also flaked once in e2e.sh tui.
 
 ### B-27 Downloads page: watch ~/Downloads, newest first, copy absolute paths
 
