@@ -90,6 +90,50 @@ notes:
 
 ## p2 · this week
 
+### B-05 Notes on almost anything, shown in the detail pane of every page
+
+status: ready · priority: p2 · size: L · owner: · branch: · verified:
+
+Today a note belongs to exactly one task or project (outline §6.8). Open it up so a note can hang
+off nearly any row deck shows, and so the page that lists those rows shows their notes in the
+main-content area on the right, not in a modal.
+
+```js
+Note    = { id, text, owner: Owner, created, updated }
+Owner   = { kind: "task"|"project"|"pane"|"context"|"capture"|"review"|"vim"|"reminder"|"prompt", id }
+// pane notes key on session + window id, like captures, and stay readable after the pane closes
+Visible = { note: Note, via: "own"|"parent"|"project"|"owner", owner: name }   // inherited marking stays
+```
+
+Pieces, in build order:
+
+1. store + commands: polymorphic owner on `notes`, migration of the two existing columns into it,
+   `notes.add|patch|delete` accept `owner`, `deck note list --owner kind:id`, visibility rules keep
+   today's task/project inheritance and add "a row sees its own notes"
+2. detail pane: every page's detail ends with a `NOTES` section for the selected row, newest last,
+   inherited notes marked with `via`, wrapped to the detail width, scrolling with the rest of the
+   detail; empty shows one dim line, never a blank gap
+3. keys: add a note under the selected row from any page, edit and delete a note when detail focus is
+   on it; the form is the existing notes textarea with the owner prefilled and shown in the title.
+   `a` is taken by Assign and `n` by "create on this page", so pick the key in the outline first
+4. the notes page from phase 2 §1 (by owner, inherited marked) can come after; it is not needed for
+   the detail view
+
+Acceptance:
+
+- `deck note add --json '{"owner":{"kind":"pane","id":"<session/window>"},"text":"…"}'` works for every
+  kind in `Owner`, and `deck note list --owner` returns it; unknown kinds are rejected with `invalid_args`
+- on each of Panes, Tasks, Context, Captures, History, Reviews, the detail of a row with notes shows the
+  `NOTES` section with the text, and the rail row carries a note count or glyph
+- adding, editing and deleting from the detail keeps the selection and scroll (same rule as refresh)
+- the `descendant_notes` outline case still passes and gains one assertion per new owner kind
+
+Open before claiming: the key for "add note here"; whether a review note belongs to the turn or to the
+history entry; whether a closed pane's notes surface anywhere besides history.
+
+notes:
+- 2026-10-19 asked for notes on "almost anything", displayed in the right pane on that item's page.
+
 ### B-04 Help modal: two rows shift left and leak border glyphs
 
 status: ready · priority: p2 · size: S · owner: · branch: · verified:
