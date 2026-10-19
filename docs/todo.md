@@ -619,7 +619,7 @@ notes:
 
 ### B-11 Documents page: starred docs, glow preview, live mode, unread theme
 
-status: claimed · priority: p2 · size: M · owner: mac lane 5 · branch: night/lane-5 · verified:
+status: review · priority: p2 · size: M · owner: mac lane 5 · branch: night/lane-5 · verified: /root/proj/redeck-astra-verification/runs/run.j6e4SZd4/verification.log
 
 Reviewable documents already exist as review entries (§6.6: an md or html the agent wrote). Give them
 a page and a star.
@@ -652,6 +652,7 @@ Acceptance:
 
 notes:
 - 2026-10-19 asked for with the review lifecycle; glow must be present on the host for the preview.
+- 2026-10-19 mac lane 5: shipped on night/lane-5 (e9ff462, b364be3, ade2e20). Page key `M`, star key `*`. The `documents` outline case passes (also run.mKoc4pEv with downloads and context). Deviations: glow is not installed on vps2, so the e2e case puts a glow stand-in on PATH; the real glow 3.0.0 flags (`-w N`, `-tl`) were checked on the Mac only. Live mode opens `glow -tl` as a tuios pane in the document's session (`deck` when that session is gone), reuses it on the next enter, and goes live on it like any pane. Document rows have session/window but no turn_id, because the review document listing does not carry one. Shared code beyond the label/detail/rail switches: (1) new `context.add` command in internal/context (adds a kind+text+owner item or updates the existing one) so a star becomes a context item; (2) render_live.go: enterLive's tail moved into `goLive` and `selectLivePane` does nothing on the documents page, so a detach stays on Documents; (3) task/project detail gets a generic `STARRED CONTEXT` block (render_work.go + model.loadDetail reading context.list for the row's scope), which B-10 can reuse. The full suite's outline step failed only on flakes outside this item: context created-asc, history_review (internal/reviews/documents.go builds documents from a map, so two documents with the same timestamp come back in random order and the case expects md before html; this failed the same way before B-11), native_picker (needs macOS), and a downloads race in my own B-27 case, fixed in ade2e20.
 
 ### B-06 Pane detail: tab bar with a live Screen tab first, learned from tuios-deck
 
