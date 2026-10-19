@@ -1056,6 +1056,21 @@ notes:
 
 ## p2 · this week
 
+### B-36 Command palette styles: several interchangeable looks, chosen in settings
+
+status: ready · priority: p2 · size: M · owner: · branch: · verified:
+
+Like the form layouts in the forms redesign: one palette engine (sources, filtering, the nested
+palette stack and per-row verbs from the nested command palette item) and 4 to 5 presentation-only
+styles picked by a `palette.style` setting on the settings page, switchable without restart.
+Candidates: `list` (help-modal look, single column), `popup` (small fuzzy popup at the cursor),
+`bar` (bottom command bar, completions above it), `side` (panel replacing the detail pane),
+`full` (full-screen list with preview). A style is one file behind a registry interface; the e2e
+palette cases run under every style.
+
+notes:
+- 2026-10-19 asked for together with switchable form layouts; build after the nested palette.
+
 ### B-34 AI page: harnesses, agents, skills, commands, marketplaces, MCPs, learned from disk
 
 status: ready · priority: p2 · size: L · owner: · branch: · verified:
