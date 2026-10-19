@@ -314,7 +314,7 @@ notes:
 
 ### B-15 ActionItem unit, page and the one-character global indicator
 
-status: claimed · priority: p1 · size: M · owner: vps2 lane 3 · branch: night/lane-3 · verified:
+status: review · priority: p1 · size: M · owner: vps2 lane 3 · branch: night/lane-3 · verified: /root/proj/night/logs/lane-3-B-15.log
 
 Everything that needs the user's attention, from any source, in one place.
 
@@ -342,6 +342,7 @@ Acceptance:
 
 notes:
 - 2026-10-19 defined as the target for the slack, github, linear and scheduled checks below.
+- 2026-10-19 lane 3: shipped in commit 7e8e27d on night/lane-3 (`internal/actions`, outline §13, e2e case `action_items`). Decisions: page key `I`; page keys `enter` open, `x` dismiss, `t` todo, `c` task because `d` is half-page-down and `T` the Tasks page; promote-to-todo calls `todos.add` when B-13 is wired, else writes the `action_todos` stub table that the B-13 import migrates; `cmd/deck` is lane 2's tonight, so `reminders.New` hosts the wiring (`internal/reminders/attach.go`), to be lifted into `cmd/deck/wiring.go` at merge; the mark rides on the Actions tab, first after the pin, until lane 1's `view.go` gives the title line a slot. Pre-existing failures on this host, identical on untouched origin/main: `e2e-daemon.sh` (transcript authorization panic), `e2e.sh` tui_suite (form_field waits under load), outline `catalogs_help`, `shared_navigation`, `history_review`; the log records them.
 
 ### B-16 Slack monitoring: mentions, DMs, threads, oncall channels, assessed into action items
 
