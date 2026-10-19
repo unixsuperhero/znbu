@@ -30,6 +30,48 @@ Item = { id: "B-01", status: "ready", priority: "p1", size: "M",   // S < half a
 
 ## p1 · tonight
 
+### B-31 Forms redesign: precise, modal, hierarchy-aware, replaces the top-8-lines box
+
+status: ready · priority: p1 · size: L · owner: · branch: · verified:
+
+The current form (a box in the top ~8 lines, outline §4 Form shape and §7.1 "forms") goes. Research
+tuios's forms, Bubble Tea's own options (huh, bubbles textinput/list) and other TUI form examples,
+then rebuild the one shared form engine:
+- a visible list of every field (data point) with its value; a binding jumps straight to a field,
+  vim/modal style, not tab-cycling
+- completion that is actually useful: fuzzy over real records, previews, current value first
+- related fields stay consistent: picking a child sets its parent field to that child's parent;
+  opening a child field after a parent is chosen scopes the choices to that parent's children
+- typing a value that matches nothing creates a new record with that name on submit
+- every form uses it; behind a settings toggle while it replaces the old box (file rule)
+Remove the "top ~8 lines" form rule from znbu's outline as part of this item.
+
+notes:
+- 2026-10-19 stub; a background agent is researching and expanding it.
+
+### B-32 Preset prompts: a dedicated start-with-preset action and a page of asked questions
+
+status: ready · priority: p1 · size: M · owner: · branch: · verified:
+
+One binding/action that starts a prompt in preset mode: pick a preset such as "answer in 10 words or
+less, or if necessary 3 paragraphs or less", which is prepended or appended to what the user types.
+Presets and every prompt sent with them get their own unit and page, so all asked questions are
+browsable with their answers.
+
+notes:
+- 2026-10-19 stub; expansion in the background.
+
+### B-33 Nested command palette: styled like the help modal, sub-palettes per kind
+
+status: ready · priority: p1 · size: M · owner: · branch: · verified:
+
+The palette looks like the fixed keybinding help modal, single column. It nests: a Pages palette
+lists only pages; similar palettes list panes, projects, tasks and other records, each reachable by
+its own binding; choosing a row offers that row's verbs (`show`, `open`, `tag`, …) from the registry.
+
+notes:
+- 2026-10-19 stub; expansion in the background.
+
 ### B-28 Provenance on every record: turn, pane, task, project, commit, PR
 
 status: review · priority: p1 · size: M · owner: vps2 lane 4 · branch: night/lane-4 · verified: /root/proj/night/logs/lane-4-B-28.log
@@ -889,6 +931,18 @@ notes:
 - 2026-10-19 10:42 vps2 lane 4: shipped on night/lane-4 (commits fc997fc, e5a54bb): todos table in the work unit, `deck todo add|patch|claim|promote|delete|import`, page on `B` with enter promoting under the pin and notes moved to the task, import of docs/todo.md keyed by B-nn, task status rule todo→active on assignment (DECK_NEW_TASK_STATUS stubs the B-21 toggle). Outline §14, suite scripts/e2e-todos.sh. The full-suite log's outline failures are macOS-only cases plus order/load-dependent cases that behave the same on the base commit (evidence in the log). Open: `deck trace`/settings toggle belong to lane 2's files; the todo concept and page are registered from the work unit because cmd/deck is lane 2's.
 
 ## p2 · this week
+
+### B-34 AI page: harnesses, agents, skills, commands, marketplaces, MCPs, learned from disk
+
+status: ready · priority: p2 · size: L · owner: · branch: · verified:
+
+A two-panel page: the left nav lists subpages (harnesses, agents, skills, commands, marketplaces,
+MCPs, …), the right shows the selected list and detail. Every harness has the same sections. Skills
+also get their own top-level page for system-wide search. Filled by scanning the disk (Claude Code,
+Codex, OMP and other harness config and plugin folders) and recording what each thing is.
+
+notes:
+- 2026-10-19 stub; expansion in the background.
 
 ### B-29 UI/UX pass on every page with Fable 5.1 and the frontend-design skill
 
