@@ -15,6 +15,8 @@ Conventions: shapes are js-style; `?` = optional; relationships read like Rails 
 - every list read takes a `Scope`; a unit answers only the rows under it (`Scope{}` is everything)
 - registers definitions (pages, commands, palette, groupings) with the registry at startup
 - verified by e2e suites only; no unit tests
+- every user-relevant state and transition has a visible indicator, explanation, and clearing rule; follow the [UI state inventory](ui-state-visibility.md), including failures and unknown state, not just the happy path
+- source documentation must support reviewing packages, structs, fields, methods and relationships; use the [Go documentation tool decision](go-code-review.md) alongside runtime registry documentation
 
 ```js
 Scope = { task_id, project_id }     // the pin: a task and its project; a unit filters by task subtree, else by project
@@ -413,6 +415,16 @@ VimSession = { id, name, session_file: path, window?, project_id, task_id, cwd, 
   - top: the review queue, finished turns and documents under the pin, oldest first; focus on the right (`l`/`right`) marks the entry reviewed, preview does not
   - bottom: the active panes, agents and terminals still working or waiting, grouped as `o`/`O` says; in `all` mode, `No Task` comes last; in `scope` mode, unassigned items and their group are absent
   - a pane moves from the bottom to the top when its turn ends, and back when a prompt is sent
+- selecting any terminal, agent or running vim row on the pane/deck page shows a read-only terminal preview anchored at the bottom of the detail area, above the help line
+  - show the actual recent scrollback and terminal screen, not an activity log or agent transcript substituted for it; vim and other alternate-screen applications show their current screen
+  - metadata and transcript may remain above it, but cannot push the preview out of view; reduce metadata first on short terminals
+  - previewing never focuses, sends input to, resizes, or acquires a size lease on the target pane; it never marks a turn reviewed
+  - bound capture requests, ignore results for old selections, and preserve selection, filters, modals and scroll during refresh; no disruptive heartbeat
+  - label loading, empty, closed, unavailable and cached previews explicitly, with target identity and capture time; render terminal styling safely without executing control sequences
+  - the [preview acceptance scenarios](ui-state-visibility.md#terminal-preview) cover terminal, agent and vim screens, stale responses and non-interference
+- rows expose simultaneous status flags and counts, including locally saved prompts as well as daemon-owned queue entries; details expand every indicator and its reason
+  - use one [status legend and inventory](ui-state-visibility.md#indicator-contract) across pane, agent and vim rows; color supplements text, never replaces it
+  - a new backend state is incomplete until its visible cue, transition, failure behavior and verification are documented
 - help line (last row): the bindings that apply to the current mode and the highlighted row, not a fixed list; `F1` / `?` open the full help modal
 - deck page keys: `h` / `l` move between rail and detail; `{` / `}` jump by group (`No Task` is one); `o` / `O` cycle the grouping; `w` the task tree modal (lineage only, see §6.3); `e` edit
 - stale panes: no activity past `stale_after` marks the row stale and groups them; a palette command closes them
