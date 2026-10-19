@@ -92,16 +92,17 @@ notes:
 
 ## p3 · someday
 
-### B-02 Record agent mail in deck history
+### B-02 Deck-owned agent messaging (shared places)
 
-status: parked · priority: p3 · size: S
+status: idea · priority: p2 · size: L
 
-Keep tuios mail as the transport. Deck taps messages into history as `message-sent` /
-`message-received` entries with the pane's task ownership, so mail survives daemon restarts and shows
-on the history page. Needs confirming that tuios exposes mail in its event stream first.
+Already designed in [the outline](outline.md) under the code unit, "shared places": the deck owns the
+record (`PlaceMessage`, `Claim`) and the routing, tuios mail is only the transport, and every message
+lands in history under the sender's task. Open decisions 598 (deck server) and 610 (messages to a human
+terminal) gate parts of it. Split into claimable items when it comes up.
 
 notes:
-- 2026-10-19 discussed and parked; not needed for the overnight runs.
+- 2026-10-19 the design was settled earlier today in the outline; this entry only tracks building it.
 
 ## Done
 
