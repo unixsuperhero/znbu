@@ -1095,3 +1095,9 @@ notes:
 
 Move finished items here with their branch and the verification log path, then add the behavior to the
 outline's done list.
+
+### B-30 Remove the Stale rail group on the panes page
+status: done · priority: p1 · size: S · owner: Claude Fable subagent · branch: main (redeck-astra ccbb1747662b2fb472efbf3b23ebf09feec80599) · verified: /root/proj/redeck-astra-verification/runs/run.gXZXXkHU/verification.log
+Stale panes stay in their project/task group with the stale mark and age; the separate Stale group hid panes the user cared about. The stale_after setting and the close-stale palette command remain.
+notes:
+- 2026-10-19 done in the background on request.
