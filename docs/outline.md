@@ -55,7 +55,7 @@ Wiring = { client, store, config?, registry, bus, runner,
 ## 2. Store — `internal/store`
 
 - one database, per-table repos, one transaction API
-- backends: json-per-table (step 6), sqlite (current, becomes "a backend")
+- SQLite only; no JSON-per-table backend
 - units declare tables; store does not know fields
 - `Tx(tables, fn)` — only touched tables saved
 - history append-only, never rewrites other tables
@@ -108,7 +108,7 @@ Tap         = chan Event   // one per shell; never closes on reconnect
 
 ```js
 Page           = { id, key, title, unit, rail: fnName, detail: fnName, keys: tableId, help: id, tick: bool,
-                   scoped: bool }   // true: the page has the scope/all modes (`S`); tasks page is false
+                   scoped: bool }   // true: the page has the scope/all modes (`S`), including tasks
 PaletteCommand = { id, group, label, hint, key?, run: Command }
 Grouping       = { id, levels: ["harness","project","top-task"] }
 Modal          = { id, kind: "list"|"form"|"tree", source: sourceId, onPick: { replace: id } | { command } }
@@ -164,15 +164,20 @@ Pane    = { session, id, name, state, harness, foreground, cwd, message, blocked
   - `settings` per project: default tree, default harness, default preset
 - the pin: the deck is always pinned to one task; its project is the task's root project
   - `active` is one row and never empty once a task exists; `Scope` is derived from it
-  - set only through the switch modal (`P`): projects, then their tasks and subtasks, as one fuzzy tree
-    - every level ends with `+ new…`; typing a name that matches nothing offers to create it there, under the highlighted node, without leaving the modal
-    - `enter` on a task pins it; `enter` on a project pins its first open task, or creates one if it has none
+  - set through the project/task tree (`P`): one fully expanded tree of actual projects, tasks, and subtasks; no repeated `+ new` rows
+    - `o` / `O` insert a draft task below the selected subtree / above the selected task; on a project, either inserts its first root task
+    - `e` / `i` edit a task title or project name inline; `Escape` or `Enter` finishes the line and returns to navigation; empty new lines are dropped
+    - new task lines support `Tab` / `Shift+Tab` nesting within the same project or unassigned group; existing task ownership is unchanged
+    - `Ctrl+s` submits every insertion and rename together, preserves the pin, and closes only on success; validation or concurrent tree changes retain the draft with an error and write nothing
+    - `Escape` in normal mode discards the entire draft without writes; navigation and line editing never persist changes
+    - `Enter` on a clean task pins it; on a clean project it pins the first open task or creates one if needed; dirty drafts must be saved or discarded first
+    - project creation and repository scanning remain separate palette actions with native filesystem pickers, not tree rows
   - almost everything the UI shows is under the pin: panes in the rail, context, captures, history, reviews, queue, vim sessions, notes
-  - not scoped, ever: the tasks/projects page (`T`), the help, the palette, the settings
+  - not scoped: the project switcher, Assign, help, palette, and settings; the tasks/projects page (`T`) follows its scope/all toggle
   - every scoped page has two modes: `scope` (rows under the pin, the default) and `all` (every row); `S` toggles, per page, and the title line reads `all` while it is on; the pin itself does not change
   - in `scope` mode, panes outside the selected project or task are not in the rail; the hidden count includes unassigned panes
   - unassigned panes, terminals, agents, and vim sessions are hidden whenever the UI is scoped to a project or task; only `all` mode shows them, in a `No Task` group at the bottom; a pane leaves that group the moment it is assigned
-- first run, no projects: the deck asks for a list of dirs (`repo_roots`), scans them for git repos, and offers each repo as a project to create; the scan is repeatable from the switch modal
+- first run, no projects: the deck asks for a list of dirs (`repo_roots`), scans them for git repos, and offers each repo as a project to create; the scan is repeatable from the palette
 - inheritance: anything created with a parent takes the parent's task and project (a context item from an assigned pane, a note on a task, a queued prompt on a task, a subtask); the child stores no project of its own
 - themes
   - a project or task gets a random theme from the unassigned pool at creation
@@ -190,7 +195,7 @@ Pane    = { session, id, name, state, harness, foreground, cwd, message, blocked
   - `ProjectOf(task)` walks parents to root (subtasks store no project_id)
 - commands: `work.add-project`, `work.patch-project`, `work.set-tree`, `work.pin`, `work.scan-repos`, `work.add-task`, `work.patch-task`, `work.move-task`, `work.assign`, `work.unassign`, `work.snooze`, `work.mass-add`
 - emits: `projects.changed`, `tasks.changed`, `assignments.changed`
-- pages: tasks (`T`, unscoped); modals: switch (`P`), task tree (`w`)
+- pages: tasks (`T`, scope/all); modals: project/task tree (`P`), task tree (`w`)
 - task tree modal (`w`, from any item): the lineage of that item only
   - rows: the project, then each ancestor down to the item's task, then that task's own subtasks
   - siblings at every ancestor level are hidden; a hidden count on the ancestor row (`+19`) expands them on `l`, `h` folds again
@@ -201,7 +206,7 @@ Project    = { id, name, theme: Theme, status, created, repo: path, trees: [Tree
                settings: { harness?, preset? } }
 Tree       = { kind: "worktree"|"clone"|"dir", path, repo?, branch? }
 Active     = { task_id, tree: path }                   // one row; project is ProjectOf(task)
-Settings   = { repo_roots: [dir], stale_after, … }          // scan roots for the first run and the switch modal
+Settings   = { repo_roots: [dir], stale_after, … }          // scan roots for the first run and the palette scan action
 Task       = { id, parent_id, project_id, title, theme: Theme, status, easy?, snoozed_until?, created, updated }
 Assignment = { [window]: { session, task_id, project_id } }
 Theme      = { color: ansiName, glyph }
@@ -450,7 +455,7 @@ InputLib  = { modes: [name], mode: name, bindings: [{ mode, key, action }],
 - turn ends
   - daemon `agent-activity` → runner → history (batch insert) + autocapture (file) → `history.changed` → reviews page re-reads `Turns`
 - switch pin
-  - `P` → switch modal (tree of projects → tasks, `+ new…` at every level) → `work.pin` → tx: active → `active.changed` → every scoped page re-reads with the new `Scope`; tasks page unchanged
+  - `P` → project/task tree (real rows only) → `Enter` on a clean task or project → `work.pin` → tx: active → `active.changed` → every page in scope mode, including Tasks, re-reads with the new `Scope`; pages in all mode keep showing all rows
 - cli patch task
   - `deck work patch-task --json` → bus → tx: tasks → `tasks.changed` → TUI re-reads
 
@@ -469,7 +474,6 @@ InputLib  = { modes: [name], mode: name, bindings: [{ mode, key, action }],
 
 ## 10. Open decisions
 
-- [ ] json-per-table vs keep sqlite as the only backend
 - [ ] command naming: `unit.verb` vs `unit/verb`
 - [ ] does `panes` unit cache or re-list on every `panes.changed`
 - [ ] where `Theme` pool lives: work or registry
