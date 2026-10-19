@@ -196,6 +196,32 @@ called deterministically, without spending agent tokens.
   types per tool) or stay meta-info that commands and schedules can trigger. Start with meta-info;
   promote a tool to a handler only when a page depends on its shape (slack search, PR list)
 
+What the logs on the Mac hold (surveyed 2026-10-19):
+
+- `~/bin/lib/h_mcp_harvest.rb` has readers for codex, claude, opencode and omp; store is sqlite
+  `~/.config/hiiro/hiiro.db` with tables `mcp_calls`, `mcp_harvest_files` (incremental by
+  path+size+mtime), `mcp_tool_definitions`; templates aggregate observed argument shape, example
+  args, declared input schema and a response parser per server/tool. Port these tables and the
+  incremental file index, not the Ruby.
+- Codex: `~/.codex/sessions/YYYY/MM/DD/rollout-*.jsonl` and `~/.codex/archived_sessions/`; a call
+  and its result are one record: `type=event_msg`, `payload.type=item_completed`,
+  `payload.item.type=McpToolCall` with `server`, `tool`, `arguments`, `result{content[],isError}`,
+  `status`, `duration`.
+- Claude Code: `~/.claude/projects/**/*.jsonl`; call is an `assistant` record with
+  `message.content[].type=tool_use` and `name=mcp__<server>__<tool>`; result is a `user` record
+  with `tool_result` joined by `tool_use_id`, body in record-level `toolUseResult` else the block
+  `content`; tool definitions come from `attachment` records (`deferred_tools_record.entries[]`,
+  `prompt_snapshot.tools[]`) with `input_schema`.
+- OMP: `~/.omp/agent/sessions/<cwd-slug>/<ts>_<id>.jsonl`; there are no direct `mcp__` toolCall
+  records. MCP traffic is nested inside the `eval` REPL tool: result records
+  `role=toolResult, toolName=eval` carry `details.jsonOutputs[].details{serverName, mcpToolName, ...}`.
+  The omp reader must unwrap eval results; h-mcp's does not, so it has never harvested an OMP call.
+- Counts on this Mac: claude 400 files / 672 MB, only 8 real MCP tool_use blocks (claude-in-chrome);
+  codex 134 files, 371 calls (cua_repl 361, codex_app, codex_apps); omp 892 files / 933 MB, nested
+  calls only (tuios_* and js). opencode: 1 db.
+- No slack, glean, linear or github MCP call exists in any log on this Mac; glean appears only in
+  permission-list text. Replay of those servers cannot be verified from logs.
+
 Acceptance:
 
 - on this Mac, `deck mcp harvest` finds the servers and tools present in existing Claude, Codex and
@@ -252,8 +278,10 @@ tonight and keep the other as the fallback:
 2. agent path: the scheduled prompt itself goes to an agent pane with the slack MCP attached; the
    agent searches, assesses and creates the action items
 
-- fallback when neither is reachable: search Claude, Codex and OMP session logs for slack MCP
-  responses already captured (B-14 readers) and assess those
+- there is no log fallback tonight: the 2026-10-19 survey found zero slack, glean, linear or github
+  MCP calls in Claude, Codex or OMP logs on the Mac, so B-14 replay has nothing to learn from yet.
+  Tonight's deliverable is path 2 (a scheduled prompt to an agent pane that has the slack MCP
+  attached) plus the fixture-driven assessment; path 1 follows once one real call has been captured.
 - slack page in deck with a settings section: oncall week (starts Monday, one or more weeks),
   channels to watch during oncall, the oncall user group or tag; during oncall, every message in
   those channels and every mention of the tag is captured and flagged; outside oncall, only
@@ -263,6 +291,8 @@ tonight and keep the other as the fallback:
 
 Acceptance:
 
+- the agent-path prompt, run by hand against a pane with the slack MCP, produces at least one action
+  item with a permalink; the captured call then seeds B-14
 - with a fixture of captured messages (no live slack), the assessment prompt yields action items with
   the permalink as `source_url` and the indicator lights
 - the settings persist in the store, `deck slack settings` prints them, and the oncall window
