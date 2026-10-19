@@ -170,14 +170,14 @@ Pane    = { session, id, name, state, harness, foreground, cwd, message, blocked
   - almost everything the UI shows is under the pin: panes in the rail, context, captures, history, reviews, queue, vim sessions, notes
   - not scoped, ever: the tasks/projects page (`T`), the help, the palette, the settings
   - every scoped page has two modes: `scope` (rows under the pin, the default) and `all` (every row); `S` toggles, per page, and the title line reads `all` while it is on; the pin itself does not change
-  - a pane assigned to another task is not in the rail; a count in the title line says how many are hidden
-  - a pane with no assignment is always in the rail, under every pin, in a `No Task` group at the bottom; its rows draw in the red/black theme; it leaves the group the moment it is assigned
+  - in `scope` mode, panes outside the selected project or task are not in the rail; the hidden count includes unassigned panes
+  - unassigned panes, terminals, agents, and vim sessions are hidden whenever the UI is scoped to a project or task; only `all` mode shows them, in a `No Task` group at the bottom; a pane leaves that group the moment it is assigned
 - first run, no projects: the deck asks for a list of dirs (`repo_roots`), scans them for git repos, and offers each repo as a project to create; the scan is repeatable from the switch modal
 - inheritance: anything created with a parent takes the parent's task and project (a context item from an assigned pane, a note on a task, a queued prompt on a task, a subtask); the child stores no project of its own
 - themes
   - a project or task gets a random theme from the unassigned pool at creation
   - a theme counts as assigned while its owner is in a non-final state; final states: `done`, `skipped`
-  - a pane with no assignment draws in the obnoxious red/white theme, inside the rail's `No Task` group
+  - an unassigned pane uses the red/black theme (black text on a red background) in the rail's `No Task` group, visible only in `all` mode
 - rail row for a pane: first 4 chars of the project name in the project's theme, then the task title in the task's theme
 - task edit (`e`): title, parent (fuzzy), status; `ctrl+h` / `ctrl+l` walk the parent up and down so a task can be added under any node from anywhere
 - rules owned here (today split ui/web)
@@ -396,7 +396,7 @@ VimSession = { id, name, session_file: path, window?, project_id, task_id, cwd, 
 - the title line always shows the pin: project glyph + name, task title, hidden pane count; `P` opens the switch modal from any page
 - deck rail layout (see `docs/images/deck-rail-annotated.png`): two sections, one list for `j`/`k`
   - top: the review queue, finished turns and documents under the pin, oldest first; focus on the right (`l`/`right`) marks the entry reviewed, preview does not
-  - bottom: the active panes, agents and terminals still working or waiting, grouped as `o`/`O` says, `No Task` last
+  - bottom: the active panes, agents and terminals still working or waiting, grouped as `o`/`O` says; in `all` mode, `No Task` comes last; in `scope` mode, unassigned items and their group are absent
   - a pane moves from the bottom to the top when its turn ends, and back when a prompt is sent
 - help line (last row): the bindings that apply to the current mode and the highlighted row, not a fixed list; `F1` / `?` open the full help modal
 - deck page keys: `h` / `l` move between rail and detail; `{` / `}` jump by group (`No Task` is one); `o` / `O` cycle the grouping; `w` the task tree modal (lineage only, see §6.3); `e` edit
