@@ -97,14 +97,19 @@ Tap         = chan Event   // one per shell; never closes on reconnect
 - definition tables; shells read, units write at register
 - `All(kind)`, `Status(id)` (review marks from the inventory plan)
 - kinds: page, action, palette, modal, grouping, form, feature
+- generated from it, never hand-written: the docs of every struct, page, concept and action (`deck docs`), `deck list-actions` (bindings per mode + actions with no key), `deck config init` (every value, with its default)
+- help modal `?`: one tab per mode, the unbound actions listed last, `/` filters
+- `/` filters every list: rail, tasks, context, captures, history, reviews, palette, help, any picker
+- catalog modal: `Modal{ kind: "catalog", source: "registry.kinds" }`; picking a kind replaces the modal with that kind's list; the meta catalog is the catalog of catalogs; still one modal at a time
 
 ```js
 Page           = { id, key, title, unit, rail: fnName, detail: fnName, keys: tableId, help: id, tick: bool }
 PaletteCommand = { id, group, label, hint, key?, run: Command }
 Grouping       = { id, levels: ["harness","project","top-task"] }
 Modal          = { id, kind: "list"|"form"|"tree", source: sourceId, onPick: { replace: id } | { command } }
-Form           = { id, submit: commandName, fields: [Field] }
-Field          = { name, source: sourceId, preview?: sourceId, add?: "task"|"project", multi?: bool, hint? }
+Form           = { id, submit: commandName, fields: [Field], box: "top" }   // drawn in the top ~8 lines, content pushed down
+Field          = { name, key: char, source: sourceId, preview?: sourceId, add?: "task"|"project", multi?: bool, hint? }
+                 // key: the one highlighted char in the field's button; pressing it focuses the field
 Action         = { name, mode, defaultKey, does }     // from config/keys.go today
 ```
 
@@ -145,11 +150,22 @@ Pane    = { session, id, name, state, harness, foreground, cwd, message, blocked
 
 ### 6.3 work — projects, tasks, assignments
 
-- tables: `projects`, `tasks`, `assignments`
-- a project has a tree: the worktree, clone or folder its work happens in
-  - `Start(spec).cwd` defaults to the assigned project's tree path
-  - [ ] one tree per project or many (one per branch)
-  - [ ] who creates it: the deck (`git worktree add`) or the person
+- tables: `projects`, `tasks`, `assignments`, `active`
+- a project is a git repo
+  - new project: pick an existing repo (the common case) or a folder, which the deck turns into one with `git init`
+  - on pick the deck lists the repo's worktrees (`git worktree list`) into `trees`; the person picks the default
+  - every new agent or terminal starts in the active project's chosen tree unless the form says otherwise; `Start(spec).cwd` defaults to it
+  - `settings` per project: default tree, default harness, default preset
+- one active project, and at most one active task, at a time
+  - `active` is one row; the switch-project modal lists projects with `+ new project…` at the end; the switch-task modal the same for tasks
+  - the deck page, the prompt composer and the vim-session opener all read `active`
+- inheritance: anything created with a parent takes the parent's task and project (a context item from an assigned pane, a note on a task, a queued prompt on a task, a subtask); the child stores no project of its own
+- themes
+  - a project or task gets a random theme from the unassigned pool at creation
+  - a theme counts as assigned while its owner is in a non-final state; final states: `done`, `skipped`
+  - a pane with no assignment draws in the obnoxious red/white theme
+- rail row for a pane: first 4 chars of the project name in the project's theme, then the task title in the task's theme
+- task edit (`e`): title, parent (fuzzy), status; `ctrl+h` / `ctrl+l` walk the parent up and down so a task can be added under any node from anywhere
 - rules owned here (today split ui/web)
   - `Resolve(window)` → task/project
   - `Target(task, project)` by id or name
@@ -158,13 +174,15 @@ Pane    = { session, id, name, state, harness, foreground, cwd, message, blocked
   - themes: 16 colours, free-colour pool, glyph sections
   - snoozes, `easy`, status, `MoveTask`
   - `ProjectOf(task)` walks parents to root (subtasks store no project_id)
-- commands: `work.add-project`, `work.patch-project`, `work.set-tree`, `work.add-task`, `work.patch-task`, `work.move-task`, `work.assign`, `work.unassign`, `work.snooze`, `work.mass-add`
+- commands: `work.add-project`, `work.patch-project`, `work.set-tree`, `work.activate`, `work.add-task`, `work.patch-task`, `work.move-task`, `work.assign`, `work.unassign`, `work.snooze`, `work.mass-add`
 - emits: `projects.changed`, `tasks.changed`, `assignments.changed`
 - pages: tasks (`T`), tree modal (`w`)
 
 ```js
-Project    = { id, name, theme: Theme, status, created, tree?: Tree }
+Project    = { id, name, theme: Theme, status, created, repo: path, trees: [Tree], default_tree: path,
+               settings: { harness?, preset? } }
 Tree       = { kind: "worktree"|"clone"|"dir", path, repo?, branch? }
+Active     = { project_id, task_id?, tree: path }      // one row
 Task       = { id, parent_id, project_id, title, theme: Theme, status, easy?, snoozed_until?, created, updated }
 Assignment = { [window]: { session, task_id, project_id } }
 Theme      = { color: ansiName, glyph }
@@ -174,7 +192,8 @@ Theme      = { color: ansiName, glyph }
 - `Task belongs_to :project (root only); Task belongs_to :parent (Task); Task has_many :subtasks`
 - `Assignment belongs_to :pane (by window); belongs_to :task or :project`
 - `Project has_one :theme; Task has_one :theme`
-- `Project has_one :tree`
+- `Project has_many :trees; Project has_one :default_tree (Tree)`
+- `Active belongs_to :project; Active belongs_to :task (optional); Active has_one :tree`
 
 ### 6.4 prompts — presets, queue, stash, dispatch, agent start
 
@@ -183,6 +202,9 @@ Theme      = { color: ansiName, glyph }
 - commands: `prompts.start-agent`, `prompts.new-terminal`, `prompts.queue`, `prompts.dispatch`, `prompts.add-preset`, `prompts.stash`
 - emits: `queue.changed`, `presets.changed`
 - modals: prompt modal (`p`), presets list, queue list
+- composer: one binding submits now, another queues for the end of the turn; the queue list shows a prompt the moment it is queued (today it is empty while the prompt still sends)
+- composer completion: `@` paths, `/` skills and commands, attachments; an option that names a task or pane previews its recent scrollback beside the list
+- a preset is a prefix prepended once plus an optional cwd; the composer offers the presets and `+ new preset…`
 - depends on: daemon, work (`Target`), panes
 
 ```js
@@ -203,7 +225,9 @@ StartSpec     = { session, agent, name, cwd, prompt, preset?, task?, project?, a
 - commands: `context.extract`, `context.patch`, `context.delete`, `context.insert`, `context.open`, `context.copy`
 - emits: `context.changed`
 - listens: `window-closed` (items outlive panes; nothing pruned)
-- page: context (`C`)
+- page: context (`C`); two scopes: the pane the deck is on, and all
+- an item inherits the task and project of the pane it came from, at extraction
+- sortable (created first), filterable, groupable like the rail; actions: copy, insert, open, open with…
 - `Item` gets its own type, no longer an alias of the store row
 
 ```js
@@ -227,6 +251,8 @@ Counts      = { scrollback, activity, transcript, history, total }
 - commands: `reviews.mark`, `reviews.unmark`
 - emits: `history.changed`, `reviews.changed`
 - pages: history, reviews, Turns tab
+- history is a timeline of everything the deck manages: prompt submitted, response completed, command run, session start, subagent start/stop, assignment, task status change, capture written, reminder fired
+- review queue: a turn is listed only after it finishes, in finishing order; opening an entry marks it reviewed; opening the page or highlighting an entry never does
 
 ```js
 HistoryEntry   = { id, kind, at, observed, source, source_id, session?, window?, summary, detail }
@@ -256,7 +282,7 @@ Capture = { name, path, size, modified, session, pane, kind: "turn"|"cmd"|"" }
 ### 6.8 notes
 
 - table: `notes`
-- visible notes: a task sees its own + ancestors' + project's
+- visible notes: a parent and a child see each other's; a task sees its own, its ancestors', its descendants' and its project's
 - commands: `notes.add`, `notes.patch`, `notes.delete`
 
 ```js
@@ -271,6 +297,7 @@ VisibleNote = { note: Note, via: "own"|"parent"|"project", owner: name }
 - table: `reminders`
 - loop delivering due reminders → becomes events-style unit with its own goroutine (step 9)
 - commands: `reminders.add`, `reminders.patch`, `reminders.delete`, `reminders.toggle`
+- a due reminder shows in the terminal and as an OS notification
 
 ```js
 Reminder     = { id, title, message, interval: seconds, enabled, next, last, created }
@@ -293,6 +320,19 @@ Action = { name, mode, default, does }
 - complete: slash commands, `@` paths; shared by shells
 - focus: idle/activity clock
 
+### 6.12 vim — neovim sessions as deck items
+
+- a vim session is listed on the deck pages beside panes, with the same rail row format
+- opening neovim starts it in the active project/task's tree; a form may pick another tree
+- commands: `vim.open`, `vim.list`
+- [ ] where sessions are discovered: a sessions dir the deck owns, or nvim's own
+
+```js
+VimSession = { id, name, path, project_id, task_id, cwd, created }
+```
+
+- `VimSession belongs_to :project; VimSession belongs_to :task (optional); belongs_to :tree`
+
 ## 7. Shells
 
 ### 7.1 tui — `internal/ui`
@@ -300,6 +340,16 @@ Action = { name, mode, default, does }
 - keeps: `Model` as view state only (selection, scroll, modal slot, page, live)
 - loses: domain logic (→ units), page enum (→ registry `Page`), closures over Model in forms (→ `Field.source`)
 - one modal slot; `replace` or close; mass-add is the one parked modal
+- forms: a box in the top ~8 lines of the window; the content below is pushed down and shrinks by that much
+  - a field is a button with one highlighted char; that char focuses the field and enters input mode
+  - a form opens in normal mode (keys pick fields, `esc` closes, `/` filters); `esc` in input mode returns to normal; `tab` / `shift+tab` cycle fields
+  - every option list is fuzzy; `ctrl+n` / `ctrl+p` move in it; moving through options previews the option's object: the rail selects it, the detail shows it
+  - `+ add new…` opens the mass-add outline (parked form); in it `tab` / `shift+tab` change the nesting level
+  - delete confirmation defaults to `y`; `esc` closes the palette so `ctrl+p` can move up in it
+- modal input library: every modal and form runs on one engine; a config of modes, bindings (key → action) and actions (action → method on the object); fed keys one at a time, it tracks the mode and the object
+  - [ ] plain text input through neovim (embedded or headless) is the ideal; the engine is the fallback
+- deck page keys: `h` / `l` move between rail and detail; `{` / `}` jump by group; `o` / `O` cycle the grouping; `w` the task tree modal from any item; `e` edit
+- stale panes: no activity past `stale_after` marks the row stale and groups them; a palette command closes them
 - pages dispatch through registry: `keys`, `rail`, `detail`, `helpLine`
 - live mode: `enter` on a pane goes live; the live screen draws in the detail area under a live bar, the rail stays; never full-screen on the deck side
   - `ctrl+a` is the leader; the key after it is a command; every other key goes to the pane untouched, including `esc`
@@ -311,7 +361,9 @@ Action = { name, mode, default, does }
 
 ```js
 ViewState = { page: pageId, sel: { pane?: window, task?: id, ctx?: id }, scroll: { [pageId]: n },
-              modal?: { def: Modal, state }, parked?: modal, confirm?, live?, status }
+              modal?: { def: Modal, state }, parked?: modal, confirm?, live?, status, filter?: query }
+InputLib  = { modes: [name], mode: name, bindings: [{ mode, key, action }],
+              actions: { [action]: (object, key) => void }, object }     // feed(key) → runs the bound action, may switch mode
 ```
 
 ### 7.2 web — removed for now
@@ -323,6 +375,8 @@ ViewState = { page: pageId, sel: { pane?: window, task?: id, ctx?: id }, scroll:
 
 - `deck <unit> <command> --json '{…}'` generated from bus `list()`
 - reads: `deck <unit> list` per table
+- one subcommand per concept (project, task, context, prompt, reminder, note, capture, vim), each mirroring its unit's commands, so an agent can drive the deck; AGENTS.md says so
+- `deck list-actions`, `deck config init`, `deck docs` from the registry
 
 ## 8. Flows (who touches what)
 
@@ -356,3 +410,7 @@ ViewState = { page: pageId, sel: { pane?: window, task?: id, ctx?: id }, scroll:
 - [ ] where `Theme` pool lives: work or registry
 - [ ] `Tree.kind`: does the deck manage worktrees itself or only record a path
 - [ ] deck events: typed Go structs or `map[string]any` like daemon events
+- [ ] neovim as the text input engine: embedded, headless server, or not at all
+- [ ] active project/task: one per deck process or one per tuios session
+- [ ] vim session discovery: deck-owned dir or nvim's
+- [ ] does the deck create worktrees (`git worktree add`) or only list and record them
