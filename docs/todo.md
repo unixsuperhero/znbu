@@ -18,6 +18,9 @@ outline's done list when it ships.
 - Work the list top to bottom inside a priority. `p1` is tonight, `p2` is this week, `p3` is someday.
 - Anything that changes existing behaviour (as opposed to adding new) ships behind a toggle on the
   settings page (B-21), default on or off as the item says; the Neovim input engine is the model case.
+- Every record an agent or a check produces carries its provenance: `turn_id`, `session` + `window`,
+  `task_id`, `project_id`, and for git things the commit, branch and PR. Turns, commits, PRs, documents,
+  context items, notes, action items, captures. No item is done while one of its rows lacks them (B-28).
 
 ```js
 Item = { id: "B-01", status: "ready", priority: "p1", size: "M",   // S < half a day, M a day, L more
@@ -26,6 +29,37 @@ Item = { id: "B-01", status: "ready", priority: "p1", size: "M",   // S < half a
 ```
 
 ## p1 · tonight
+
+### B-28 Provenance on every record: turn, pane, task, project, commit, PR
+
+status: ready · priority: p1 · size: M · owner: · branch: · verified:
+
+Cross-cutting. Every row that comes out of a turn or a check links back to where it came from, so a
+PR can be traced to the turn that wrote its commits, the task that turn was on, and the project.
+The outline's code unit already links commits and head moves to turns and branches to tasks; this
+item makes the same fields mandatory on everything else.
+
+```js
+Provenance = { turn_id?, session, window, task_id, project_id, commit?, branch?, pr_url?, at }
+// on: Review/Turn, Commit, PR, Document (B-11), ContextItem, Note (B-05), ActionItem (B-15),
+//     Capture, Download? (no: a download has no turn), Schedule run (B-20)
+```
+
+- the store gets one `provenance` shape embedded in each of those tables, filled at write time from the
+  pane's assignment and the open turn; CLI and MCP writes (B-12) fill it from the env-bound identity
+- detail views show a `FROM` block: turn, pane, task › project, commit, PR, each a jump
+- `deck trace <id>` prints the chain for any row id: PR → commits → turn → task → project
+
+Acceptance:
+
+- a commit made inside an agent turn shows the turn id and task in `deck code list`; the PR opened from
+  that branch shows the same task and project; `deck trace <pr>` prints the chain
+- a document reported through `document_report` and a context item extracted from the same turn carry
+  identical `turn_id`, `task_id`, `project_id`
+- the e2e provenance case asserts the fields on each table after one scripted turn
+
+notes:
+- 2026-10-19 "for turns, commits, prs, etc. make sure we track the turn, the tasks, project".
 
 ### B-25 Command palette opens in search mode
 
