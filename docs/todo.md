@@ -30,6 +30,32 @@ Item = { id: "B-01", status: "ready", priority: "p1", size: "M",   // S < half a
 
 ## p1 · tonight
 
+### B-37 Bulk-create tree: projects, tasks and subtasks in one editable tree
+
+status: ready · priority: p1 · size: M · owner: · branch: · verified:
+
+Supersedes the mass-add outline item. One tree component, built on the new form engine, that opens
+holding every existing project with its tasks and subtasks (existing rows drawn dim), so new nodes
+go under existing records as easily as under new ones. Keys add a sibling or child at the cursor,
+indent and outdent, rename new nodes, and one key saves the whole draft in one transaction.
+Projects are the top level; a top-level line is always a project. Existing nodes are never renamed
+or deleted from here.
+
+notes:
+- 2026-10-19 queued after the forms redesign is tagged formsv2.
+
+### B-38 Panes rail as a nested tree below the pin
+
+status: ready · priority: p1 · size: M · owner: · branch: · verified:
+
+The panes page's rail groups panes in a tree: project › task › subtask, starting at the level
+below whatever is pinned (pinned to a project: its tasks are the top level; pinned to a task: its
+subtasks). Folding and `{`/`}` group jumps work per level; the review and working sections from
+the pane lifecycle item keep their place above and below the tree.
+
+notes:
+- 2026-10-19 queued after the bulk-create tree.
+
 ### B-35 Replace the one-off orchestrator with a stuck-pane check that raises action items
 
 status: ready · priority: p1 · size: M · owner: · branch: · verified:
