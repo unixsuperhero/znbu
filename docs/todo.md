@@ -32,7 +32,7 @@ Item = { id: "B-01", status: "ready", priority: "p1", size: "M",   // S < half a
 
 ### B-37 Bulk-create tree: projects, tasks and subtasks in one editable tree
 
-status: ready · priority: p1 · size: M · owner: · branch: · verified:
+status: review · priority: p1 · size: M · owner: claude (redeck-astra pane) · branch: matomeru main · verified: vps2 outline cases bulk_create, mass_add, switch_creation
 
 Supersedes the mass-add outline item. One tree component, built on the new form engine, that opens
 holding every existing project with its tasks and subtasks (existing rows drawn dim), so new nodes
@@ -43,6 +43,7 @@ or deleted from here.
 
 notes:
 - 2026-10-19 queued after the forms redesign is tagged formsv2.
+- 2026-10-19 built on the `P` tree draft rather than the field form engine: one tree component with a bulk policy (adds only, existing dim and read-only, top-level lines are projects). New projects have no repository; `Set project tree` attaches one. `work.bulk_create` (default on) routes `alt+m` / `+ add new…` here; off keeps the mass-add outline. Palette `Bulk create`; CLI `mtm task bulk-create`.
 
 ### B-38 Panes rail as a nested tree below the pin
 
@@ -979,7 +980,7 @@ notes:
 
 ### B-07 Mass-add outline: prefill the existing tree and reuse names, learned from tuios-deck
 
-status: ready · priority: p2 · size: M · owner: · branch: · verified:
+status: parked · priority: p2 · size: M · owner: · branch: · verified:
 
 The current mass-add (`alt+m` / `+ add new…`, outline §6.3 and §7.1) is a parked form where
 `tab` / `shift+tab` nest new lines. tuios-deck's "Adding many at once" (README) is still a
@@ -1014,6 +1015,7 @@ Acceptance:
 
 notes:
 - 2026-10-19 "not great, but better than ours".
+- 2026-10-19 parked: superseded by B-37 (bulk-create tree); the outline stays behind `work.bulk_create` off.
 
 ### B-03 Gather TUI design samples for every deck screen and widget
 
