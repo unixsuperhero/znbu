@@ -59,7 +59,7 @@ notes:
 
 ### B-31 Forms redesign: precise, modal, hierarchy-aware, replaces the top-8-lines box
 
-status: ready · priority: p1 · size: L · owner: · branch: · verified:
+status: claimed · priority: p1 · size: L · owner: forms agent (Opus, redeck-forms clone) · branch: feat/forms · verified:
 
 Research: [docs/research/tui-forms.md](research/tui-forms.md) recommends rebuilding deck's own engine on
 `internal/input`, taking huh's `OptionsFunc(fn, bindings)` dependencies, `Validate` and theme struct, tuios's
@@ -106,6 +106,7 @@ Acceptance:
 
 notes:
 - 2026-10-19 stub; expanded by a background agent the same day.
+- 2026-10-19 claimed by the forms agent (Opus) in the redeck-forms clone, branch `feat/forms`.
 
 ### B-32 Preset prompts: a dedicated start-with-preset action and a page of asked questions
 
