@@ -396,7 +396,7 @@ notes:
 
 ### B-17 PR review requests from GitHub, periodic through `gh`
 
-status: ready · priority: p1 · size: S · owner: · branch: · verified:
+status: claimed · priority: p1 · size: S · owner: vps2 lane 3 · branch: night/lane-3 · verified:
 
 - a schedule (B-20) runs one `gh` search for PRs with `@instajosh` as a requested reviewer
   (`review-requested:instajosh`, not team requests) and creates an ActionItem per new PR with
@@ -456,7 +456,7 @@ notes:
 
 ### B-20 Schedules: recurring prompts and lookups on an interval, results back through the MCP server
 
-status: claimed · priority: p1 · size: M · owner: vps2 lane 3 · branch: night/lane-3 · verified:
+status: review · priority: p1 · size: M · owner: vps2 lane 3 · branch: night/lane-3 · verified: /root/proj/night/logs/lane-3-B-20.log
 
 The reminders unit (§6.9) already runs a scheduler with intervals. Extend it so a schedule can be:
 
@@ -488,6 +488,7 @@ Acceptance:
 
 notes:
 - 2026-10-19 the glue between B-16, B-17, B-18 and the agent side.
+- 2026-10-19 lane 3: shipped in commit 508cf27 on night/lane-3 (`internal/schedules`, outline §14, e2e case `schedules`). Decisions: a sibling unit of reminders rather than a widening of the reminders table, same advance-before-run rule; page key `Z`, `enter` run now, `t` toggle; a lookup reports `found: N` / `new: bool` / `items` and the items it creates get `schedule_id` because the lookup receives it in its args; runs reach `deck history list` as `command-run` entries with source `schedules` (no change to the history unit); the loop runs only inside the TUI process, `deck schedule run` is the CLI path. Hosted by `internal/reminders/attach.go` until `cmd/deck` merges. The log also records the pre-existing host failures (`e2e-daemon.sh`, outline `catalogs_help`, `shared_navigation`) and one flaky `e2e-setup.sh` run that passed on rerun.
 
 ### B-08 Rail height budget: sections capped by percent, one-line rows, panes get most of it
 
