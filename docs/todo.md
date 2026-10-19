@@ -1083,6 +1083,48 @@ notes:
 
 ## p2 · this week
 
+### B-39 Parallel e2e runner: a database per case, about four at once, one report at the end
+
+status: ready · priority: p2 · size: M · owner: · branch: · verified:
+
+Today `scripts/e2e-all.sh` runs every suite in sequence and the outline suite runs its cases one
+after another against one shared tuios daemon and database (about 5 of the 7.5 minutes), so cases
+see each other's rows and one failure under `set -e` hides every later result.
+
+```js
+plan = { suites: "each shell/python suite in its own process (they already isolate tmp + daemon)",
+         outline: "each case, or a small group, gets its own daemon + database",
+         limit: 4,            // vps2 cores; PTY cases flake under heavy load
+         report: "run everything, print one PASS/FAIL table, exit non-zero if any failed" }
+// target: wall time near the slowest few cases, about 1.5-2 min instead of 7.5
+```
+
+Acceptance:
+- a full run on vps2 finishes under 3 minutes and lists every suite and case with status and time
+- a failing case does not stop later ones; exit status is the number of failures
+- two cases that both create a project with the same name pass in the same run
+
+notes:
+- 2026-10-19 asked for after seeing how long full runs take.
+
+### B-40 Verify with targeted cases while working; one full suite only at the end
+
+status: ready · priority: p2 · size: S · owner: · branch: · verified:
+
+Agents ran their cases, then neighbouring cases, then the full suite, per item, and `e2e-all.sh`
+re-runs about a dozen outline cases the outline suite already ran (settings, palette search, MCP
+server, action items, schedules, GitHub review requests, Slack, my PRs, pane tabs, create-jump,
+review accordion, rail lifecycle). Remove those appended per-item suites from `e2e-all.sh`, and make
+AGENTS.md say plainly: while iterating run only the cases you touched
+(`E2E_OUTLINE_CASES=…`); run the full suite once, at the end of the branch, before merging.
+
+Acceptance:
+- `e2e-all.sh` runs each outline case exactly once (count in its output)
+- AGENTS.md's verification section states the targeted-then-once rule
+
+notes:
+- 2026-10-19 "parallel but only do targeted until the end".
+
 ### B-36 Command palette styles: several interchangeable looks, chosen in settings
 
 status: ready · priority: p2 · size: M · owner: · branch: · verified:
