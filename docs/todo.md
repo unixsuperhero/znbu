@@ -902,7 +902,7 @@ notes:
 
 ### B-22 Feature inventory with review marks, growing into an in-app registry
 
-status: claimed · priority: p2 · size: L · owner: mac lane 5 · branch: night/lane-5 (redeck-astra2) · verified:
+status: review · priority: p2 · size: L · owner: mac lane 5 · branch: night/lane-5 (redeck-astra2) · verified: vps2:/root/proj/redeck-astra-verification/runs/run.wTMwj4fO/verification.log
 
 Port `~/proj/tuios-deck/docs/plans/2026-10-18-feature-inventory.md`: nobody can say which features
 were reviewed or are worth keeping. Deck is ahead here: the registry (outline §5) already holds pages,
@@ -945,6 +945,7 @@ or both? Should `cut` ever delete code? The plan says no: the cut list is the de
 
 notes:
 - 2026-10-19 stub; expanded by a background agent the same day.
+- 2026-10-19 mac lane 5: stage 1 only (steps 1 and 2) in commit cf4e680. Deviations: registry kinds are read by running the deck binary's `docs`, `commands` and `list-actions` in an isolated home (the wiring lives in cmd/deck, lane 2's file), not by importing; file/line come from go/ast placing each definition at its declaring literal, not `runtime.Caller`, so registry and bus are unchanged and a few loop-built entries point at a nearby literal; ids keep Go case for structs (`struct.store.Task`, as the plan shows); `docs/review.yaml` is YAML flow style (JSON) so no YAML dependency, and each mark carries the hash it was made against; extra kinds `kind` (registry definition kinds) and `feature`; one concept comment seeded (`concept.review.notification-continues-turn`). Not built: pre-commit hook regenerating `docs/inventory.json` (it goes stale until rerun), the `deck docs` id cross-check, stage 2 (store table, `Status(id)` gating, Features page) and the cut-grouping e2e. Open questions in the item are still open.
 
 ### B-23 Neovim as the input engine behind form fields, behind a settings toggle
 
