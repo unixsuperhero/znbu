@@ -271,7 +271,10 @@ Counts      = { scrollback, activity, transcript, history, total }
 - emits: `history.changed`, `reviews.changed`
 - pages: history, reviews, Turns tab
 - history is a timeline of everything the deck manages: prompt submitted, response completed, command run, session start, subagent start/stop, assignment, task status change, capture written, reminder fired
-- review queue: a turn is listed only after it finishes, in finishing order; opening an entry marks it reviewed; opening the page or highlighting an entry never does
+- review queue: a turn is listed only after it finishes, in finishing order, oldest at the top, newest at the bottom; it lives in the top section of the deck rail (§7.1), not only on its own page
+  - highlighting an entry previews it in the detail area and does not mark it reviewed
+  - giving the detail area focus (`l` or `right`) on an entry marks it reviewed; `r` toggles the mark by hand either way
+  - a reviewable document (an md or html the agent wrote) is an entry too, once it exists
 
 ```js
 HistoryEntry   = { id, kind, at, observed, source, source_id, session?, window?, summary, detail }
@@ -369,6 +372,11 @@ VimSession = { id, name, path, project_id, task_id, cwd, created }
 - modal input library: every modal and form runs on one engine; a config of modes, bindings (key → action) and actions (action → method on the object); fed keys one at a time, it tracks the mode and the object
   - [ ] plain text input through neovim (embedded or headless) is the ideal; the engine is the fallback
 - the title line always shows the pin: project glyph + name, task title, hidden pane count; `P` opens the switch modal from any page
+- deck rail layout (see `docs/images/deck-rail-annotated.png`): two sections, one list for `j`/`k`
+  - top: the review queue, finished turns and documents under the pin, oldest first; focus on the right (`l`/`right`) marks the entry reviewed, preview does not
+  - bottom: the active panes, agents and terminals still working or waiting, grouped as `o`/`O` says, `No Task` last
+  - a pane moves from the bottom to the top when its turn ends, and back when a prompt is sent
+- help line (last row): the bindings that apply to the current mode and the highlighted row, not a fixed list; `F1` / `?` open the full help modal
 - deck page keys: `h` / `l` move between rail and detail; `{` / `}` jump by group (`No Task` is one); `o` / `O` cycle the grouping; `w` the task tree modal (lineage only, see §6.3); `e` edit
 - stale panes: no activity past `stale_after` marks the row stale and groups them; a palette command closes them
 - pages dispatch through registry: `keys`, `rail`, `detail`, `helpLine`
