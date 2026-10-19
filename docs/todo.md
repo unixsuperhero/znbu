@@ -1047,7 +1047,7 @@ notes:
 
 ### B-04 Help modal: two rows shift left and leak border glyphs
 
-status: ready · priority: p2 · size: S · owner: · branch: · verified:
+status: claimed · priority: p2 · size: S · owner: mac lane 5 · branch: night/lane-5 · verified:
 
 Screenshot: [attachments/B-04-help-modal-alignment.png](attachments/B-04-help-modal-alignment.png),
 deck on a wide terminal, `?` on the Panes page, filter `all`.
