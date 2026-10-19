@@ -529,7 +529,7 @@ notes:
 
 ### B-09 Pane lifecycle in the rail: working at the bottom and locked, review at the top, rest in the middle
 
-status: ready · priority: p1 · size: L · owner: · branch: · verified:
+status: claimed · priority: p1 · size: L · owner: vps2 lane 1 · branch: night/lane-1 · verified: 
 
 The rail becomes three sections that a pane moves through. Replaces the two-section rule in §7.1.
 
@@ -572,10 +572,13 @@ other free letters in normal mode are `b c f i t v x z` and `B E F I J K L M N Q
 
 notes:
 - 2026-10-19 the human called this the important one.
+- 2026-10-19 vps2 lane 1: claimed. Open question answered for this build: agents only enter the working
+  section; a terminal after a command stays in the panes section (its state is not a turn). Revisit if the
+  human wants terminals there too.
 
 ### B-10 Review accordion: the detail for a pane with unreviewed turns
 
-status: claimed · priority: p1 · size: L · owner: vps2 lane 1 · branch: night/lane-1 · verified:
+status: review · priority: p1 · size: L · owner: vps2 lane 1 · branch: night/lane-1 · verified: /root/proj/night/logs/lane-1-B-10.log
 
 Modelled on tuios-deck's Turns tab (`~/proj/tuios-deck` README "The Turns tab", `internal/ui/turns.go`):
 an accordion, one row per thing to review, oldest at the top, everything collapsed on open.
@@ -619,6 +622,20 @@ Acceptance:
 
 notes:
 - 2026-10-19 defined together with B-09; B-09 owns the rail movement, this owns the detail.
+- 2026-10-19 vps2 lane 1: built on night/lane-1 (commit a6121b2); outline §14. The Turns tab of B-06 is the
+  accordion and a pane with unreviewed finished turns opens on it. Rows group review records by harness
+  turn id; `enter`/`space` open and mark, `x` marks the auto-reviewable rows, `*` stars (new `review_stars`
+  table, `reviews.star`/`reviews.unstar`, `starred` on `reviews.list`), `y` copies, `g`/`G` follow off/on;
+  context items from the pane list under the rows and star in place; `STARRED CONTEXT` shows on the item's
+  task and its direct parents (tasks page reads `context.list` under the row's scope). Verified by outline
+  `review_accordion` plus `pane_tabs`, `history_review`, `shared_navigation`, the review suite and
+  `go test ./...`; the full `scripts/e2e-all.sh` run (log above) passed every suite except outline
+  `catalogs_help`, `shared_navigation`, `history_review` (timing waits, load average 12.8, green alone) and
+  the macOS-only `context`/`native_picker`.
+- 2026-10-19 note: "two review records with one turn id" can only come from two conversations reporting
+  the same harness turn id (`history.capture-turn` rejects a re-used id inside one conversation); the case
+  builds it that way. A pane whose latest turn finished has no pane row in today's rail (only queue rows),
+  so the case gives the pane a pending prompt; B-09 removes that limitation.
 
 ### B-11 Documents page: starred docs, glow preview, live mode, unread theme
 
