@@ -85,7 +85,7 @@ notes:
 
 ### B-31 Forms redesign: precise, modal, hierarchy-aware, replaces the top-8-lines box
 
-status: review · priority: p1 · size: L · owner: forms agent (Opus, redeck-forms clone) · branch: feat/forms (redeck-forms clone, not pushed; rebase onto matomeru pending) · verified: vps2:/root/proj/redeck-astra-verification/runs/run.WiIfR2kY/verification.log
+status: review · priority: p1 · size: L · owner: forms agent (Opus, redeck-forms clone) · branch: main (matomeru, tag formsv2) · verified: vps2:/root/proj/redeck-astra-verification/runs/run.VRG1P8eF/verification.log
 
 Research: [docs/research/tui-forms.md](research/tui-forms.md) recommends rebuilding deck's own engine on
 `internal/input`, taking huh's `OptionsFunc(fn, bindings)` dependencies, `Validate` and theme struct, tuios's
