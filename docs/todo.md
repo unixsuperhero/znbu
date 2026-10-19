@@ -25,6 +25,270 @@ Item = { id: "B-01", status: "ready", priority: "p1", size: "M",   // S < half a
 
 ## p1 · tonight
 
+### B-12 Deck as an MCP server, configured into every agent deck starts
+
+status: ready · priority: p1 · size: L · owner: · branch: · verified:
+
+`deck mcp serve` speaks MCP over stdio from the same binary (Claude Code, Codex, OMP, opencode all
+take a stdio command); an HTTP transport comes second only if a harness refuses stdio. One tool
+registry, two transports, same handlers as the command bus (§3), so every tool is also a CLI command
+and is recorded in history under the calling pane's task.
+
+Agents started by deck (`prompts.start-agent`, `n a`) get the server configured for that harness
+before the first prompt, scoped to the pane: the tool calls carry session + window, so deck knows who
+is talking. See `~/bin/h-mcp` AGENT_TARGETS for every harness's config path and entry shape.
+
+First tools, all thin wrappers over existing or planned commands:
+
+```js
+document_report   = { path, title?, kind?: "report"|"plan"|"review", summary? }   // → documents (B-11), owner = pane's task
+task_list         = { scope?: "pin"|"all", status? }                               // → work.tasks
+task_done         = { task_id, note? }                                             // → work.patch-task
+task_note_add     = { owner: {kind, id}, text }                                    // → notes (B-05)
+todo_list         = { priority?, status? }                                         // → B-13
+todo_note_add     = { todo_id, text }                                              // research results land on the item
+todo_claim        = { todo_id }                                                    // → B-13
+action_item_create= ActionItem                                                     // → B-15
+context_add       = { kind, text, task_id? }                                       // → context.extract
+```
+
+Acceptance:
+
+- `deck mcp serve` answers `initialize`, `tools/list` and `tools/call` over stdio; `deck mcp tools`
+  prints the same list; a tool call from a deck-started Claude Code pane shows in `deck history list`
+  with the pane's task
+- an agent calling `document_report` on an md it wrote makes the file appear on the documents page
+  within one refresh, unread-styled
+- `task_done` from an agent flips the row and the TUI reflects it without a manual refresh
+- outline gains §7.4 mcp as a shell over the bus, like the CLI
+
+notes:
+- 2026-10-19 requested with the action-item and slack work; a subagent is checking what
+  `~/work/ch/vaim` exposes as tools so the first list can borrow from it.
+
+### B-13 Todo unit and page: items that are not yet tasks
+
+status: ready · priority: p1 · size: M · owner: · branch: · verified:
+
+A todo is lighter than a task: no project required, no panes, a priority and free text, promotable
+to a task. Agents browse todos for easy ones, do research and leave notes on them (through B-12), or
+resolve them outright.
+
+```js
+Todo = { id, title, text, priority: "p1"|"p2"|"p3", status: "idea"|"ready"|"claimed"|"review"|"done",
+         owner?: string, project_id?, task_id?, promoted_task_id?, created, updated }
+```
+
+- page under its own key (see the free letters in B-11), rows by priority then age; `enter` promotes to
+  a task under the pin, keeping the notes; detail shows the notes (B-05) newest last
+- commands `todos.add|patch|promote|claim|delete`, CLI `deck todo …`
+- task status rule: a new task is `todo` unless the form assigns it to a pane or an agent at creation,
+  then it is `active`
+- this file (`znbu/docs/todo.md`) stays the human-facing list until the unit exists; a one-off
+  import of it is part of this item
+
+Acceptance:
+
+- `deck todo add --json '{"title":"…","priority":"p2"}'` then `deck todo list` shows it; `promote`
+  creates a task with the same title and moves the notes
+- a task created from the form without a pane has status `todo`; one created by `n a` is `active`
+- the import reproduces every B-nn item in this file with its status and notes
+
+notes:
+- 2026-10-19 asked for so agents can pick off easy items and pre-research the rest.
+
+### B-14 MCP harvest and replay built into deck: read harness logs, catalog servers and tools, call them without an agent
+
+status: ready · priority: p2 · size: L · owner: · branch: · verified:
+
+`~/bin/h-mcp` already does this in Ruby (`harvest`, `harvested`, `template`, `calls`, `run`;
+readers per harness in `~/bin/lib/h_mcp_harvest.rb`) but has never been used. Build the same into
+deck so slack, glean, linear and github MCP servers the user is already authenticated with can be
+called deterministically, without spending agent tokens.
+
+- readers for Claude Code, Codex and OMP session logs (jsonl), run on a schedule and on demand
+  (`deck mcp harvest`); each reader extracts: servers configured, their tools and input schemas,
+  every tool call with its arguments, and the response for each call
+- catalog tables: `mcp_servers`, `mcp_tools`, `mcp_calls` (args + response + harness + pane + at);
+  `deck mcp servers|tools|calls|template SERVER TOOL`
+- replay: `deck mcp call SERVER TOOL --json '{…}'` using the server's own transport and the auth the
+  harness config holds; `--select path` into the response
+- decision to make in the outline: tools become first-class handlers (generated request/response
+  types per tool) or stay meta-info that commands and schedules can trigger. Start with meta-info;
+  promote a tool to a handler only when a page depends on its shape (slack search, PR list)
+
+Acceptance:
+
+- on this Mac, `deck mcp harvest` finds the servers and tools present in existing Claude, Codex and
+  OMP logs and lists call counts per tool; a subagent is confirming tonight what those logs contain
+- `deck mcp template slack search` prints a filled-in example from a harvested call;
+  `deck mcp call` on a server with a live session returns the parsed response
+
+notes:
+- 2026-10-19 the user has no MCP servers to test against right now; harvest from logs must work
+  offline, replay is verified when a server is available.
+
+### B-15 ActionItem unit, page and the one-character global indicator
+
+status: ready · priority: p1 · size: M · owner: · branch: · verified:
+
+Everything that needs the user's attention, from any source, in one place.
+
+```js
+ActionItem = { id, service: "slack"|"github"|"linear"|"agent"|"schedule", source_url, title, text,
+               action_type: "pr-review"|"pr-status"|"oncall"|"mention"|"dm"|"thread"|"ticket"|"report"|other,
+               category?: string, task_id?, project_id?, created, seen_at?, dismissed_at?,
+               promoted_todo_id?, promoted_task_id?, extra: {} }
+```
+
+- commands `actions.create|seen|dismiss|promote` (to a todo or a task), CLI `deck action …`, MCP tool
+  `action_item_create` (B-12); dedupe on service + source_url so repeated checks do not pile up
+- page: unseen first, then undismissed, grouped by service; `enter` opens the url; `d` dismiss;
+  `t` promote to todo; `T` to task
+- the indicator: while any item is unseen, or seen but neither dismissed nor promoted, one bright
+  character sits in the title line on every page (position fixed, next to the pin), with the count
+  beside it when there is room. It is never cleared by looking at the page alone; items clear it
+- OS notification on a new item is optional and off by default
+
+Acceptance:
+
+- `deck action create` twice with the same url makes one row; the title line shows the mark on every
+  page; dismissing the last item removes it within one refresh
+- the e2e case covers create, indicator, dismiss, promote to todo
+
+notes:
+- 2026-10-19 defined as the target for the slack, github, linear and scheduled checks below.
+
+### B-16 Slack monitoring: mentions, DMs, threads, oncall channels, assessed into action items
+
+status: ready · priority: p1 · size: L · owner: · branch: · verified:
+
+Wanted by the morning. Two paths, both producing ActionItems (B-15); build the one that works
+tonight and keep the other as the fallback:
+
+1. MCP path: a scheduled lookup (B-20) calls the slack MCP through B-14's replay, searching for the
+   username, DMs and threads the user is in; new messages since the last check are captured, then
+   sent to an agent with a fixed prompt that answers only with action items (through
+   `action_item_create`) or nothing
+2. agent path: the scheduled prompt itself goes to an agent pane with the slack MCP attached; the
+   agent searches, assesses and creates the action items
+
+- fallback when neither is reachable: search Claude, Codex and OMP session logs for slack MCP
+  responses already captured (B-14 readers) and assess those
+- slack page in deck with a settings section: oncall week (starts Monday, one or more weeks),
+  channels to watch during oncall, the oncall user group or tag; during oncall, every message in
+  those channels and every mention of the tag is captured and flagged; outside oncall, only
+  mentions, DMs and threads the user is in
+- captured messages are stored as context items of kind `slack` with the permalink, so the action
+  item links straight to the thread
+
+Acceptance:
+
+- with a fixture of captured messages (no live slack), the assessment prompt yields action items with
+  the permalink as `source_url` and the indicator lights
+- the settings persist in the store, `deck slack settings` prints them, and the oncall window
+  changes which channels the next check queries
+- a live run against the real slack MCP is verified the first morning it is available
+
+notes:
+- 2026-10-19 "i need this by the morning"; no MCP server is available to test tonight, so the fixture
+  path and the agent-prompt path are what can be proven.
+
+### B-17 PR review requests from GitHub, periodic through `gh`
+
+status: ready · priority: p1 · size: S · owner: · branch: · verified:
+
+- a schedule (B-20) runs one `gh` search for PRs with `@instajosh` as a requested reviewer
+  (`review-requested:instajosh`, not team requests) and creates an ActionItem per new PR with
+  `action_type: "pr-review"`; the dedupe key is the PR url
+- during the oncall week (settings from B-16) the query widens: team review requests and PRs
+  touching the oncall channels' repos; the exact oncall criteria are a setting, not code
+- a follow-up schedule can ask an agent to review the PR and write an md report (B-11 documents),
+  linked from the action item
+
+Acceptance:
+
+- `deck github check` creates action items for the PRs `gh search prs --review-requested=instajosh
+  --state=open` returns, once each, and the indicator lights
+- switching oncall on changes the query that runs next and the e2e case asserts both queries
+
+notes:
+- 2026-10-19.
+
+### B-18 My PRs: open and drafts, watching, snooze until midnight, CI and status change alerts
+
+status: ready · priority: p1 · size: M · owner: · branch: · verified:
+
+```js
+MyPR = { url, number, repo, title, draft, state, ci: "pending"|"pass"|"fail"|"unknown",
+         checks: [{name, state, url}], reviews: [{who, state}], comments: int, last_change,
+         watching: bool, snoozed_until?: midnight-local }
+```
+
+- a page or a section of the github page listing every open PR and draft authored by the user; `w`
+  toggles watching, `z` snoozes until local midnight, after which the row returns
+- watched PRs are polled every 5 minutes with one GraphQL request for all of them (`gh api graphql`
+  with a nodes query on their ids), never one call per PR; the poll interval is a setting
+- any change creates an ActionItem with `action_type: "pr-status"`: CI pending→pass, pass→fail, a
+  new comment, a new review or approval, merged, closed, conflicts; the item names what changed
+- the indicator (B-15) and, for watched PRs only, an OS notification
+
+Acceptance:
+
+- the list matches `gh pr list --author @me --state open` plus drafts; `w` and `z` persist across
+  restarts; a snoozed row reappears after midnight in a clock-advanced test
+- one poll of three watched PRs issues one `gh api graphql` call (asserted by counting invocations
+  of a stub `gh` on PATH); a CI state change in the stub's next answer creates exactly one action item
+
+notes:
+- 2026-10-19; the single-call poll is to protect the API quota.
+
+### B-19 Linear as a source of action items
+
+status: idea · priority: p2 · size: S · owner: · branch: · verified:
+
+Through the linear MCP (B-14 replay or an agent prompt): tickets assigned to the user, mentions,
+state changes on watched tickets, into ActionItems with `service: "linear"`. Linear aggregates a lot
+of this already but misses things, so it complements B-16 and B-17 rather than replacing them.
+
+notes:
+- 2026-10-19.
+
+### B-20 Schedules: recurring prompts and lookups on an interval, results back through the MCP server
+
+status: ready · priority: p1 · size: M · owner: · branch: · verified:
+
+The reminders unit (§6.9) already runs a scheduler with intervals. Extend it so a schedule can be:
+
+```js
+Schedule = { id, title, interval: seconds, enabled, next, last,
+             run: { kind: "prompt", target: StartSpec|window, text }          // send to an agent pane
+                | { kind: "lookup", command: "github.check"|"slack.check"|"mcp.call", args: {} }
+                | { kind: "command", name, args: {} },
+             on_result?: { kind: "prompt", text }                               // what to do when a lookup finds something
+           }
+```
+
+- a lookup that finds new rows creates ActionItems itself (B-15); a prompt run is sent to an agent
+  with B-12 configured, so the agent reports back with `action_item_create` or `document_report`
+  rather than text the deck has to parse
+- `on_result` chains work: a found PR review request starts an agent that reviews the PR and writes an
+  md report, linked from the action item
+- every run is recorded in history with its duration and outcome; failures are visible on the
+  reminders/schedules page and never repeat-notify the same occurrence (same rule as reminders)
+- intervals are finite and bounded; a run has a timeout and the scheduler kills it
+
+Acceptance:
+
+- `deck schedule add --json '{"interval":300,"run":{"kind":"lookup","command":"github.check"}}'`
+  runs within the interval, shows in `deck history list` with its outcome, and its action items carry
+  the schedule id
+- a prompt schedule starts the agent once per interval and never while the previous run's pane is
+  still working
+
+notes:
+- 2026-10-19 the glue between B-16, B-17, B-18 and the agent side.
+
 ### B-08 Rail height budget: sections capped by percent, one-line rows, panes get most of it
 
 status: ready · priority: p1 · size: M · owner: · branch: · verified:
