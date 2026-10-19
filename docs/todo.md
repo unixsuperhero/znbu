@@ -1087,6 +1087,116 @@ notes:
 
 ## p2 · this week
 
+### B-41 Keep the last explicitly chosen detail tab while navigating a page
+
+status: idea · priority: p2 · size: · owner: · branch: · verified:
+
+On every page with detail tabs, including Panes, moving through the list on the left keeps the
+last tab the user explicitly selected. Selecting another row must not reset the tab or restore a
+different per-row tab. This changes the per-pane tab memory described in B-06.
+
+Acceptance:
+- Select a detail tab, move through several left-hand rows, and see that same tab remain active.
+- Explicitly choose another tab; subsequent row navigation now keeps that tab.
+- Apply this rule to every tabbed page, not only Panes.
+
+notes:
+- 2026-10-19 captured from [the mtm prompt](../../../hub/prompts/mtm-todo.md); implementation not requested in this capture.
+
+### B-42 Field-group presets, recent selections and composable preset layers
+
+status: idea · priority: p2 · size: · owner: · branch: · verified:
+
+Presets should configure groups of fields, not just prompt text. Keep this distinct from the
+prompt-prefix and question presets in B-32. Name the cohesive concepts and make each easy to set.
+Working names, not settled terminology:
+
+- Execution location: host, repository, cwd and worktree.
+- Work assignment: project and task.
+- Agent profile: harness/agent, model and effort level.
+
+Offer the one or two most recent selections as preset-like choices even when no named preset exists.
+
+Preserve both ideas for design: cohesive field-group presets and sparse, composable preset layers.
+The groups need not become fixed units. A layer may supply any subset of fields, leaving gaps.
+Applying a later layer overwrites every value it supplies, even if that field already has a value;
+fields omitted from the layer keep their existing values. Layers are not fill-empty-only defaults.
+
+```js
+current = { host: "local", task: "Login", model: "model-a" }
+layer   = { host: "vps2", effort: "high" }
+after   = { host: "vps2", task: "Login", model: "model-a", effort: "high" }
+```
+
+Acceptance:
+- Set each cohesive group without editing every field individually.
+- With no saved preset, offer the one or two most recent selections.
+- Apply multiple sparse layers in order; supplied fields overwrite earlier values and omitted fields remain unchanged.
+- Keep grouped presets and layers as compatible design options until their relationship and names are decided.
+
+notes:
+- 2026-10-19 captured from [the mtm prompt](../../../hub/prompts/mtm-todo.md); the user likes both the grouped and layered approaches.
+
+### B-43 Give projects their own page organized around what needs to be known, done, made and shared
+
+status: idea · priority: p2 · size: · owner: · branch: · verified:
+
+Projects should have their own page rather than appearing only on Tasks. For a particular project,
+or as a reusable way to approach any project, organize the work into:
+
+- Things I need or want to know.
+- Things I need to do.
+- Things I need to make.
+- Things I need to share.
+
+For things to know, agents should do what they can to obtain an answer at the requested depth:
+a small concise answer, a medium answer of a few paragraphs, or a large full report.
+
+Acceptance:
+- Open a dedicated Projects page and select a project without using Tasks as its only entry point.
+- Record and view the four categories for that project.
+- Request agent research for a knowledge item with concise, medium or full-report output.
+- Keep the project-specific questions and their answers associated with that project.
+
+notes:
+- 2026-10-19 captured from [the mtm prompt](../../../hub/prompts/mtm-todo.md); the organizing question is what is needed to finish this project or any project.
+
+### B-44 Edit the bulk-create tree continuously and rename existing records
+
+status: idea · priority: p2 · size: · owner: · branch: · verified:
+
+Extend B-37 beyond its adds-only policy. After `o` or `O` enters insertion, Enter should continue
+adding task/project lines without requiring Escape and another `o` or `O` for every item.
+Editing should feel like a Vim-style multiline buffer. `Tab` and `Shift+Tab` adjust the current
+line's nesting while inserting; preserve those controls if they already work.
+
+Allow names of existing tasks and projects to be edited in the same tree. Existing rows must not
+be read-only merely because their records already exist. Renaming changes a name, not a primary key.
+This follow-up replaces B-37's prohibition on renaming existing nodes; it does not mark that change as shipped.
+
+Acceptance:
+- Use `o` or `O` once, type several names separated by Enter, and create multiple items without leaving insert mode.
+- Use `Tab` and `Shift+Tab` while editing lines to change task/project nesting.
+- Move through and edit the multiline draft, including existing task and project names.
+- Save renamed records with their identities and existing relationships preserved.
+
+notes:
+- 2026-10-19 captured from [the mtm prompt](../../../hub/prompts/mtm-todo.md); the repeated Escape → normal mode → `o`/`O` loop is the interaction to remove.
+
+### B-45 Offer task or project completion when closing its pane
+
+status: idea · priority: p2 · size: · owner: · branch: · verified:
+
+When closing a pane, ask whether to mark its associated task or project done. Closing the pane
+alone must not silently imply that its work is complete.
+
+Acceptance:
+- Closing an associated pane offers an explicit choice to mark its task or project done.
+- Accepting updates the chosen task or project; declining leaves its completion state unchanged.
+
+notes:
+- 2026-10-19 captured from [the mtm prompt](../../../hub/prompts/mtm-todo.md).
+
 ### B-39 Parallel e2e runner: a database per case, about four at once, one report at the end
 
 status: ready · priority: p2 · size: M · owner: · branch: · verified:
