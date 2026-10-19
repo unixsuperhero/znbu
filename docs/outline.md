@@ -171,7 +171,7 @@ Pane    = { session, id, name, state, harness, foreground, cwd, message, blocked
   - not scoped, ever: the tasks/projects page (`T`), the help, the palette, the settings
   - every scoped page has two modes: `scope` (rows under the pin, the default) and `all` (every row); `S` toggles, per page, and the title line reads `all` while it is on; the pin itself does not change
   - a pane assigned to another task is not in the rail; a count in the title line says how many are hidden
-  - a pane with no assignment is always in the rail, under every pin, in a `No Task` group at the bottom; its rows draw in the red/white theme; it leaves the group the moment it is assigned
+  - a pane with no assignment is always in the rail, under every pin, in a `No Task` group at the bottom; its rows draw in the red/black theme; it leaves the group the moment it is assigned
 - first run, no projects: the deck asks for a list of dirs (`repo_roots`), scans them for git repos, and offers each repo as a project to create; the scan is repeatable from the switch modal
 - inheritance: anything created with a parent takes the parent's task and project (a context item from an assigned pane, a note on a task, a queued prompt on a task, a subtask); the child stores no project of its own
 - themes
@@ -262,8 +262,13 @@ Counts      = { scrollback, activity, transcript, history, total }
 
 - table: `history` (append-only), `review_marks`
 - history: `events.Handler`, batches live events → one insert a second
+- harnesses/agents must capture turn-based information: one delivered user request through the agent’s final answer, not each model response or tool cycle
+  - automatic continuations and retries keep the turn open; OMP completes on `agent_end` only when `willContinue !== true`, never on its lower-level `turn_end`
+  - retain the full prompt and final response, stable turn and conversation IDs, harness, pane/session, start/completion timestamps, transcript reference, and final-message metadata; clipped activity summaries are not the archive
+  - `history.capture-turn --json -` persists a start and then its completion as immutable, correlated records; repeated identical delivery is idempotent, conflicting reuse of an ID is rejected, and task ownership stays with the start
+  - queued input is not a delivered request; steering delivered during an open turn belongs to that turn; aborted/error stops do not enter the completed review queue
 - reviews: a view over history; only the mark is stored
-  - turn = prompt-submitted + every response-completed until next prompt
+  - packaged harness captures correlate prompt-submitted and response-completed by turn ID; uncorrelated native activity groups responses until the next prompt
   - `<task-notification>` prompt keeps turn open
   - listed when not awaiting and window subagent count == 0
 - `Turns(window)`, `Mark(id)`
@@ -277,7 +282,9 @@ Counts      = { scrollback, activity, transcript, history, total }
   - a reviewable document (an md or html the agent wrote) is an entry too, once it exists
 
 ```js
-HistoryEntry   = { id, kind, at, observed, source, source_id, session?, window?, summary, detail }
+HistoryEntry   = { id, kind, at, observed, source, source_id, session?, window?, summary, detail, turn?: HarnessTurn }
+HarnessTurn    = { id, harness, conversation_id, session, window, prompt, response?,
+                   started_at, completed_at?, transcript_path?, response_message? }
 Review         = { id: promptHistoryId, session, window, pane, harness, prompt, response,
                    responses: [ReviewResponse], output?, started_at, completed_at, reviewed_at }
 ReviewResponse = { id, at, text }
@@ -291,6 +298,7 @@ ReviewMark     = { [historyId]: reviewedAtMs }
 
 - folder: `~/.local/share/tuios-deck/captures`
 - autocapture: `events.Handler`, writes `-turn` / `-cmd` on turn or command end
+- terminal snapshots supplement the structured harness turn records in history; they do not replace the full prompt and final answer
 - `List`, `Read`, `Dir` (no store import)
 - commands: `captures.capture`, `captures.delete`
 - page: captures
@@ -338,22 +346,30 @@ Action = { name, mode, default, does }
 
 ### 6.11 setup, complete, focus (unchanged leaves)
 
-- setup: embedded omp extension, `Items()` table, install/status/uninstall
+- setup: `Items()` table and CLI `deck setup` (list), `deck setup status`, `deck setup install`, `deck setup uninstall`
+  - every required external setup asset (hooks, extensions, scripts, helpers, configuration templates) must be stored in this repo and embedded in the distributed binary; setup must work without a source checkout or a separate inbox installation
+  - install materializes and configures the packaged files; no manual hook copying or shell edits are required for harness turn capture
+  - installation is idempotent; status identifies missing, modified, conflicting, and migration-required files; uninstall removes owned files only, preserving unrelated configuration and rejecting unowned files/symlinks
+  - the OMP integration captures delivered requests through final answers; setup records the installing executable and selected `-data` database, and replaces the older managed deck activity reporter so completions are not duplicated
+  - reload/restart OMP after installation; rerun setup if the deck executable or database location changes; other harness adapters must follow the same terminal-turn and packaging contract
 - complete: slash commands, `@` paths; shared by shells
 - focus: idle/activity clock
 
 ### 6.12 vim — neovim sessions as deck items
 
-- a vim session is listed on the deck pages beside panes, with the same rail row format
+- a vim session is the deck's own editor: a tuios pane running `nvim` that the deck started, for editing the files of a project or task; it is the third kind of pane beside terminal and agent
+  - same rail section, same row format, same assignment, same `No Task` rule; `enter` goes live on it like any pane
+  - opened in the tree it was made for, with a session file per vim session so closing and reopening restores it (`nvim -S`)
+  - a pane running nvim that the deck did not start is still a terminal
 - opening neovim starts it in the active project/task's tree; a form may pick another tree
-- commands: `vim.open`, `vim.list`
+- commands: `vim.open`, `vim.list`, `vim.forget`
 - [ ] where sessions are discovered: a sessions dir the deck owns, or nvim's own
 
 ```js
-VimSession = { id, name, path, project_id, task_id, cwd, created }
+VimSession = { id, name, session_file: path, window?, project_id, task_id, cwd, created }   // window: the pane while it is open
 ```
 
-- `VimSession belongs_to :project; VimSession belongs_to :task (optional); belongs_to :tree`
+- `VimSession belongs_to :project; VimSession belongs_to :task (optional); belongs_to :tree; has_one :pane (window, while open)`
 
 ## 7. Shells
 
@@ -371,6 +387,12 @@ VimSession = { id, name, path, project_id, task_id, cwd, created }
   - delete confirmation defaults to `y`; `esc` closes the palette so `ctrl+p` can move up in it
 - modal input library: every modal and form runs on one engine; a config of modes, bindings (key → action) and actions (action → method on the object); fed keys one at a time, it tracks the mode and the object
   - [ ] plain text input through neovim (embedded or headless) is the ideal; the engine is the fallback
+- new pane bindings: two per kind, six in all, on every page
+  - quick: `n t` terminal, `n a` agent, `n v` vim session; spawns at once from `NewSpec`, no form, no question, the pane is live-ready when the key returns
+  - with form: `N t`, `N a`, `N v`; opens the form with the same `NewSpec` prefilled, the person edits, submit spawns
+  - `NewSpec` comes from the highlighted rail row when it is a pane or a vim session: its tuios session, task, project, tree/cwd, and for an agent its harness and preset; otherwise from the pin: the current tuios session, the pinned task, its project's default tree, `settings.harness`, `settings.preset`
+  - the new pane is assigned to that task before the key returns, so it never lands in `No Task`
+  - binding names in config: `new_terminal`, `new_agent`, `new_vim`, `new_terminal_form`, `new_agent_form`, `new_vim_form`
 - the title line always shows the pin: project glyph + name, task title, hidden pane count; `P` opens the switch modal from any page
 - deck rail layout (see `docs/images/deck-rail-annotated.png`): two sections, one list for `j`/`k`
   - top: the review queue, finished turns and documents under the pin, oldest first; focus on the right (`l`/`right`) marks the entry reviewed, preview does not
@@ -391,6 +413,8 @@ VimSession = { id, name, path, project_id, task_id, cwd, created }
 ```js
 ViewState = { pin: Scope, all: { [pageId]: bool }, page: pageId, sel: { pane?: window, task?: id, ctx?: id }, scroll: { [pageId]: n },
               modal?: { def: Modal, state }, parked?: modal, confirm?, live?, status, filter?: query }
+NewSpec   = { kind: "terminal"|"agent"|"vim", session, task_id, project_id, cwd, harness?, preset?, name? }
+            // from the highlighted pane or vim row, else from the pin
 InputLib  = { modes: [name], mode: name, bindings: [{ mode, key, action }],
               actions: { [action]: (object, key) => void }, object }     // feed(key) → runs the bound action, may switch mode
 ```
