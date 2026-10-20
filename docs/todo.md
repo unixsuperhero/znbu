@@ -2,6 +2,8 @@
 
 Znbu owns the canonical backlog. Each concept pairs its remaining acceptance with the [outline](outline.md); implemented work is indexed below but lives in the outline, not the active queue.
 
+See [unfinished work and value-first priorities](priorities.md) for the complete remaining-work list and a recommended order. It is an assessment, not a replacement for the acceptance criteria below.
+
 | Concept | Outline | Remaining work |
 |---|---|---|
 | Architecture: Unit boundaries, store, buses, registry, shells and design rules | [Design and current behavior](outline/architecture.md) | [Todo](todo/architecture.md) |
