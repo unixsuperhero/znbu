@@ -4,52 +4,7 @@
 
 The outline owns implemented [B-06 tabs](../outline/panes.md#b-06), [B-09 lifecycle](../outline/panes.md#b-09), [B-10 accordion](../outline/panes.md#b-10), [B-30 stale grouping](../outline/panes.md#b-30), and [B-38 nested rail](../outline/panes.md#b-38). They are not active construction items here. Recorded verification is historical evidence, not a check performed during this consolidation.
 
-<a id="b-08"></a>
-## B-08: Budget rail height by section and compact resting rows
-
-Status: open · priority: p1 · size: M
-
-The three [lifecycle sections](../outline/panes.md#b-09) exist, but a single growing list is not independent height allocation. Keep the original intent that panes receive most rail space rather than allowing reviews to displace all useful panes.
-
-Acceptance:
-
-- Give each section a configurable percentage cap of usable rail height. A candidate default is `review:25,panes:60,working:15`; the exact default must retain a majority for panes. Section headings count against that section's share.
-- Scroll each section within its allocation and show `+N more` or a visible scroll marker. Overflow cannot push the next section offscreen. Existing grouping/tree headings remain visible within the middle section's budget.
-- Make resting rows one line. Selected or messaging rows use two. Write the rule for any other second-line case, such as stale rows, in the outline and apply it across pages. A second line must carry information absent from the first.
-- With forty finished turns and three panes in a forty-row terminal, reviews occupy no more than their configured share and all three panes remain visible. Moving `j` within Review scrolls that section rather than expanding it.
-- `mtm config init` emits the default section shares. Rendered layout acceptance checks both the percentage budget and one-line/two-line policy.
-
-The original comparison also records tuios's duration-based resting-row fold and per-subagent group cap as relevant alternatives. They inform the policy; they do not establish Matomeru's implementation. Sources: [original B-08](../sources/znbu/docs/todo.md#b-08-rail-height-budget-sections-capped-by-percent-one-line-rows-panes-get-most-of-it) and [implementation-side copy](../sources/matomeru/docs/todo.md#b-08-rail-height-budget-sections-capped-by-percent-one-line-rows-panes-get-most-of-it). The code audit found lifecycle ordering, not percentage caps or independent scroll allocations.
-
-<a id="b-41"></a>
-## B-41: Keep the page's last explicitly chosen detail tab
-
-Status: open · priority: p2 · size: not estimated
-
-This changes [B-06's current per-pane memory](../outline/panes.md#b-06). It is not satisfied by restoring each row's previous tab. The last tab explicitly selected on the page remains active while navigating that page's rows.
-
-Acceptance:
-
-- Explicitly select a detail tab, move through several rows in the left list, and retain that tab. Do not reset to a default or restore a different per-row tab.
-- Explicitly choose another tab, then keep that new choice on subsequent row navigation.
-- Apply the same rule to every tabbed page, including Panes. Automatic row-specific choices must not override an explicit page-level choice.
-
-Source: [original B-41](../sources/znbu/docs/todo.md#b-41-keep-the-last-explicitly-chosen-detail-tab-while-navigating-a-page) and [user request](../sources/hub/prompts/mtm-todo.md). The audited `paneTabs` map is keyed by selection identity and automatically remembers Turns for panes with unreviewed records; it does not implement this acceptance.
-
-<a id="b-45"></a>
-## B-45: Offer task or project completion when closing a pane
-
-Status: open · priority: p2 · size: not estimated
-
-[Current pane closure](../outline/panes.md#pane-closure-and-work-completion) observes lifecycle and prunes assignments. It does not mean the associated work is finished.
-
-Acceptance:
-
-- Closing an associated pane offers an explicit choice to mark its task or project done.
-- Accepting updates the chosen task or project. Declining closes the pane without changing that owner's completion state.
-- Closing a pane alone never silently implies completion.
-
-Source: [original B-45](../sources/znbu/docs/todo.md#b-45-offer-task-or-project-completion-when-closing-its-pane) and [user request](../sources/hub/prompts/mtm-todo.md). Task/project mutations and pane-close observation exist separately; no completion-choice workflow was found in the audit.
+Implemented rail budgets [B-08](../outline/panes.md#b-08), page-level explicit tab memory [B-41](../outline/panes.md#b-41), and close-time completion [B-45](../outline/panes.md#b-45) now live in the outline.
 
 <a id="b-49"></a>
 ## B-49: Complete the noninterfering preview contract

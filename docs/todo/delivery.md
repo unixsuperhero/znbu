@@ -37,14 +37,7 @@ Status: open · priority: p2 · size: M. [Current runner](../outline/delivery.md
 - A full vps2 run must finish under three minutes; the original desired range was roughly 1.5–2 minutes versus the observed 7.5-minute baseline.
 - Two cases creating the same project name must pass together without seeing each other's rows. Keep test daemons uniquely named and separate from existing sessions.
 
-<a id="b-40"></a>
-## B-40 Targeted iteration and one final full suite
-
-Status: open · priority: p2 · size: S. [Existing targeted-case support](../outline/delivery.md#b-40).
-
-- Remove appended per-item outline invocations already covered by the full outline suite, including settings, palette search, MCP, action items, schedules, GitHub reviews/PRs, Slack, tabs, create-jump, review accordion and rail lifecycle.
-- Count the output to establish each outline case runs exactly once in a full suite.
-- Make the implementation AGENTS verification section state: while iterating, use only affected E2E_OUTLINE_CASES; run one full suite at branch end before merge. Do not confuse this with running a full suite after every item.
+Implemented targeted iteration and deduplicated full-suite execution [B-40](../outline/delivery.md#b-40) live in the outline.
 
 <a id="b-71"></a>
 ## B-71 Adopt source documentation only after compatibility review

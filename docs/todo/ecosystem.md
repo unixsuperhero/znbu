@@ -7,7 +7,7 @@ The preserved sources retain original wording and mixed authorship. Do not conve
 ## Existing Matomeru intake, references only
 
 <a id="ext-001"></a>
-- EXT-001, [Keep the chosen detail tab across row navigation, B-41](../todo/panes.md#b-41).
+- EXT-001, [Keep the chosen detail tab across row navigation, B-41](../outline/panes.md#b-41).
   Provenance: user requests: [Matomeru requests L4](../sources/hub/prompts/mtm-todo.md).
 
 <a id="ext-002"></a>
@@ -23,14 +23,14 @@ The preserved sources retain original wording and mixed authorship. Do not conve
   Provenance: user requests: [Matomeru requests L20-41](../sources/hub/prompts/mtm-todo.md).
 
 <a id="ext-005"></a>
-- EXT-005, [Continuous Vim-like tree editing and renaming, B-44](../todo/work.md#b-44).
+- EXT-005, [Continuous Vim-like tree editing and renaming, B-44](../outline/work.md#b-44).
   Provenance: user requests: [Matomeru requests L47-59](../sources/hub/prompts/mtm-todo.md).
 
 <a id="ext-006"></a>
-- EXT-006, [Offer work completion when closing a pane, B-45](../todo/panes.md#b-45).
+- EXT-006, [Offer work completion when closing a pane, B-45](../outline/panes.md#b-45).
   Provenance: user requests: [Matomeru requests L63](../sources/hub/prompts/mtm-todo.md).
 
-B-42 retains cohesive preset groups, recent selections, and the competing ordered sparse-layer design. No choice between them is made here. B-44 retains existing-name editing separately from Ima's no-live-editor plugin boundary; B-45 retains explicit completion choice on pane close.
+B-41, B-44, and B-45 are implemented in Matomeru. EXT-001, EXT-005, and EXT-006 remain intake references to those completed B items, not separate unfinished ecosystem work. B-42 retains cohesive preset groups, recent selections, and the competing ordered sparse-layer design. B-43 remains open. The rename request does not broaden Ima's no-live-editor plugin boundary; pane close never implicitly completes work.
 
 ## Attention and work
 

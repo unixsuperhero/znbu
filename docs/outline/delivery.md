@@ -33,9 +33,13 @@ MTM_VERIFY_TIMEOUT is a positive number of seconds. Use finite tool and remote d
 Status: open. `scripts/e2e-all.sh` prints status/time for each suite and existing suites isolate temporary data/daemons, but the runner is sequential and set -e stops after a failed suite. Outline cases share a harness run rather than four per-case workers. [Remaining acceptance](../todo/delivery.md#b-39) preserves per-case isolation, aggregate reporting and the under-three-minute goal.
 
 <a id="b-40"></a>
-## B-40 Iteration baseline
+## B-40 Targeted iteration and one final full suite
 
-Status: open. E2E_OUTLINE_CASES already selects targeted cases. The full runner still appends settings, palette, MCP, actions, schedules, GitHub, Slack, pane-tab and other cases already present in outline acceptance. The requested targeted-during-work/one-full-final policy and deduplication remain [B-40](../todo/delivery.md#b-40). Existing remote safety rules do not establish this newer policy.
+Status: implemented. `E2E_OUTLINE_CASES` selects only affected cases during iteration. The full runner invokes the outline suite once and no longer appends duplicate settings, palette search, MCP, actions, schedules, GitHub review/PR, Slack, tabs, create-jump, accordion, or rail-lifecycle invocations. Each outline case runs once in a full suite. The implementation AGENTS verification policy calls for one full suite at branch end before merge, not after every item. B-39 bounded parallelism and aggregate reporting remain separate unfinished work.
+
+Recorded dispatcher evidence: `/root/proj/redeck-astra-verification/runs/run.neOHqj34/verification.log` compares the earlier 15 outline invocations and 67 dispatches for 53 unique cases with one invocation and 53 dispatches, each once. This predates the latest added cases. It proves dispatcher deduplication, not that every suite passes. The main agent owns the final full-suite run. This documentation task ran no local checks. [Original B-40 acceptance](../sources/znbu/docs/todo.md#b-40-verify-with-targeted-cases-while-working-one-full-suite-only-at-the-end) remains preserved.
+
+Delivery verification stopped at the user’s explicit request after focused VPS proofs and Go vet passed. Broader runs exposed stale fixtures and reached their finite deadlines; no final all-green full-suite result is claimed. Native macOS picker selection remains unverified, with an explicit Linux skip rather than a pass.
 
 <a id="b-22"></a>
 ## B-22 Feature inventory, stage 1

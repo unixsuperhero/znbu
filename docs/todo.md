@@ -39,8 +39,6 @@ This is a navigation index, not a second task list. Status and acceptance live i
 |---|---|
 | [B-02: Build application-owned shared-place messaging ](todo/work.md#b-02) | open |
 | [B-05: Notes on almost any record ](todo/knowledge.md#b-05) | partial |
-| [B-08: Budget rail height by section and compact resting rows ](todo/panes.md#b-08) | open |
-| [B-13: Complete faithful backlog import ](todo/work.md#b-13) | partial |
 | [B-14: offline MCP harvest, catalog, templates, and replay ](todo/agents.md#b-14) | open |
 | [B-16: Complete Slack context capture and live monitoring ](todo/automation.md#b-16) | partial |
 | [B-19: Linear as a source of action items ](todo/automation.md#b-19) | open |
@@ -57,12 +55,8 @@ This is a navigation index, not a second task list. Status and acceptance live i
 | [B-34: complete the per-harness AI asset catalog ](todo/agents.md#b-34) | partial |
 | [B-36: interchangeable palette styles ](todo/forms.md#b-36) | open |
 | [B-39: Parallel isolated end-to-end runner ](todo/delivery.md#b-39) | open |
-| [B-40: Targeted iteration and one final full suite ](todo/delivery.md#b-40) | open |
-| [B-41: Keep the page's last explicitly chosen detail tab ](todo/panes.md#b-41) | open |
 | [B-42: field-group presets, recent selections, and sparse layers ](todo/agents.md#b-42) | open |
 | [B-43: Give projects their own knowledge and deliverables page ](todo/work.md#b-43) | open |
-| [B-44: Continue insertion and rename existing records in the bulk tree ](todo/work.md#b-44) | partial |
-| [B-45: Offer task or project completion when closing a pane ](todo/panes.md#b-45) | open |
 | [B-46: Resolve the remaining directory-ranking acceptance ](todo/work.md#b-46) | partial |
 | [B-48: Implement the full Place and observed Git model ](todo/work.md#b-48) | open |
 | [B-49: Complete the noninterfering preview contract ](todo/panes.md#b-49) | verification-pending |
@@ -103,11 +97,17 @@ This is a navigation index, not a second task list. Status and acceptance live i
 | [B-25: searchable palette ](outline/forms.md#b-25) | implemented |
 | [B-30: Stale panes remain in their group ](outline/panes.md#b-30) | implemented |
 | [B-35: Stuck-pane checks ](outline/automation.md#b-35) | implemented |
-| [B-37: Adds-only bulk creation ](outline/work.md#b-37) | implemented |
+| [B-37: Bulk creation tree ](outline/work.md#b-37) | implemented |
 | [B-38: Nested middle rail below the pin ](outline/panes.md#b-38) | implemented |
 | [B-47: Git and GitHub inventories ](outline/work.md#b-47) | implemented |
 | [B-61: Inferred launch defaults ](outline/agents.md#b-61) | implemented |
 | [B-62: Two-input Prompt/Settings composer ](outline/agents.md#b-62) | implemented |
+| [B-08: Rail height budgets and compact rows](outline/panes.md#b-08) | implemented |
+| [B-13: Faithful canonical backlog import](outline/work.md#b-13) | implemented |
+| [B-40: Targeted iteration and one final full suite](outline/delivery.md#b-40) | implemented |
+| [B-41: Explicit page-level detail tab](outline/panes.md#b-41) | implemented |
+| [B-44: Continuous tree editing and renames](outline/work.md#b-44) | implemented |
+| [B-45: Close-time work completion choice](outline/panes.md#b-45) | implemented |
 
 ### Adjacent product ideas
 
@@ -147,7 +147,7 @@ See [ecosystem remaining work](todo/ecosystem.md) and [source-reported behavior 
 - [B-12: Deck as an MCP server, configured into every agent deck starts](outline/automation.md#b-12) — implemented.
 <a id="b-13-todo-unit-and-page-items-that-are-not-yet-tasks"></a>
 <a id="b-13"></a>
-- [B-13: Todo unit and page: items that are not yet tasks](todo/work.md#b-13) — partial.
+- [B-13: Todo unit and page: items that are not yet tasks](outline/work.md#b-13) — implemented.
 <a id="b-14-mcp-harvest-and-replay-built-into-deck-read-harness-logs-catalog-servers-and-tools-call-them-without-an-agent"></a>
 <a id="b-14"></a>
 - [B-14: MCP harvest and replay built into deck: read harness logs, catalog servers and tools, call them without an agent](todo/agents.md#b-14) — open.
@@ -171,7 +171,7 @@ See [ecosystem remaining work](todo/ecosystem.md) and [source-reported behavior 
 - [B-20: Schedules: recurring prompts and lookups on an interval, results back through the MCP server](todo/automation.md#b-20) — partial.
 <a id="b-08-rail-height-budget-sections-capped-by-percent-one-line-rows-panes-get-most-of-it"></a>
 <a id="b-08"></a>
-- [B-08: Rail height budget: sections capped by percent, one-line rows, panes get most of it](todo/panes.md#b-08) — open.
+- [B-08: Rail height budget: sections capped by percent, one-line rows, panes get most of it](outline/panes.md#b-08) — implemented.
 <a id="b-09-pane-lifecycle-in-the-rail-working-at-the-bottom-and-locked-review-at-the-top-rest-in-the-middle"></a>
 <a id="b-09"></a>
 - [B-09: Pane lifecycle in the rail: working at the bottom and locked, review at the top, rest in the middle](outline/panes.md#b-09) — implemented.
@@ -195,7 +195,7 @@ See [ecosystem remaining work](todo/ecosystem.md) and [source-reported behavior 
 - [B-01: Orchestrator agent that catches agents spinning their wheels](outline/automation.md#b-01) — superseded.
 <a id="b-41-keep-the-last-explicitly-chosen-detail-tab-while-navigating-a-page"></a>
 <a id="b-41"></a>
-- [B-41: Keep the last explicitly chosen detail tab while navigating a page](todo/panes.md#b-41) — open.
+- [B-41: Keep the last explicitly chosen detail tab while navigating a page](outline/panes.md#b-41) — implemented.
 <a id="b-42-field-group-presets-recent-selections-and-composable-preset-layers"></a>
 <a id="b-42"></a>
 - [B-42: Field-group presets, recent selections and composable preset layers](todo/agents.md#b-42) — open.
@@ -204,16 +204,16 @@ See [ecosystem remaining work](todo/ecosystem.md) and [source-reported behavior 
 - [B-43: Give projects their own page organized around what needs to be known, done, made and shared](todo/work.md#b-43) — open.
 <a id="b-44-edit-the-bulk-create-tree-continuously-and-rename-existing-records"></a>
 <a id="b-44"></a>
-- [B-44: Edit the bulk-create tree continuously and rename existing records](todo/work.md#b-44) — partial.
+- [B-44: Edit the bulk-create tree continuously and rename existing records](outline/work.md#b-44) — implemented.
 <a id="b-45-offer-task-or-project-completion-when-closing-its-pane"></a>
 <a id="b-45"></a>
-- [B-45: Offer task or project completion when closing its pane](todo/panes.md#b-45) — open.
+- [B-45: Offer task or project completion when closing its pane](outline/panes.md#b-45) — implemented.
 <a id="b-39-parallel-e2e-runner-a-database-per-case-about-four-at-once-one-report-at-the-end"></a>
 <a id="b-39"></a>
 - [B-39: Parallel e2e runner: a database per case, about four at once, one report at the end](todo/delivery.md#b-39) — open.
 <a id="b-40-verify-with-targeted-cases-while-working-one-full-suite-only-at-the-end"></a>
 <a id="b-40"></a>
-- [B-40: Verify with targeted cases while working; one full suite only at the end](todo/delivery.md#b-40) — open.
+- [B-40: Verify with targeted cases while working; one full suite only at the end](outline/delivery.md#b-40) — implemented.
 <a id="b-36-command-palette-styles-several-interchangeable-looks-chosen-in-settings"></a>
 <a id="b-36"></a>
 - [B-36: Command palette styles: several interchangeable looks, chosen in settings](todo/forms.md#b-36) — open.

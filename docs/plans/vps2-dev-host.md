@@ -65,7 +65,7 @@ Independent; any order. Retain each original failure and separate acceptance:
 - e2e-setup.sh turn capture: after l, a single read can see no text on a slow render and page past the answer. Wait for DETAIL / FOCUSED and answer text before paging; after each PageDown wait for the screen to change.
 - Outline shared_navigation: `previous section selects previous group start` times out under full-suite load but passes targeted.
 
-Acceptance is five consecutive green vps2 runs of each affected suite, with logs. A later unrelated green suite or owner's feature check is not evidence for this repetition gate. [B-40](../todo/delivery.md#b-40) governs targeted iteration versus the one final full run; do not conflate deliberate flake measurement with a general full-suite-per-item policy.
+Acceptance is five consecutive green vps2 runs of each affected suite, with logs. A later unrelated green suite or owner's feature check is not evidence for this repetition gate. [B-40](../outline/delivery.md#b-40) governs targeted iteration versus the one final full run; do not conflate deliberate flake measurement with a general full-suite-per-item policy.
 
 <a id="authchoice"></a>
 ### 7. Shared auth proxy versus per-machine logins

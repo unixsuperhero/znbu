@@ -2,7 +2,7 @@
 
 This is a recommendation based on the current [outline](outline.md), [canonical todo](todo.md), all ten outline/todo concept pairs, and the [source map](source-map.json). It is not a new implementation audit or a commitment to dates. Existing statuses, acceptance criteria and owners remain authoritative in the linked concept documents.
 
-There are **45 unfinished Matomeru items** and **18 separate ecosystem groups with remaining work or decisions**. The optional third B-35 stuck-pane rule is listed separately, not reopened as mandatory work. EXT-001 through EXT-006 already route to B-41 through B-45 and are not counted twice. Implemented and superseded work is excluded.
+There are **39 unfinished Matomeru items** and **18 separate ecosystem groups with remaining work or decisions**. The optional third B-35 stuck-pane rule is listed separately, not reopened as mandatory work. EXT-001 through EXT-006 route to B-41 through B-45 and are not counted twice; B-42 and B-43 remain open while B-41, B-44, and B-45 are complete. Implemented and superseded work is excluded.
 
 ## Recommendation
 
@@ -10,20 +10,16 @@ Start with repeated interaction friction, then work on the shared creation workf
 
 **[INFERENCE]** All value rankings and effort estimates below are judgments from documented scope, not measured development times. S means a bounded change to an existing workflow; M means coordinated state/UI work; L means a cross-cutting feature or substantial design decisions. Dependencies and real-code inspection can change the estimate. Old p1/p2 labels are preserved in source docs, but do not determine this order.
 
-### Fastest useful outcomes
+### Remaining small outcomes
 
-| Order | Outcome | Why it earns its place | Estimated effort and boundary |
-|---|---|---|---|
-| 1 | [B-41: remember the page's chosen tab](todo/panes.md#b-41) | Removes a repeated interruption every time you inspect another row. Clear, narrow acceptance. | S; apply to every tabbed page, not just Panes. |
-| 2 | [B-45: offer work completion when closing a pane](todo/panes.md#b-45) | Saves the extra trip to task/project status while keeping completion explicit. | S; declining must not mark anything done. |
-| 3 | [B-44: continuous bulk editing and existing-record renames](todo/work.md#b-44) | Removes the repeated Escape/o/type cycle and makes planning a real multiline workflow. | M; retain identity, nesting, atomic saves and conflict handling. |
-| 4 | [B-08: prevent reviews from crowding panes out of the rail](todo/panes.md#b-08) | Keeps active work visible as finished work accumulates. | M; independent section scrolling and compact-row rules are part of the result. |
-| 5 | [B-13: faithfully import this complete backlog](todo/work.md#b-13) | Makes the actual plan usable in the application without losing statuses or reopening retired ideas. | M; topology-aware import and idempotence matter. Confirm the intended store before importing. |
-| Parallel developer task | [B-40: eliminate duplicate suite execution](todo/delivery.md#b-40) | Reduces repeated verification work for every later implementation. | S; prove each case runs once. Not a dependency that should block the UI wins. |
+The [B-27 downloads directory setting](todo/knowledge.md#b-27) and [B-92 saved-editor forget command](todo/knowledge.md#b-92) remain small independent outcomes. Neither closes its entire parent item: download notes depend on B-05, and rich editor Place support depends on B-48.
 
-Two additional small, independent outcomes are the [B-27 downloads directory setting](todo/knowledge.md#b-27) and [B-92 saved-editor forget command](todo/knowledge.md#b-92). They can fill a short implementation slot, but neither closes its entire parent item: download notes depend on B-05, and rich editor Place support depends on B-48.
+### Completed quick wins
 
-### Important work after the first quick wins
+The previous recommendation is retained here as history, not active work. [B-41 explicit page tab](outline/panes.md#b-41), [B-45 close-time completion](outline/panes.md#b-45), [B-44 continuous tree editing](outline/work.md#b-44), [B-08 rail budgets](outline/panes.md#b-08), [B-13 complete import](outline/work.md#b-13), and [B-40 deduplicated full suite](outline/delivery.md#b-40) are implemented. Their outlines retain acceptance, provenance, and recorded real VPS evidence. Intended-store import follows the documentation snapshot and is not claimed as already performed here.
+
+### Important remaining work
+
 
 | Priority | Outcome | Value and sequencing |
 |---|---|---|
@@ -58,9 +54,6 @@ Each row summarizes remaining scope; its link retains the full acceptance criter
 
 | Item | Documented status | Remaining work | Effort |
 |---|---|---|---|
-| [B-08](todo/panes.md#b-08) | open | Independent rail section height budgets/scrolling, compact resting rows and visible overflow so reviews cannot crowd out panes. | M |
-| [B-41](todo/panes.md#b-41) | open | Retain the last explicitly selected page tab across row navigation on every tabbed page; automatic/per-row choices cannot override it. | S |
-| [B-45](todo/panes.md#b-45) | open | On pane close, offer explicit task/project completion; declining leaves work status unchanged. | S |
 | [B-49](todo/panes.md#b-49) | verification-pending | Establish all noninterfering terminal/agent/Vim preview scenarios, stale/cached/error states, race handling, escape safety and unchanged target/input/dimensions. | M check; implementation unknown |
 | [B-50](todo/panes.md#b-50) | verification-pending | Establish complete remote-terminal inventory and host identity through every stored/routed reference; prove stale-host recovery without incorrect pruning. | M check; implementation unknown |
 
@@ -69,9 +62,7 @@ Each row summarizes remaining scope; its link retains the full acceptance criter
 | Item | Documented status | Remaining work | Effort |
 |---|---|---|---|
 | [B-02](todo/work.md#b-02) | open | Persistent shared-place claims/messages, peer routing, launch context and overlap warnings; depends on Place and unresolved server/delivery decisions. | L |
-| [B-13](todo/work.md#b-13) | partial | Faithful, repeatable import of the complete split backlog; preserve IDs, statuses, notes and ownership, including parked/superseded records; establish intended-store evidence. | M |
 | [B-43](todo/work.md#b-43) | open | Dedicated Projects page with know/do/make/share and actual research at three answer depths, retained with its project. | L |
-| [B-44](todo/work.md#b-44) | partial | Continuous o/O insertion across Enter, in-line nesting and Vim-style editing/renaming of existing records; retain IDs and atomic/conflict-safe saves. | M |
 | [B-46](todo/work.md#b-46) | partial | Resolve current-cwd versus successful-launch frequency and explain the ranking; obtain platform-specific native-picker evidence where required. | S decision/evidence; chosen change may grow |
 | [B-48](todo/work.md#b-48) | open | Full host-qualified multi-directory Place model, inherited launch location, observed Git/dirty blame/HEAD rewrites, branch/task/PR links and warnings. | L |
 
@@ -138,7 +129,6 @@ Each row summarizes remaining scope; its link retains the full acceptance criter
 | [B-22](todo/delivery.md#b-22) | partial | Feature inventory regeneration hook, runtime docs coverage, verdict ownership, Features page and keep/cut/status gating. | L |
 | [B-26](todo/delivery.md#b-26) | verification-pending | Establish remote release/tag evidence and authorized publication acceptance; existing release machinery is not missing, and this assessment authorizes no release. | S |
 | [B-39](todo/delivery.md#b-39) | open | Isolated bounded-concurrency E2E runner, aggregate every result, failure counts and demonstrated full-suite timing. | M |
-| [B-40](todo/delivery.md#b-40) | open | Remove duplicate full-suite case invocations; use targeted cases while iterating and one full suite at branch end; prove each case runs once. | S |
 | [B-71](todo/delivery.md#b-71) | open | Validate existing source-doc tools against real public/private/interface examples and compiler compatibility before adopting or building custom views. | S |
 | [B-72](todo/delivery.md#b-72) | open | Choose/dispose completed TUI research recommendations; research is already done, adoption and unresolved decisions remain. | S |
 | [B-73](todo/delivery.md#b-73) | partial | Finish all seven VPS development-host steps: platform actions, branch round-trip, real attached task, concurrent-load evidence, orphan cleanup, flake burn-down and auth policy. | L |

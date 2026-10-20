@@ -4,19 +4,7 @@
 
 Only unfinished acceptance is active here. Implemented [B-37 bulk creation](../outline/work.md#b-37) and [B-47 Git inventories](../outline/work.md#b-47) live in the outline. [B-07](../outline/work.md#b-07) is superseded, not an active request to rebuild the legacy mass-add outline. Historical evidence is not a test performed during this consolidation.
 
-<a id="b-13"></a>
-## B-13: Complete faithful backlog import
-
-Status: partial · priority: p1 · size: M
-
-The [implemented Todo page, commands, promotion, and task lifecycle](../outline/work.md#b-13) are the baseline. Remaining acceptance:
-
-- Preserve each imported B identifier, title, priority, status, body, and notes. Resolve parked/superseded items explicitly instead of changing them silently into active ideas. The current importer maps `parked` and unknown status to `idea`; B-07 demonstrates why that is not faithful.
-- Repeat the import without duplicate records. Existing B identifiers update in place, with notes and ownership retained according to the documented import contract.
-- Import the complete canonical backlog, not just the older checked-in fixture. The move from one large `todo.md` to topical files must not omit an item. Preserve completed and superseded identity without reopening it as work.
-- Record evidence of the complete import into the intended application store, or an explicit approved disposition for each item. The recorded fixture suite is not evidence that the current expanded backlog was imported into a user's real store.
-
-No import or user-store mutation ran during documentation consolidation. Sources: [original B-13 acceptance](../sources/znbu/docs/todo.md#b-13-todo-unit-and-page-items-that-are-not-yet-tasks), [implementation import contract](../sources/matomeru/docs/outline.md), and `internal/work/todos.go`.
+Implemented canonical backlog import [B-13](../outline/work.md#b-13) lives in the outline.
 
 <a id="b-43"></a>
 ## B-43: Give projects their own knowledge and deliverables page
@@ -34,21 +22,7 @@ Acceptance:
 
 Sources: [original B-43](../sources/znbu/docs/todo.md#b-43-give-projects-their-own-page-organized-around-what-needs-to-be-known-done-made-and-shared) and [captured user request](../sources/hub/prompts/mtm-todo.md). Related reusable knowledge/research ideas remain in the [ecosystem outline](../outline/ecosystem.md) and [ecosystem backlog](ecosystem.md).
 
-<a id="b-44"></a>
-## B-44: Continue insertion and rename existing records in the bulk tree
-
-Status: partial · priority: p2 · size: not estimated
-
-[Implemented B-37](../outline/work.md#b-37) can nest new rows, and the separate `P` draft can rename existing records. The bulk editor still protects existing rows and ends insertion at Enter. Backend rename structs alone do not complete this UI change.
-
-Remaining acceptance:
-
-- Use `o` or `O` once, type several project/task names separated by Enter, and create several rows without leaving insertion mode. Remove the repeated Escape, `o`/`O`, type-name cycle.
-- Keep Tab and Shift+Tab available while editing the current line to change nesting.
-- Navigate and edit the multiline draft as a Vim-style multiline buffer, including the names of existing tasks and projects. Existing records must not be read-only just because they already exist.
-- Save renames without changing primary keys or existing relationships. Keep the atomic draft-save/conflict behavior described in the [tree contract](../outline/work.md#projecttask-tree-and-atomic-drafts).
-
-This deliberately replaces B-37's prohibition on renaming existing nodes. It is not a request to rebuild superseded B-07. Evidence of the gap: `internal/ui/tree_edit.go` protects existing bulk rows, and `finishTreeLine` ends editing. Sources: [original B-44](../sources/znbu/docs/todo.md#b-44-edit-the-bulk-create-tree-continuously-and-rename-existing-records) and [captured request](../sources/hub/prompts/mtm-todo.md).
+Implemented continuous bulk editing and existing-record renames [B-44](../outline/work.md#b-44) live in the outline.
 
 <a id="rankedpaths"></a>
 <a id="b-46"></a>

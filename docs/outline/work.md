@@ -81,17 +81,25 @@ Draft children can refer to earlier draft rows. Project additions precede task a
 Evidence: `internal/work/tree.go`, `internal/ui/tree_edit.go`, and the [preserved tree contract](../sources/matomeru/docs/outline.md#63-work--projects-tasks-assignments).
 
 <a id="b-37"></a>
-## B-37: Adds-only bulk creation
+## B-37: Bulk creation tree
 
-Status: implemented. `work.bulk_create` defaults on. The palette's **Bulk create**, `alt+m`, and a form's `+ add new…` open the same tree draft under an adds-only policy. This intentionally uses the `P` tree, not a second component built on the field-form engine.
+Status: implemented. `work.bulk_create` defaults on. **Bulk create**, `alt+m`, and a form's `+ add new…` open the same tree draft as the `P` tree, not a separate field-form component. It opens every project, task, and subtask at the form's parent or pin. The historical adds-only restriction and dim read-only existing names are replaced by [B-44](#b-44).
 
-The tree opens with every project, task, and subtask. Existing rows are dim and read-only. The cursor starts at the form's parent or the pin. `o` and `O` add siblings; `a` adds a child. On a project, sibling insertion creates a project because every top-level line is a project. Tab can nest a new project into the preceding project as its last root task. Shift+Tab can turn a new root task into a project; children follow it. `e`, `i`, and Enter rename a new row.
+`o` and `O` add siblings; `a` adds a child. On a project, sibling insertion creates a project because top-level lines are projects. Tab nests a new project into the preceding project as its last root task. Shift+Tab turns a new root task into a project with its children. A new project needs only a name, not a repository. **Set project tree** attaches one separately.
 
-A new project needs only a name. It has no repository until **Set project tree** attaches one. Ctrl+s runs one atomic `work.apply-tree-draft`, reports `Added N projects, M tasks`, and restores a parked form with its field set to the first new task. Escape in normal mode discards. CLI entry points are `mtm task tree` and `mtm task bulk-create --json '{revision, project_adds, adds, sibling_orders}'`.
+Ctrl+s runs one atomic `work.apply-tree-draft`, reports additions, and restores a parked form with the first new task selected. Escape in normal mode discards. CLI entry points remain `mtm task tree` and `mtm task bulk-create` with draft JSON. The [atomic tree contract](#projecttask-tree-and-atomic-drafts) retains revision/conflict handling.
 
-This baseline does not continuously insert another row after Enter, and it does not allow existing records to be renamed in the bulk editor. Those changes are [B-44](../todo/work.md#b-44), which deliberately replaces the adds-only restriction without changing record identities.
+Historical evidence: commit `e3f3780`, `internal/ui/tree_edit.go`, `internal/work/tree.go`, and `internal/settings/settings.go`. [Original B-37](../sources/znbu/docs/todo.md#b-37-bulk-create-tree-projects-tasks-and-subtasks-in-one-editable-tree) records `bulk_create`, `mass_add`, and `switch_creation` acceptance. Current behavior adds the B-44 proof below.
 
-Evidence: commit `e3f3780`, `internal/ui/tree_edit.go`, `internal/work/tree.go`, and `internal/settings/settings.go`. [Historical B-37 evidence](../sources/znbu/docs/todo.md#b-37-bulk-create-tree-projects-tasks-and-subtasks-in-one-editable-tree) records the `bulk_create`, `mass_add`, and `switch_creation` outline cases.
+<a id="b-44"></a>
+## B-44: Continuous insertion and existing-record renames
+
+Status: implemented. Use `o` or `O` once, then enter several names separated by Enter without leaving insertion mode. Tab and Shift+Tab change the current line's nesting during editing. Multiline bulk lines retain their hierarchy. Vim-style draft navigation and name editing apply to existing projects and tasks as well as new rows.
+
+Saving a rename preserves its primary key, assignments, and existing relationships. The same atomic draft-save and stale-revision conflict behavior applies to renames and additions; a failed save does not partially apply the draft. This explicitly replaces B-37's former existing-row protection, not superseded B-07.
+
+Evidence: real VPS CLI/PTy tree runs `run.rn4oBZIK` and `run.nZi7OYaT`. Sources: [original B-44](../sources/znbu/docs/todo.md#b-44-edit-the-bulk-create-tree-continuously-and-rename-existing-records), [user request](../sources/hub/prompts/mtm-todo.md).
+
 
 <a id="b-07"></a>
 ## B-07: Superseded mass-add outline
@@ -105,11 +113,11 @@ These are preserved design alternatives, not a claim that every legacy outline b
 <a id="b-13"></a>
 ## B-13: Lightweight todos and promotion
 
-Status: partial. The Todo unit exists in `internal/work`, alongside the work transaction and pin. A todo needs no project or pane. It carries free text, priority, notes, and optional ownership, and can be claimed, researched through the [agent interface](agents.md), resolved, or promoted into a task.
+Status: implemented. The Todo unit exists in `internal/work`, alongside the work transaction and pin. A todo needs no project or pane. It carries free text, priority, notes, and optional ownership, and can be claimed, researched through the [agent interface](agents.md), resolved, or promoted into a task. Canonical index/directory import now preserves the complete backlog and its dispositions.
 
 ```js
 Todo = { id, external_id?: "B-nn", title, text, priority: "p1"|"p2"|"p3",
-  status: "idea"|"ready"|"claimed"|"review"|"done", owner?, project_id?, task_id?,
+  status: "idea"|"ready"|"claimed"|"review"|"done"|"parked"|"superseded", owner?, project_id?, task_id?,
   promoted_task_id?, notes: [string], created, updated }
 Promoted = { task: Task, todo: Todo }
 Import = { path, imported, updated, ids }
@@ -119,9 +127,11 @@ The global Todos page uses `B`. Rows sort with done last, then by priority and a
 
 Promotion chooses explicit `parent_id`, then explicit root `project_id`, then the todo's own task/project, then the pin. Without a destination it returns `invalid_args`. It copies the title, moves text followed by notes into the new task's own notes in order, sets `done`, `promoted_task_id`, and `task_id`, and refuses repetition with `already_promoted`. A new task defaults to `todo`; creation with a pane, or a later `work.assign`, makes it `active` and records that change in history. `done` and `skipped` remain the final states. The `new_task_status` setting defaults to `todo`; the historical environment-only fallback is not the canonical settings interface.
 
-Import uses `internal/todomd` and upserts by B identifier, updating rather than duplicating on repetition. Unknown priorities become `p2`. The current importer converts `parked` and unknown statuses to `idea`, so the original exact-status import acceptance is not complete. Its fixture verification also does not prove that the complete expanded backlog was imported into a real user store. [B-13's remaining acceptance](../todo/work.md#b-13) retains both limitations and the move to topical backlog files.
+Import accepts the canonical `docs/todo.md` index or its containing directory, follows the split concept locations, and preserves all 66 B identifiers. It preserves each title, priority, status, body, and notes rather than importing only the older fixture. Parked and superseded records retain their dispositions instead of becoming active ideas. Repeating an import upserts by B identifier without duplicate records; existing notes and ownership are retained under the import contract. Unknown statuses are not silently recast as idea. Completed identities remain completed.
 
-Evidence: commit `059ba80`, `internal/work/todos.go`, and `internal/work/commands.go`. The [implementation source document](../sources/matomeru/docs/outline.md#17-b-13-todo-unit-and-page-items-that-are-not-yet-tasks) records `todos` outline verification for ordering, errors, claim, promotion, notes, task activation, and repeat import. No application verification ran in this consolidation.
+Recorded real VPS CLI evidence: `run.GsYNEfhn` covers all 66 IDs and repeat import. The intended application-store import subsequently returned `imported: 66, updated: 0`; the CLI read-back contained 23 open, 13 partial, 3 verification-pending, 25 implemented, and 2 superseded records. All six quick-win IDs retain implemented status. The approved disposition of each imported item is recorded in the canonical index and source map.
+
+Historical baseline evidence remains commit `059ba80`, `internal/work/todos.go`, and `internal/work/commands.go`. The [implementation source](../sources/matomeru/docs/outline.md#17-b-13-todo-unit-and-page-items-that-are-not-yet-tasks) records original ordering, errors, claim, promotion, notes, activation, and fixture repeat-import acceptance. [Original B-13 acceptance](../sources/znbu/docs/todo.md#b-13-todo-unit-and-page-items-that-are-not-yet-tasks) remains preserved.
 
 ## Projects as knowledge and deliverables
 

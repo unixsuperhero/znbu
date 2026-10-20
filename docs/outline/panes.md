@@ -57,7 +57,7 @@ The [shared status contract](forms.md) requires simultaneous flags, plain-text c
 
 Status: implemented. A pane detail has **Screen**, **Activity**, **Transcript**, and **Turns**, in that order. The bar identifies the pane's session/name, assignment path and glyph, stale age, and last message. Review and persisted Vim rows have their own detail and do not receive a misleading pane tab bar.
 
-`1` through `4`, `[`/`]`, and Tab/Shift+Tab switch pane tabs from the rail or detail. Detail focus makes the selected tab more prominent. Screen is the default for an ordinary newly selected pane. The implemented tab memory is per pane during the application's lifetime. Returning to a pane restores that pane's tab, and a pane with unreviewed turns opens Turns. [B-41](../todo/panes.md#b-41) deliberately changes this rule to the page's last explicitly selected tab. Per-pane restoration does not complete B-41.
+`1` through `4`, `[`/`]`, and Tab/Shift+Tab switch pane tabs from the rail or detail. Detail focus makes the selected tab more prominent. Screen is the default for an ordinary newly selected pane until the page has an explicit tab choice. [B-41](#b-41) replaces the historical per-pane memory with page-level explicit selection.
 
 Screen uses the actual `capture-pane` result rather than substituting an activity log or transcript. Selected output events request a new capture, with a one-second fallback. One capture runs at a time and at most one newer request waits. A late capture older than five seconds does not block the UI. Screen scroll remains where the user left it unless following the bottom; `G` resumes follow. With detail focused, `j`/`k` scroll a line and `J`/`K` move half a page.
 
@@ -98,7 +98,9 @@ An unknown leader command is consumed and explained rather than sent to the pane
 
 Zoom/fullscreen first wait for renderer acknowledgement of the target focus through a tuios `run-command`. A daemon `focus-window` response alone does not establish renderer focus. There is no guessed delay in place of that acknowledgement.
 
-Pane creation navigates to Panes, measures the Screen region, sizes the created target to that region, and selects it on Screen with follow enabled. CLI creation can supply explicit dimensions. A resize failure reports a nonfatal note without losing an otherwise created pane. Creation/live resizing is distinct from the read-only preview's no-resize rule.
+Pane creation uses the project's named tuios session for terminal, agent, and Vim launches. An explicit destination wins over that default. A pane is a terminal runtime target; a page is a Matomeru navigation view. These are not interchangeable terms.
+
+Automatic placement requires at least eighteen rows per new pane and selects an empty workspace when the current one cannot fit it. If every workspace is occupied, creation refuses with an explanation because the native API cannot safely create the required workspace. It does not rearrange, resize, or otherwise mutate an existing workspace layout to force a fit. Explicit destination selection remains authoritative. Evidence: real PTY and SSH launch acceptance in `run.mu80sv9H`. Creation selects the new pane on Screen with follow enabled. CLI creation can supply explicit dimensions. Live-mode sizing is distinct from read-only preview's no-resize rule.
 
 The six global creation bindings remain `n t`, `n a`, `n v` for quick terminal/agent/Vim creation, and `N t`, `N a`, `N v` for the corresponding prefilled forms. Quick creation does not open a form. Launch context comes from the highlighted pane/Vim row when applicable, otherwise the pin. Current launch behavior and the implemented defaults/composer are described in [agent launches](agents.md#launchdefaults); the full inherited Place and preflight-warning target remains [B-48](../todo/work.md#b-48). New panes must retain their assignment rather than briefly appearing as unassigned.
 
@@ -119,7 +121,7 @@ Working rows are oldest first, using first observation of working state when the
 
 Document review is not the same as this focused-pane retention. Documents have their own open/read transition and a three-second off-cursor linger. Their content, star, and read state are documented under [documents](knowledge.md#b-11).
 
-The sections do not yet have B-08's independent percentage budgets. [B-08](../todo/panes.md#b-08) remains open even though B-09 is implemented.
+The sections have [B-08's independent percentage budgets](#b-08). B-09 defines membership and lifecycle; B-08 controls allocated height, compact rows, and scrolling.
 
 Evidence: commit `ce5e679`; `internal/ui/rail_sections.go`, `internal/ui/render_panes.go`, and `internal/ui/pane_tabs.go`; recorded `rail_lifecycle`, `history_review`, and `shared_navigation` cases in the [implementation outline](../sources/matomeru/docs/outline.md). The [original lifecycle proposal](../sources/matomeru/docs/todo.md#b-09-pane-lifecycle-in-the-rail-working-at-the-bottom-and-locked-review-at-the-top-rest-in-the-middle) retains the earlier lowercase unlock and undecided terminal alternative as history, not current bindings.
 
@@ -137,6 +139,8 @@ ReviewStar = { id: turn_id ?? review_id, starred_at }
 ```
 
 Enter or Space opens/closes a row. Opening marks exactly that row's records reviewed. Expanded state is keyed by stable source identity, so a reread does not close opened rows or shift selection to an unrelated turn. Selection is found again by ID unless follow is enabled. `g` disables follow and moves to the beginning; `G` enables it and follows the newest row. The original proposal also suggested skipping rereads when a count/last-ID/last-body-length fingerprint is unchanged. That remains a retained optimization alternative, not a claim about the current `accordionLines` implementation, which rebuilds its rows.
+
+With Turns detail focused, `j`/`k` move between accordion rows. `J`/`K` and PgDn/PgUp scroll the full expanded body so long responses can be read through their first, middle, and last lines. Real PTY evidence `run.AdYBNDbO` covers a 72-line response at 150x48 and 100x22; `run.ORperME4` records the earlier scoped proof.
 
 A turn with later prompts is auto-reviewable and has a distinct background. The hint names `x`, which marks exactly the earlier auto-reviewable rows. The most recent turn is never mass-marked. `*` persists a turn star in `review_stars`; the Reviews page sorts starred rows first. `y` copies through `context.copy` and OSC 52. `{`/`}` move between the turn group and extracted context.
 
@@ -166,6 +170,36 @@ Evidence: commit `52961a5`; `internal/ui/model.go` and `internal/panes/panes.go`
 
 ## Pane closure and work completion
 
-Closing a pane removes a runtime target, not the work itself. [B-45](../todo/panes.md#b-45) requires an explicit offer to mark the associated task or project done, with no implicit completion. Read-only selection and preview also cannot mark work complete.
+Closing a pane removes a runtime target, not the work itself. [B-45](#b-45) defines the separate explicit completion choice.
 
-Related broader terminal, multi-host, and collaboration ideas remain in the [ecosystem outline](ecosystem.md) and [ecosystem backlog](../todo/ecosystem.md). They do not change the current daemon or pane contract without an explicit implementation decision.
+<a id="b-08"></a>
+## B-08: Rail height budgets and compact rows
+
+Status: implemented. `panes.rail_review_percent`, `panes.rail_panes_percent`, and `panes.rail_working_percent` default to 25, 60, and 15. `mtm config init` emits those shares. Each accepts an integer from 1 through 100. Totals above 100 scale proportionally using the total as denominator; totals at or below 100 use 100. Headings count against their section. Empty or short Review and Working sections release unused space to Panes.
+
+Each section retains an independent row offset. `+N more` and up/down markers identify overflow without pushing the next section offscreen. Group and tree ancestry stays visible within the middle viewport. Resting rows are one line across pages. A selected row adds a second line only for a nonempty summary. A live message adds its actual message as a second line whether selected or not. Staleness alone does not expand a row.
+
+Recorded VPS PTY acceptance covers forty finished turns and three visible panes at forty rows, forty overflowing document rows, independent Working overflow, default/invalid config, and folds/pin. Moving within Review scrolls Review inside its budget.
+
+Evidence: `/root/proj/redeck-astra-verification/runs/run.WJHFiPxy/verification.log`; artifacts `/tmp/mtm-e2e.CSpauN/outline-budget-*.txt`.
+
+At fourteen rows, if the focused section cannot fit its heading and one row, an explicit `<Section> · rail too small for section budgets` message temporarily dedicates the available rail to that section. With only one row available, its label, warning, and selected row share that row. Normal-height budgets do not change. Final tiny-layout evidence: `run.1QOzlv21/verification.log`, artifacts `/tmp/mtm-e2e.4Fj981`.
+
+The original duration-based resting fold and per-subagent cap remain historical alternatives, not extra current requirements. Sources: [original B-08](../sources/znbu/docs/todo.md#b-08-rail-height-budget-sections-capped-by-percent-one-line-rows-panes-get-most-of-it), [implementation-side copy](../sources/matomeru/docs/todo.md#b-08-rail-height-budget-sections-capped-by-percent-one-line-rows-panes-get-most-of-it).
+
+<a id="b-41"></a>
+## B-41: Keep the page's last explicitly chosen detail tab
+
+Status: implemented. Explicitly choosing a tab sets the page's choice. Row navigation retains it rather than restoring a per-row tab or resetting to a default. Choosing another tab replaces that choice for subsequent rows. The rule applies to every tabbed page, including Panes. Automatic row-specific choices, including unreviewed-turn defaults, cannot override it. The former per-pane memory is historical, not the current contract.
+
+Evidence: real VPS PTY acceptance `run.AdYBNDbO` and earlier `run.ORperME4`. Existing `pane_tabs` and `review_accordion` acceptance passed in `run.Rw8zJ3Z1`. Sources: [original B-41](../sources/znbu/docs/todo.md#b-41-keep-the-last-explicitly-chosen-detail-tab-while-navigating-a-page), [user request](../sources/hub/prompts/mtm-todo.md).
+
+<a id="b-45"></a>
+## B-45: Offer task or project completion after successful pane close
+
+Status: implemented. Pane closure first requires confirmation and a successful close result. Only then does an associated task or project receive a separate completion offer. The default is No. Accepting marks the chosen owner done; declining leaves that owner's completion state unchanged while the pane remains closed. Cancelled or failed closure never offers completion. Closing a pane alone never implies work completion. Read-only selection and preview cannot mark work complete.
+
+Evidence: real VPS PTY `run.AdYBNDbO` and earlier `run.ORperME4`. Sources: [original B-45](../sources/znbu/docs/todo.md#b-45-offer-task-or-project-completion-when-closing-its-pane), [user request](../sources/hub/prompts/mtm-todo.md).
+
+Related broader terminal, multi-host, and collaboration ideas remain in the [ecosystem outline](ecosystem.md) and [ecosystem backlog](../todo/ecosystem.md).
+

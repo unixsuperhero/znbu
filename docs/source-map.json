@@ -8,10 +8,10 @@
       "sha256": "97a0cd212e959e76caec0a4f3bc6fecb2df9e072343dfad95e35573a13fbac32",
       "role": "historical-prompt",
       "destinations": [
-        "docs/todo/panes.md#b-41",
+        "docs/outline/panes.md#b-41",
         "docs/todo/work.md#b-43",
-        "docs/todo/work.md#b-44",
-        "docs/todo/panes.md#b-45",
+        "docs/outline/work.md#b-44",
+        "docs/outline/panes.md#b-45",
         "docs/outline/agents.md#fieldpresets",
         "docs/todo/agents.md#b-42",
         "docs/outline/ecosystem.md#ext-001",
@@ -378,8 +378,8 @@
         "docs/outline/panes.md#b-10",
         "docs/outline/panes.md#b-30",
         "docs/todo/work.md#b-02",
-        "docs/todo/work.md#b-13",
-        "docs/todo/panes.md#b-08",
+        "docs/outline/work.md#b-13",
+        "docs/outline/panes.md#b-08",
         "docs/outline/forms.md#b-04",
         "docs/outline/forms.md#b-21",
         "docs/outline/forms.md#b-25",
@@ -654,7 +654,7 @@
         "docs/todo/architecture.md#b-28",
         "docs/outline/automation.md#b-35",
         "docs/todo/delivery.md#b-39",
-        "docs/todo/delivery.md#b-40",
+        "docs/outline/delivery.md#b-40",
         "docs/outline/work.md#b-07",
         "docs/outline/work.md#b-37",
         "docs/outline/panes.md#b-06",
@@ -663,12 +663,12 @@
         "docs/outline/panes.md#b-30",
         "docs/outline/panes.md#b-38",
         "docs/todo/work.md#b-02",
-        "docs/todo/work.md#b-13",
+        "docs/outline/work.md#b-13",
         "docs/todo/work.md#b-43",
-        "docs/todo/work.md#b-44",
-        "docs/todo/panes.md#b-08",
-        "docs/todo/panes.md#b-41",
-        "docs/todo/panes.md#b-45",
+        "docs/outline/work.md#b-44",
+        "docs/outline/panes.md#b-08",
+        "docs/outline/panes.md#b-41",
+        "docs/outline/panes.md#b-45",
         "docs/outline/forms.md#b-04",
         "docs/outline/forms.md#b-21",
         "docs/outline/forms.md#b-25",
@@ -842,7 +842,7 @@
       "status": "implemented",
       "path": "docs/outline/panes.md#b-06",
       "evidence": [
-        "internal/ui/pane_tabs.go and model.go implement the four tabs, selected Screen capture, per-pane memory, and create/live round trip.",
+        "Four tabs, actual selected Screen capture, and create/live round trip remain implemented; B-41 replaces historical per-pane memory with explicit page-level choice.",
         "Commits 09a4f22, 48f451f, 3494216; original recorded pane_tabs/shared_navigation/create_jump/live acceptance retained through preserved source links. Historical only, not rerun."
       ],
       "title": "Pane detail tabs"
@@ -859,11 +859,11 @@
     },
     {
       "id": "B-08",
-      "status": "open",
-      "path": "docs/todo/panes.md#b-08",
+      "status": "implemented",
+      "path": "docs/outline/panes.md#b-08",
       "evidence": [
-        "Lifecycle sections exist, but source audit found no independent percentage height budget or scroll allocation.",
-        "Retains majority-pane default, heading accounting, overflow, all-page compact-row policy, 40 turns plus 3 panes in 40 rows, and config-init acceptance."
+        "25/60/15 configurable shares, heading accounting, independent offsets/overflow, released empty-section space, global compact-row policy.",
+        "VPS PTY run.WJHFiPxy proves forty finished turns/three panes at forty rows, overflowing documents/Working, config defaults/errors, and folds/pin. Final run.1QOzlv21 proves the explicit focused-section too-small fallback at fourteen rows; normal-height caps are unchanged."
       ],
       "title": "Budget rail height by section and compact resting rows"
     },
@@ -911,11 +911,11 @@
     },
     {
       "id": "B-13",
-      "status": "partial",
-      "path": "docs/todo/work.md#b-13",
+      "status": "implemented",
+      "path": "docs/outline/work.md#b-13",
       "evidence": [
-        "Implemented Todo commands/page/promotion/import baseline consolidated at docs/outline/work.md#b-13; commit 059ba80 and internal/work/todos.go.",
-        "Importer maps parked/unknown to idea. Exact status/notes/current-complete-backlog import remains unproved, including canonical topical backlog discovery. No user store import performed."
+        "Canonical index/directory import preserves all 66 B identifiers, faithful dispositions, priority/body/notes, and repeat upsert without duplicates; baseline 059ba80 retained.",
+        "Real VPS CLI run.GsYNEfhn proves all 66 IDs and repeat import. Intended-store mutation is handled separately by the main agent after docs; no user-store import claimed here."
       ],
       "title": "Complete faithful backlog import"
     },
@@ -1154,10 +1154,10 @@
       "status": "implemented",
       "path": "docs/outline/work.md#b-37",
       "evidence": [
-        "Commit e3f3780; internal/ui/tree_edit.go and internal/work/tree.go implement atomic adds-only bulk tree with protected dim existing nodes and top-level projects.",
-        "P tree reuse rather than the proposed field-form basis is recorded as the implemented design change. Historical bulk_create/mass_add/switch_creation results retained, not rerun."
+        "Historical e3f3780 introduced atomic bulk tree; B-44 now replaces protected existing rows with continuous insertion and identity-preserving renames.",
+        "P-tree reuse remains current. Historical bulk_create/mass_add/switch_creation evidence retained; current CLI/PTy run.rn4oBZIK and run.nZi7OYaT."
       ],
-      "title": "Adds-only bulk creation"
+      "title": "Bulk creation tree"
     },
     {
       "id": "B-38",
@@ -1180,20 +1180,20 @@
     },
     {
       "id": "B-40",
-      "status": "open",
-      "path": "docs/todo/delivery.md#b-40",
+      "status": "implemented",
+      "path": "docs/outline/delivery.md#b-40",
       "evidence": [
-        "matomeru scripts/e2e-all.sh appended duplicate outline selections; AGENTS missing target-once policy at audit"
+        "Real VPS dispatcher proof run.neOHqj34: 15 invocations/67 dispatches/53 unique cases become one invocation/53 dispatches/each once, before newest cases. Final full-suite result is separate; no local docs-task checks."
       ],
       "title": "Targeted iteration and one final full suite"
     },
     {
       "id": "B-41",
-      "status": "open",
-      "path": "docs/todo/panes.md#b-41",
+      "status": "implemented",
+      "path": "docs/outline/panes.md#b-41",
       "evidence": [
-        "Current paneTabs map restores tabs per selection identity and can automatically select Turns.",
-        "Retains new page-level last-explicit-tab behavior across rows on EVERY tabbed page; explicitly changes B-06 rather than claiming B-06 completes it."
+        "Every tabbed page retains its last explicit choice across rows; automatic/per-row selection cannot override it.",
+        "Real VPS PTY run.AdYBNDbO and run.ORperME4; legacy pane_tabs/review_accordion run.Rw8zJ3Z1."
       ],
       "title": "Keep the page's last explicitly chosen detail tab"
     },
@@ -1220,21 +1220,21 @@
     },
     {
       "id": "B-44",
-      "status": "partial",
-      "path": "docs/todo/work.md#b-44",
+      "status": "implemented",
+      "path": "docs/outline/work.md#b-44",
       "evidence": [
-        "New-row nesting and separate P-editor renames exist; bulk existing rows remain protected and finishTreeLine ends editing.",
-        "Retains one-o/O continuous Enter insertion, Vim-style multiline edits, Tab/Shift+Tab, and same-editor existing-record rename preserving identity/relations. Explicitly replaces B-37 adds-only restriction."
+        "Continuous o/O Enter insertion, inline nesting, multiline lines, and existing-record renames preserve IDs/relationships and atomic revision conflict handling.",
+        "Real VPS CLI/PTy run.rn4oBZIK and run.nZi7OYaT replace historical B-37 adds-only restriction."
       ],
       "title": "Continue insertion and rename existing records in the bulk tree"
     },
     {
       "id": "B-45",
-      "status": "open",
-      "path": "docs/todo/panes.md#b-45",
+      "status": "implemented",
+      "path": "docs/outline/panes.md#b-45",
       "evidence": [
-        "Pane-close lifecycle and task/project status mutations exist separately, not a close-time choice workflow.",
-        "Retains explicit task/project completion offer, accept updating chosen owner, decline leaving completion state unchanged."
+        "Successful confirmed pane close precedes a separate default-No completion choice. Accept updates the chosen task/project; decline leaves its status unchanged.",
+        "Real VPS PTY run.AdYBNDbO and run.ORperME4; legacy run.Rw8zJ3Z1."
       ],
       "title": "Offer task or project completion when closing a pane"
     },
@@ -1460,12 +1460,12 @@
     {
       "id": "EXT-001",
       "status": "reference-only",
-      "path": "docs/todo/panes.md#b-41",
+      "path": "docs/todo/ecosystem.md#ext-001",
       "evidence": [
         "docs/sources/hub/prompts/mtm-todo.md#L4"
       ],
       "referenceOnly": true,
-      "adoptedIntoMatomeru": "existing B idea only",
+      "adoptedIntoMatomeru": "B-41 implemented; reference only, no separate ecosystem work",
       "title": "B-41: Keep the page's last explicitly chosen detail tab"
     },
     {
@@ -1504,23 +1504,23 @@
     {
       "id": "EXT-005",
       "status": "reference-only",
-      "path": "docs/todo/work.md#b-44",
+      "path": "docs/todo/ecosystem.md#ext-005",
       "evidence": [
         "docs/sources/hub/prompts/mtm-todo.md#L47-L59"
       ],
       "referenceOnly": true,
-      "adoptedIntoMatomeru": "existing B idea only",
+      "adoptedIntoMatomeru": "B-44 implemented; reference only, no separate ecosystem work",
       "title": "B-44: Continue insertion and rename existing records in the bulk tree"
     },
     {
       "id": "EXT-006",
       "status": "reference-only",
-      "path": "docs/todo/panes.md#b-45",
+      "path": "docs/todo/ecosystem.md#ext-006",
       "evidence": [
         "docs/sources/hub/prompts/mtm-todo.md#L63"
       ],
       "referenceOnly": true,
-      "adoptedIntoMatomeru": "existing B idea only",
+      "adoptedIntoMatomeru": "B-45 implemented; reference only, no separate ecosystem work",
       "title": "B-45: Offer task or project completion when closing a pane"
     },
     {

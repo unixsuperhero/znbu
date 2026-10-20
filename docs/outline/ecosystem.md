@@ -19,7 +19,7 @@ Source copies remain unchanged under [sources](../sources/), with originals and 
 The first six external groups are references, not second backlogs. Competing cohesive-group and sparse-layer preset designs remain open in B-42. The newer editable-tree request remains separate from the completed Ima draft plugin.
 
 <a id="ext-001"></a>
-- EXT-001, [Keep the chosen detail tab across row navigation, B-41](../todo/panes.md#b-41).
+- EXT-001, [Keep the chosen detail tab across row navigation, B-41](../outline/panes.md#b-41).
   Provenance: user requests: [Matomeru requests L4](../sources/hub/prompts/mtm-todo.md).
 
 <a id="ext-002"></a>
@@ -35,11 +35,11 @@ The first six external groups are references, not second backlogs. Competing coh
   Provenance: user requests: [Matomeru requests L20-41](../sources/hub/prompts/mtm-todo.md).
 
 <a id="ext-005"></a>
-- EXT-005, [Continuous Vim-like tree editing and renaming, B-44](../todo/work.md#b-44).
+- EXT-005, [Continuous Vim-like tree editing and renaming, B-44](../outline/work.md#b-44).
   Provenance: user requests: [Matomeru requests L47-59](../sources/hub/prompts/mtm-todo.md).
 
 <a id="ext-006"></a>
-- EXT-006, [Offer work completion when closing a pane, B-45](../todo/panes.md#b-45).
+- EXT-006, [Offer work completion when closing a pane, B-45](../outline/panes.md#b-45).
   Provenance: user requests: [Matomeru requests L63](../sources/hub/prompts/mtm-todo.md).
 
 EXT-002 and EXT-003 intentionally share B-42. Neither the cohesive-group preset design nor ordered sparse layers wins by consolidation. EXT-005/B-44's rename request does not broaden Ima's draft plugin into a live task-database editor. EXT-006/B-45 is an offer to complete work, not an inference that closing a pane means done.
