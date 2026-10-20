@@ -1,0 +1,69 @@
+# Source coverage
+
+Start with the [outline](../outline.md) or [backlog](../todo.md). Znbu is the source of truth; copies under this directory are evidence, not competing live backlogs. Original hub/ima notes and the other session's Matomeru files were not edited.
+
+## Consolidation record
+
+- Grouped the design and remaining work into ten matching concept sections. Original B identifiers and root anchors remain navigable.
+- Preserved 38 source files, including text, generated inventories, prompt history and image attachments; [source-map.json](../source-map.json) records SHA-256 hashes and canonical destinations.
+- Mapped 44 original B items individually. Partial scope keeps its unfinished acceptance; implemented and superseded scope lives in the outline. Additional IDs preserve previously unnumbered requirements and explicit new requests, rather than inventing scope.
+- Consolidated 36 external idea groups with 177 detail bullets. Ecosystem completion is labeled source-reported, not inferred as verified Matomeru behavior.
+- Incorporated the concurrent owner's completed `ec0d83a` and `e4cf07a` scope and reported verification, without closing broader catalog, form-width, provenance or Place requirements. Both the [latest Matomeru outline](matomeru/docs/outline.md) and [pre-handoff outline](matomeru/docs/outline.pre-handoff.md) are retained.
+- Added the user's [shared verbs and nested creation palette](../outline/forms.md#commonverbs) to [B-33](../todo/forms.md#b-33); agent-choice ordering and prompt variants remain open decisions.
+- Added the user's [first-class Inventory concept](../outline/inventory.md) and [B-100](../todo/inventory.md#b-100), preserving all named kinds and the distinction between owned children and reusable linked records.
+
+## How to read status
+
+Implemented Matomeru behavior has source/history evidence and explicit verification limits in its outline. Partial, open and verification-pending items retain remaining acceptance in todo. Superseded proposals identify their replacement. Adjacent-product source claims and historical alternatives remain labeled separately. This consolidation did not rerun application acceptance or release anything.
+
+All unfinished plans and research adoption have owning todo links. The checker verifies those links, preserved bytes, original B coverage and canonical local links; it does not establish semantic completeness or test product behavior. See [maintenance](../maintenance.md).
+
+<a id="prompt-history"></a>
+## Prompt history
+
+The seven [agent prompt records](../prompts/README.md) and their [machine-readable index](../prompts/index.json) retain execution chronology, model/agent names, steering and original delivery metadata. They are historical inputs, not instructions to execute obsolete orchestration or model choices. Product requirements are consolidated into concept documents. The old reports directory describes the superseded [B-01 orchestrator](../outline/automation.md#b-01); no missing report was fabricated.
+
+## Sources and destinations
+
+Paths identify original locations. Preserved links point only within this repository. Multiple destinations indicate one source spanning concepts; each requirement has a primary owning concept.
+
+| Original | Preserved copy | Canonical destinations |
+|---|---|---|
+| `~/hub/prompts/mtm-todo.md` | [historical-prompt](../sources/hub/prompts/mtm-todo.md) | [todo/panes.md](../todo/panes.md) · [todo/work.md](../todo/work.md) · [outline/agents.md](../outline/agents.md) · [todo/agents.md](../todo/agents.md) · [outline/ecosystem.md](../outline/ecosystem.md) · [todo/ecosystem.md](../todo/ecosystem.md) |
+| `~/notes/ima/ideas/change-walker.md` | [historical-notes](../sources/notes/ima/ideas/change-walker.md) | [outline/knowledge.md](../outline/knowledge.md) · [outline/ecosystem.md](../outline/ecosystem.md) · [todo/ecosystem.md](../todo/ecosystem.md) |
+| `~/notes/ima/ideas/context-matchers.md` | [historical-notes](../sources/notes/ima/ideas/context-matchers.md) | [outline/knowledge.md](../outline/knowledge.md) · [outline/ecosystem.md](../outline/ecosystem.md) · [todo/ecosystem.md](../todo/ecosystem.md) |
+| `~/notes/ima/ideas/fml-2026-10-15-180521-goal.txt` | [historical-notes](../sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt) | [outline/ecosystem.md](../outline/ecosystem.md) · [todo/ecosystem.md](../todo/ecosystem.md) |
+| `~/notes/ima/iwants.md` | [historical-notes](../sources/notes/ima/iwants.md) | [outline/ecosystem.md](../outline/ecosystem.md) · [todo/ecosystem.md](../todo/ecosystem.md) |
+| `~/notes/ima/unfinished-work.md` | [historical-notes](../sources/notes/ima/unfinished-work.md) | [outline/ecosystem.md](../outline/ecosystem.md) · [todo/ecosystem.md](../todo/ecosystem.md) |
+| `~/proj/matomeru/docs/attachments/B-04-help-modal-alignment.png` | [asset](../sources/matomeru/docs/attachments/B-04-help-modal-alignment.png) | [outline/forms.md](../outline/forms.md) |
+| `~/proj/matomeru/docs/inventory.json` | [historical-inventory](../sources/matomeru/docs/inventory.json) | [outline/delivery.md](../outline/delivery.md) · [todo/delivery.md](../todo/delivery.md) |
+| `~/proj/matomeru/docs/outline.md` | [historical-document](../sources/matomeru/docs/outline.md) | [outline/architecture.md](../outline/architecture.md) · [outline/automation.md](../outline/automation.md) · [outline/delivery.md](../outline/delivery.md) · [todo/architecture.md](../todo/architecture.md) · [todo/automation.md](../todo/automation.md) · [todo/delivery.md](../todo/delivery.md) · [outline/work.md](../outline/work.md) · [outline/panes.md](../outline/panes.md) · [outline/forms.md](../outline/forms.md) · [outline/agents.md](../outline/agents.md) · [outline/knowledge.md](../outline/knowledge.md) |
+| `~/proj/matomeru/docs/plans/forms-redesign.md` | [historical-plan](../sources/matomeru/docs/plans/forms-redesign.md) | [plans/forms-redesign.md](../plans/forms-redesign.md) · [outline/forms.md](../outline/forms.md) · [todo/forms.md](../todo/forms.md) |
+| `~/proj/matomeru/docs/plans/ranked-dir-suggestions.md` | [historical-plan](../sources/matomeru/docs/plans/ranked-dir-suggestions.md) | [plans/ranked-dir-suggestions.md](../plans/ranked-dir-suggestions.md) · [outline/work.md](../outline/work.md) · [todo/work.md](../todo/work.md) |
+| `~/proj/matomeru/docs/plans/vps2-dev-host.md` | [historical-plan](../sources/matomeru/docs/plans/vps2-dev-host.md) | [plans/vps2-dev-host.md](../plans/vps2-dev-host.md) · [outline/delivery.md](../outline/delivery.md) · [todo/delivery.md](../todo/delivery.md) |
+| `~/proj/matomeru/docs/research/tui-design-samples.md` | [historical-document](../sources/matomeru/docs/research/tui-design-samples.md) | [research/tui-design-samples.md](../research/tui-design-samples.md) · [outline/delivery.md](../outline/delivery.md) · [todo/delivery.md](../todo/delivery.md) · [outline/forms.md](../outline/forms.md) · [todo/forms.md](../todo/forms.md) · [outline/knowledge.md](../outline/knowledge.md) |
+| `~/proj/matomeru/docs/research/tui-design-samples.outline.md` | [historical-document](../sources/matomeru/docs/research/tui-design-samples.outline.md) | [research/tui-design-samples.outline.md](../research/tui-design-samples.outline.md) · [outline/delivery.md](../outline/delivery.md) · [outline/forms.md](../outline/forms.md) · [todo/forms.md](../todo/forms.md) · [outline/knowledge.md](../outline/knowledge.md) |
+| `~/proj/matomeru/docs/review.yaml` | [historical-review](../sources/matomeru/docs/review.yaml) | [outline/delivery.md](../outline/delivery.md) · [todo/delivery.md](../todo/delivery.md) |
+| `~/proj/matomeru/docs/todo-overview.md` | [historical-document](../sources/matomeru/docs/todo-overview.md) | [outline/automation.md](../outline/automation.md) · [todo/automation.md](../todo/automation.md) · [todo/delivery.md](../todo/delivery.md) · [todo/forms.md](../todo/forms.md) · [todo/agents.md](../todo/agents.md) · [outline/knowledge.md](../outline/knowledge.md) · [todo/knowledge.md](../todo/knowledge.md) |
+| `~/proj/matomeru/docs/todo.md` | [historical-document](../sources/matomeru/docs/todo.md) | [outline/automation.md](../outline/automation.md) · [outline/delivery.md](../outline/delivery.md) · [todo/automation.md](../todo/automation.md) · [todo/delivery.md](../todo/delivery.md) · [todo/architecture.md](../todo/architecture.md) · [outline/work.md](../outline/work.md) · [outline/panes.md](../outline/panes.md) · [todo/work.md](../todo/work.md) · [todo/panes.md](../todo/panes.md) · [outline/forms.md](../outline/forms.md) · [todo/forms.md](../todo/forms.md) · [todo/agents.md](../todo/agents.md) · [outline/knowledge.md](../outline/knowledge.md) · [todo/knowledge.md](../todo/knowledge.md) |
+| `~/proj/znbu/docs/attachments/B-04-help-modal-alignment.png` | [asset](../attachments/B-04-help-modal-alignment.png) | [outline/forms.md](../outline/forms.md) |
+| `~/proj/znbu/docs/go-code-review.md` | [original-document](../go-code-review.md) | [go-code-review.md](../go-code-review.md) · [outline/delivery.md](../outline/delivery.md) · [todo/delivery.md](../todo/delivery.md) · [outline/knowledge.md](../outline/knowledge.md) · [todo/knowledge.md](../todo/knowledge.md) |
+| `~/proj/znbu/docs/images/deck-rail-annotated.png` | [asset](../images/deck-rail-annotated.png) | [outline/panes.md](../outline/panes.md) |
+| `~/proj/znbu/docs/images/help-good.png` | [asset](../images/help-good.png) | [outline/forms.md](../outline/forms.md) |
+| `~/proj/znbu/docs/outline-phase2.md` | [original-document](../outline-phase2.md) | [outline/architecture.md](../outline/architecture.md) · [outline/knowledge.md](../outline/knowledge.md) · [outline/agents.md](../outline/agents.md) · [todo/automation.md](../todo/automation.md) · [outline/panes.md](../outline/panes.md) · [todo/panes.md](../todo/panes.md) · [todo/agents.md](../todo/agents.md) · [todo/knowledge.md](../todo/knowledge.md) |
+| `~/proj/znbu/docs/outline.md` | [historical-outline](../sources/znbu/docs/outline.md) | [outline/architecture.md](../outline/architecture.md) · [outline/automation.md](../outline/automation.md) · [outline/delivery.md](../outline/delivery.md) · [todo/architecture.md](../todo/architecture.md) · [todo/delivery.md](../todo/delivery.md) · [outline/panes.md](../outline/panes.md) · [outline/work.md](../outline/work.md) · [todo/work.md](../todo/work.md) · [todo/panes.md](../todo/panes.md) · [outline/forms.md](../outline/forms.md) · [outline/agents.md](../outline/agents.md) · [outline/knowledge.md](../outline/knowledge.md) · [todo/knowledge.md](../todo/knowledge.md) |
+| `~/proj/znbu/docs/prompts/00-init/01-modular.md` | [prompt-archive](../prompts/00-init/01-modular.md) | [sources/README.md](../sources/README.md) |
+| `~/proj/znbu/docs/prompts/00-init/02-redeck.md` | [prompt-archive](../prompts/00-init/02-redeck.md) | [sources/README.md](../sources/README.md) |
+| `~/proj/znbu/docs/prompts/00-init/03-astra.md` | [prompt-archive](../prompts/00-init/03-astra.md) | [sources/README.md](../sources/README.md) |
+| `~/proj/znbu/docs/prompts/01-restart/04-redeck.md` | [prompt-archive](../prompts/01-restart/04-redeck.md) | [sources/README.md](../sources/README.md) |
+| `~/proj/znbu/docs/prompts/02-steer/05-modular.md` | [prompt-archive](../prompts/02-steer/05-modular.md) | [sources/README.md](../sources/README.md) |
+| `~/proj/znbu/docs/prompts/02-steer/06-redeck.md` | [prompt-archive](../prompts/02-steer/06-redeck.md) | [sources/README.md](../sources/README.md) |
+| `~/proj/znbu/docs/prompts/03-round/07-astra.md` | [prompt-archive](../prompts/03-round/07-astra.md) | [sources/README.md](../sources/README.md) |
+| `~/proj/znbu/docs/prompts/index.json` | [prompt-archive](../prompts/index.json) | [sources/README.md](../sources/README.md) |
+| `~/proj/znbu/docs/prompts/README.md` | [prompt-archive](../prompts/README.md) | [sources/README.md](../sources/README.md) |
+| `~/proj/znbu/docs/reports/README.md` | [original-document](../reports/README.md) | [outline/automation.md](../outline/automation.md) |
+| `~/proj/znbu/docs/research/tui-forms.md` | [research](../research/tui-forms.md) | [outline/forms.md](../outline/forms.md) · [plans/forms-redesign.md](../plans/forms-redesign.md) · [todo/forms.md](../todo/forms.md) |
+| `~/proj/znbu/docs/todo-overview.md` | [historical-backlog](../sources/znbu/docs/todo-overview.md) | [outline/automation.md](../outline/automation.md) · [todo/automation.md](../todo/automation.md) · [todo/architecture.md](../todo/architecture.md) · [todo/delivery.md](../todo/delivery.md) · [todo/forms.md](../todo/forms.md) · [todo/agents.md](../todo/agents.md) · [outline/knowledge.md](../outline/knowledge.md) · [todo/knowledge.md](../todo/knowledge.md) |
+| `~/proj/znbu/docs/todo.md` | [historical-backlog](../sources/znbu/docs/todo.md) | [outline/automation.md](../outline/automation.md) · [outline/delivery.md](../outline/delivery.md) · [todo/automation.md](../todo/automation.md) · [todo/delivery.md](../todo/delivery.md) · [todo/architecture.md](../todo/architecture.md) · [outline/work.md](../outline/work.md) · [outline/panes.md](../outline/panes.md) · [todo/work.md](../todo/work.md) · [todo/panes.md](../todo/panes.md) · [outline/forms.md](../outline/forms.md) · [todo/forms.md](../todo/forms.md) · [todo/agents.md](../todo/agents.md) · [outline/knowledge.md](../outline/knowledge.md) · [todo/knowledge.md](../todo/knowledge.md) |
+| `~/proj/znbu/docs/ui-state-visibility.md` | [original-document](../ui-state-visibility.md) | [outline/delivery.md](../outline/delivery.md) · [outline/forms.md](../outline/forms.md) · [todo/forms.md](../todo/forms.md) · [outline/panes.md](../outline/panes.md) · [todo/panes.md](../todo/panes.md) · [outline/agents.md](../outline/agents.md) · [todo/agents.md](../todo/agents.md) |
+| `~/proj/znbu/README.md` | [historical-overview](../sources/znbu/README.md) | [outline.md](../outline.md) · [todo.md](../todo.md) |

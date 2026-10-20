@@ -1,0 +1,1948 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "id": "hub:prompts/mtm-todo.md",
+      "original": "~/hub/prompts/mtm-todo.md",
+      "preserved": "docs/sources/hub/prompts/mtm-todo.md",
+      "sha256": "97a0cd212e959e76caec0a4f3bc6fecb2df9e072343dfad95e35573a13fbac32",
+      "role": "historical-prompt",
+      "destinations": [
+        "docs/todo/panes.md#b-41",
+        "docs/todo/work.md#b-43",
+        "docs/todo/work.md#b-44",
+        "docs/todo/panes.md#b-45",
+        "docs/outline/agents.md#fieldpresets",
+        "docs/todo/agents.md#b-42",
+        "docs/outline/ecosystem.md#ext-001",
+        "docs/todo/ecosystem.md#ext-001",
+        "docs/outline/ecosystem.md#ext-002",
+        "docs/todo/ecosystem.md#ext-002",
+        "docs/outline/ecosystem.md#ext-003",
+        "docs/todo/ecosystem.md#ext-003",
+        "docs/outline/ecosystem.md#ext-004",
+        "docs/todo/ecosystem.md#ext-004",
+        "docs/outline/ecosystem.md#ext-005",
+        "docs/todo/ecosystem.md#ext-005",
+        "docs/outline/ecosystem.md#ext-006",
+        "docs/todo/ecosystem.md#ext-006"
+      ]
+    },
+    {
+      "id": "notes:ima/ideas/change-walker.md",
+      "original": "~/notes/ima/ideas/change-walker.md",
+      "preserved": "docs/sources/notes/ima/ideas/change-walker.md",
+      "sha256": "170659b65d36f2063888bcedad29ebfd8f80fd315af85eaf66c478b1c4ea7c15",
+      "role": "historical-notes",
+      "destinations": [
+        "docs/outline/knowledge.md#history",
+        "docs/outline/knowledge.md#knowledgepagedesign",
+        "docs/outline/ecosystem.md#ext-025",
+        "docs/todo/ecosystem.md#ext-025"
+      ]
+    },
+    {
+      "id": "notes:ima/ideas/context-matchers.md",
+      "original": "~/notes/ima/ideas/context-matchers.md",
+      "preserved": "docs/sources/notes/ima/ideas/context-matchers.md",
+      "sha256": "a8ec113a09d163ce65e13e4610006606f3ed45b741f2a2c12399bd3cff57a82d",
+      "role": "historical-notes",
+      "destinations": [
+        "docs/outline/knowledge.md#extraction",
+        "docs/outline/knowledge.md#knowledgepagedesign",
+        "docs/outline/ecosystem.md#ext-024",
+        "docs/todo/ecosystem.md#ext-024"
+      ]
+    },
+    {
+      "id": "notes:ima/ideas/fml-2026-10-15-180521-goal.txt",
+      "original": "~/notes/ima/ideas/fml-2026-10-15-180521-goal.txt",
+      "preserved": "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt",
+      "sha256": "23ac9ff25f90b383e5cda8f51a1de76f3baa80348dad8313827e60834199fad7",
+      "role": "historical-notes",
+      "destinations": [
+        "docs/outline/ecosystem.md#ext-007",
+        "docs/todo/ecosystem.md#ext-007",
+        "docs/outline/ecosystem.md#ext-008",
+        "docs/todo/ecosystem.md#ext-008",
+        "docs/outline/ecosystem.md#ext-009",
+        "docs/todo/ecosystem.md#ext-009",
+        "docs/outline/ecosystem.md#ext-010",
+        "docs/todo/ecosystem.md#ext-010",
+        "docs/outline/ecosystem.md#ext-011",
+        "docs/todo/ecosystem.md#ext-011",
+        "docs/outline/ecosystem.md#ext-012",
+        "docs/todo/ecosystem.md#ext-012",
+        "docs/outline/ecosystem.md#ext-013",
+        "docs/todo/ecosystem.md#ext-013",
+        "docs/outline/ecosystem.md#ext-014",
+        "docs/todo/ecosystem.md#ext-014",
+        "docs/outline/ecosystem.md#ext-015",
+        "docs/todo/ecosystem.md#ext-015",
+        "docs/outline/ecosystem.md#ext-016",
+        "docs/todo/ecosystem.md#ext-016",
+        "docs/outline/ecosystem.md#ext-019",
+        "docs/todo/ecosystem.md#ext-019",
+        "docs/outline/ecosystem.md#ext-021",
+        "docs/todo/ecosystem.md#ext-021",
+        "docs/outline/ecosystem.md#ext-022",
+        "docs/todo/ecosystem.md#ext-022",
+        "docs/outline/ecosystem.md#ext-023",
+        "docs/todo/ecosystem.md#ext-023",
+        "docs/outline/ecosystem.md#ext-031",
+        "docs/todo/ecosystem.md#ext-031",
+        "docs/outline/ecosystem.md#ext-032",
+        "docs/todo/ecosystem.md#ext-032",
+        "docs/outline/ecosystem.md#ext-033",
+        "docs/todo/ecosystem.md#ext-033",
+        "docs/outline/ecosystem.md#ext-034",
+        "docs/todo/ecosystem.md#ext-034",
+        "docs/outline/ecosystem.md#ext-035",
+        "docs/todo/ecosystem.md#ext-035",
+        "docs/outline/ecosystem.md#ext-036",
+        "docs/todo/ecosystem.md#ext-036"
+      ]
+    },
+    {
+      "id": "notes:ima/iwants.md",
+      "original": "~/notes/ima/iwants.md",
+      "preserved": "docs/sources/notes/ima/iwants.md",
+      "sha256": "917061ba980be98a6a605ebe3bb5f215e825e42a38ccde22024348a847ea1662",
+      "role": "historical-notes",
+      "destinations": [
+        "docs/outline/ecosystem.md#ext-007",
+        "docs/todo/ecosystem.md#ext-007",
+        "docs/outline/ecosystem.md#ext-008",
+        "docs/todo/ecosystem.md#ext-008",
+        "docs/outline/ecosystem.md#ext-009",
+        "docs/todo/ecosystem.md#ext-009",
+        "docs/outline/ecosystem.md#ext-010",
+        "docs/todo/ecosystem.md#ext-010",
+        "docs/outline/ecosystem.md#ext-011",
+        "docs/todo/ecosystem.md#ext-011",
+        "docs/outline/ecosystem.md#ext-012",
+        "docs/todo/ecosystem.md#ext-012",
+        "docs/outline/ecosystem.md#ext-014",
+        "docs/todo/ecosystem.md#ext-014",
+        "docs/outline/ecosystem.md#ext-016",
+        "docs/todo/ecosystem.md#ext-016",
+        "docs/outline/ecosystem.md#ext-018",
+        "docs/todo/ecosystem.md#ext-018",
+        "docs/outline/ecosystem.md#ext-020",
+        "docs/todo/ecosystem.md#ext-020"
+      ]
+    },
+    {
+      "id": "notes:ima/unfinished-work.md",
+      "original": "~/notes/ima/unfinished-work.md",
+      "preserved": "docs/sources/notes/ima/unfinished-work.md",
+      "sha256": "07b1eb0b509fe916e1dd4ed3d70b04436cded315c58304677f6a681444258dd0",
+      "role": "historical-notes",
+      "destinations": [
+        "docs/outline/ecosystem.md#ext-007",
+        "docs/todo/ecosystem.md#ext-007",
+        "docs/outline/ecosystem.md#ext-008",
+        "docs/todo/ecosystem.md#ext-008",
+        "docs/outline/ecosystem.md#ext-010",
+        "docs/todo/ecosystem.md#ext-010",
+        "docs/outline/ecosystem.md#ext-012",
+        "docs/todo/ecosystem.md#ext-012",
+        "docs/outline/ecosystem.md#ext-013",
+        "docs/todo/ecosystem.md#ext-013",
+        "docs/outline/ecosystem.md#ext-014",
+        "docs/todo/ecosystem.md#ext-014",
+        "docs/outline/ecosystem.md#ext-015",
+        "docs/todo/ecosystem.md#ext-015",
+        "docs/outline/ecosystem.md#ext-016",
+        "docs/todo/ecosystem.md#ext-016",
+        "docs/outline/ecosystem.md#ext-017",
+        "docs/todo/ecosystem.md#ext-017",
+        "docs/outline/ecosystem.md#ext-019",
+        "docs/todo/ecosystem.md#ext-019",
+        "docs/outline/ecosystem.md#ext-020",
+        "docs/todo/ecosystem.md#ext-020",
+        "docs/outline/ecosystem.md#ext-021",
+        "docs/todo/ecosystem.md#ext-021",
+        "docs/outline/ecosystem.md#ext-022",
+        "docs/todo/ecosystem.md#ext-022",
+        "docs/outline/ecosystem.md#ext-023",
+        "docs/todo/ecosystem.md#ext-023",
+        "docs/outline/ecosystem.md#ext-024",
+        "docs/todo/ecosystem.md#ext-024",
+        "docs/outline/ecosystem.md#ext-025",
+        "docs/todo/ecosystem.md#ext-025",
+        "docs/outline/ecosystem.md#ext-026",
+        "docs/todo/ecosystem.md#ext-026",
+        "docs/outline/ecosystem.md#ext-027",
+        "docs/todo/ecosystem.md#ext-027",
+        "docs/outline/ecosystem.md#ext-028",
+        "docs/todo/ecosystem.md#ext-028",
+        "docs/outline/ecosystem.md#ext-029",
+        "docs/todo/ecosystem.md#ext-029",
+        "docs/outline/ecosystem.md#ext-030",
+        "docs/todo/ecosystem.md#ext-030",
+        "docs/outline/ecosystem.md#ext-031",
+        "docs/todo/ecosystem.md#ext-031",
+        "docs/outline/ecosystem.md#ext-033",
+        "docs/todo/ecosystem.md#ext-033"
+      ]
+    },
+    {
+      "id": "matomeru:docs/attachments/B-04-help-modal-alignment.png",
+      "original": "~/proj/matomeru/docs/attachments/B-04-help-modal-alignment.png",
+      "preserved": "docs/sources/matomeru/docs/attachments/B-04-help-modal-alignment.png",
+      "sha256": "c9209a04e7a2872ec422263b1226364bd09be6035abf6a47175d2f8bec2654e4",
+      "role": "asset",
+      "destinations": [
+        "docs/outline/forms.md#b-04"
+      ]
+    },
+    {
+      "id": "matomeru:docs/inventory.json",
+      "original": "~/proj/matomeru/docs/inventory.json",
+      "preserved": "docs/sources/matomeru/docs/inventory.json",
+      "sha256": "8e244e37f66f53aa57e258ddd3d7ea4df968e374a1fcb37e1762a8287a1d4583",
+      "role": "historical-inventory",
+      "destinations": [
+        "docs/outline/delivery.md#b-22",
+        "docs/todo/delivery.md#b-22"
+      ]
+    },
+    {
+      "id": "matomeru:docs/outline.md",
+      "original": "~/proj/matomeru/docs/outline.md",
+      "preserved": "docs/sources/matomeru/docs/outline.md",
+      "sha256": "607f53169916d6fcb2b66195a7cdf88104cabf61947e58579f27484f00debc42",
+      "role": "historical-document",
+      "destinations": [
+        "docs/outline/architecture.md",
+        "docs/outline/automation.md",
+        "docs/outline/delivery.md",
+        "docs/todo/architecture.md",
+        "docs/todo/automation.md",
+        "docs/todo/delivery.md",
+        "docs/outline/work.md#projects-tasks-and-the-pin",
+        "docs/outline/work.md#assignment-discovery-and-pruning",
+        "docs/outline/work.md#projecttask-tree-and-atomic-drafts",
+        "docs/outline/work.md#b-13",
+        "docs/outline/work.md#b-37",
+        "docs/outline/work.md#rankedpaths",
+        "docs/outline/work.md#b-47",
+        "docs/outline/panes.md#daemon",
+        "docs/outline/panes.md#listing",
+        "docs/outline/panes.md#live",
+        "docs/outline/panes.md#b-06",
+        "docs/outline/panes.md#b-09",
+        "docs/outline/panes.md#b-10",
+        "docs/outline/panes.md#b-38",
+        "docs/outline/forms.md#navigation",
+        "docs/outline/forms.md#b-31",
+        "docs/outline/forms.md#settings",
+        "docs/outline/forms.md#palette",
+        "docs/outline/agents.md#prompts",
+        "docs/outline/agents.md#b-61",
+        "docs/outline/agents.md#b-62",
+        "docs/outline/agents.md#modelcatalog",
+        "docs/outline/agents.md#aiassets",
+        "docs/outline/knowledge.md#context",
+        "docs/outline/knowledge.md#extraction",
+        "docs/outline/knowledge.md#history",
+        "docs/outline/knowledge.md#observedconversations",
+        "docs/outline/knowledge.md#captures",
+        "docs/outline/knowledge.md#b-05",
+        "docs/outline/knowledge.md#b-11",
+        "docs/outline/knowledge.md#b-27",
+        "docs/outline/knowledge.md#editorvim"
+      ],
+      "previousSnapshot": "docs/sources/matomeru/docs/outline.pre-handoff.md",
+      "previousSha256": "803e3aa8ba7fc1c083a9c9274bf8090d26442786e9b17659eb19b3867181a32d",
+      "revision": "e4cf07a"
+    },
+    {
+      "id": "matomeru:docs/plans/forms-redesign.md",
+      "original": "~/proj/matomeru/docs/plans/forms-redesign.md",
+      "preserved": "docs/sources/matomeru/docs/plans/forms-redesign.md",
+      "sha256": "430c413a3e67b74bbbaa33aa36ab9a39c0f42cb073b17ad495c615ed6b7a70dd",
+      "role": "historical-plan",
+      "destinations": [
+        "docs/plans/forms-redesign.md",
+        "docs/outline/forms.md#b-31",
+        "docs/todo/forms.md#b-31"
+      ]
+    },
+    {
+      "id": "matomeru:docs/plans/ranked-dir-suggestions.md",
+      "original": "~/proj/matomeru/docs/plans/ranked-dir-suggestions.md",
+      "preserved": "docs/sources/matomeru/docs/plans/ranked-dir-suggestions.md",
+      "sha256": "6426fccf886380af48689f561e4767a055482543788cad5732f5235e098abb0b",
+      "role": "historical-plan",
+      "destinations": [
+        "docs/plans/ranked-dir-suggestions.md",
+        "docs/outline/work.md#rankedpaths",
+        "docs/todo/work.md#b-46"
+      ]
+    },
+    {
+      "id": "matomeru:docs/plans/vps2-dev-host.md",
+      "original": "~/proj/matomeru/docs/plans/vps2-dev-host.md",
+      "preserved": "docs/sources/matomeru/docs/plans/vps2-dev-host.md",
+      "sha256": "b9f98f3ce4dd5daba535cd6a276e3f7e367794d76552706b8fd75a8462fe395d",
+      "role": "historical-plan",
+      "destinations": [
+        "docs/plans/vps2-dev-host.md",
+        "docs/outline/delivery.md#vpsplan",
+        "docs/todo/delivery.md#b-73"
+      ]
+    },
+    {
+      "id": "matomeru:docs/research/tui-design-samples.md",
+      "original": "~/proj/matomeru/docs/research/tui-design-samples.md",
+      "preserved": "docs/sources/matomeru/docs/research/tui-design-samples.md",
+      "sha256": "160a20655692157f2e4061ce5d3fdda38f1fb4ac92361037babe03a18b088a8c",
+      "role": "historical-document",
+      "destinations": [
+        "docs/research/tui-design-samples.md",
+        "docs/outline/delivery.md#b-03",
+        "docs/todo/delivery.md#b-72",
+        "docs/outline/forms.md#research",
+        "docs/todo/forms.md#b-29",
+        "docs/outline/knowledge.md#knowledgepagedesign"
+      ]
+    },
+    {
+      "id": "matomeru:docs/research/tui-design-samples.outline.md",
+      "original": "~/proj/matomeru/docs/research/tui-design-samples.outline.md",
+      "preserved": "docs/sources/matomeru/docs/research/tui-design-samples.outline.md",
+      "sha256": "48fc629ad2de9e6a31f89e8f0f6d2625f8f6a7619dd4877c63ae9046e7c195ec",
+      "role": "historical-document",
+      "destinations": [
+        "docs/research/tui-design-samples.outline.md",
+        "docs/outline/delivery.md#b-03",
+        "docs/outline/forms.md#research",
+        "docs/todo/forms.md#b-29",
+        "docs/outline/knowledge.md#knowledgepagedesign"
+      ]
+    },
+    {
+      "id": "matomeru:docs/review.yaml",
+      "original": "~/proj/matomeru/docs/review.yaml",
+      "preserved": "docs/sources/matomeru/docs/review.yaml",
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+      "role": "historical-review",
+      "destinations": [
+        "docs/outline/delivery.md#b-22",
+        "docs/todo/delivery.md#b-22"
+      ]
+    },
+    {
+      "id": "matomeru:docs/todo-overview.md",
+      "original": "~/proj/matomeru/docs/todo-overview.md",
+      "preserved": "docs/sources/matomeru/docs/todo-overview.md",
+      "sha256": "78737ce5aff27ab8d3722e80597d03e8c6cbd97e50fdba901a0dcc51e2b90d14",
+      "role": "historical-document",
+      "destinations": [
+        "docs/outline/automation.md",
+        "docs/todo/automation.md",
+        "docs/todo/delivery.md",
+        "docs/todo/forms.md",
+        "docs/todo/agents.md",
+        "docs/outline/knowledge.md#b-05",
+        "docs/outline/knowledge.md#b-11",
+        "docs/outline/knowledge.md#b-27",
+        "docs/todo/knowledge.md#b-05",
+        "docs/todo/knowledge.md#b-27"
+      ]
+    },
+    {
+      "id": "matomeru:docs/todo.md",
+      "original": "~/proj/matomeru/docs/todo.md",
+      "preserved": "docs/sources/matomeru/docs/todo.md",
+      "sha256": "c8fb2d551a324f1adcfb8e33864ece194eb7c413a42e78a78d5d1c865cbce88b",
+      "role": "historical-document",
+      "destinations": [
+        "docs/outline/automation.md#b-01",
+        "docs/outline/delivery.md#b-03",
+        "docs/outline/automation.md#b-12",
+        "docs/outline/automation.md#b-15",
+        "docs/todo/automation.md#b-16",
+        "docs/outline/automation.md#b-17",
+        "docs/outline/automation.md#b-18",
+        "docs/todo/automation.md#b-19",
+        "docs/todo/automation.md#b-20",
+        "docs/todo/delivery.md#b-22",
+        "docs/todo/delivery.md#b-26",
+        "docs/todo/architecture.md#b-28",
+        "docs/outline/work.md#b-07",
+        "docs/outline/panes.md#b-06",
+        "docs/outline/panes.md#b-09",
+        "docs/outline/panes.md#b-10",
+        "docs/outline/panes.md#b-30",
+        "docs/todo/work.md#b-02",
+        "docs/todo/work.md#b-13",
+        "docs/todo/panes.md#b-08",
+        "docs/outline/forms.md#b-04",
+        "docs/outline/forms.md#b-21",
+        "docs/outline/forms.md#b-25",
+        "docs/todo/forms.md#b-23",
+        "docs/todo/forms.md#b-29",
+        "docs/todo/agents.md#b-14",
+        "docs/outline/knowledge.md#b-05",
+        "docs/outline/knowledge.md#b-11",
+        "docs/outline/knowledge.md#b-27",
+        "docs/todo/knowledge.md#b-05",
+        "docs/todo/knowledge.md#b-27"
+      ]
+    },
+    {
+      "id": "znbu:docs/attachments/B-04-help-modal-alignment.png",
+      "original": "~/proj/znbu/docs/attachments/B-04-help-modal-alignment.png",
+      "preserved": "docs/attachments/B-04-help-modal-alignment.png",
+      "sha256": "c9209a04e7a2872ec422263b1226364bd09be6035abf6a47175d2f8bec2654e4",
+      "role": "asset",
+      "destinations": [
+        "docs/outline/forms.md#b-04"
+      ]
+    },
+    {
+      "id": "znbu:docs/go-code-review.md",
+      "original": "~/proj/znbu/docs/go-code-review.md",
+      "preserved": "docs/go-code-review.md",
+      "sha256": "b9cf4da1c649e278a6ee78dcd3fbaefd3d5ec71020845415ba63cd47cd4189e6",
+      "role": "original-document",
+      "destinations": [
+        "docs/go-code-review.md",
+        "docs/outline/delivery.md#sourcereview",
+        "docs/todo/delivery.md#b-71",
+        "docs/outline/knowledge.md#agentinstructions",
+        "docs/todo/knowledge.md#b-90"
+      ]
+    },
+    {
+      "id": "znbu:docs/images/deck-rail-annotated.png",
+      "original": "~/proj/znbu/docs/images/deck-rail-annotated.png",
+      "preserved": "docs/images/deck-rail-annotated.png",
+      "sha256": "68c64b045ee29aba4ea7590b1aa1fa3bbda9d1d68c25e4ff1a4594f19b1e9c03",
+      "role": "asset",
+      "destinations": [
+        "docs/outline/panes.md"
+      ]
+    },
+    {
+      "id": "znbu:docs/images/help-good.png",
+      "original": "~/proj/znbu/docs/images/help-good.png",
+      "preserved": "docs/images/help-good.png",
+      "sha256": "2a75b1d316a8edf249003cc56170a7d25293f1281dd2157916450a0de4264fbf",
+      "role": "asset",
+      "destinations": [
+        "docs/outline/forms.md#help"
+      ]
+    },
+    {
+      "id": "znbu:docs/outline-phase2.md",
+      "original": "~/proj/znbu/docs/outline-phase2.md",
+      "preserved": "docs/outline-phase2.md",
+      "sha256": "2da5a602250b844df01907b3923f5ca15ac2b9ea975781feb52e25ebc0366ffe",
+      "role": "original-document",
+      "destinations": [
+        "docs/outline/architecture.md#unitpages",
+        "docs/outline/knowledge.md#unitnotes",
+        "docs/outline/agents.md#unitprompts",
+        "docs/todo/automation.md#b-75",
+        "docs/outline/panes.md#listing",
+        "docs/todo/panes.md#b-50",
+        "docs/todo/agents.md#b-64",
+        "docs/outline/knowledge.md#agentinstructions",
+        "docs/todo/knowledge.md#b-90",
+        "docs/todo/knowledge.md#b-91"
+      ]
+    },
+    {
+      "id": "znbu:docs/outline.md",
+      "original": "~/proj/znbu/docs/outline.md",
+      "preserved": "docs/sources/znbu/docs/outline.md",
+      "sha256": "2ecd71a377cb63cf487a252d5d0540a35c272cef2eebb60a5d61af6c84db1ef8",
+      "role": "historical-outline",
+      "destinations": [
+        "docs/outline/architecture.md",
+        "docs/outline/automation.md#reminders",
+        "docs/outline/delivery.md#workflow",
+        "docs/outline/delivery.md#setup",
+        "docs/todo/architecture.md#b-70",
+        "docs/todo/architecture.md#b-74",
+        "docs/todo/delivery.md#b-76",
+        "docs/outline/panes.md#daemon",
+        "docs/outline/panes.md#listing",
+        "docs/outline/panes.md#live",
+        "docs/outline/panes.md#preview",
+        "docs/outline/work.md#projects-tasks-and-the-pin",
+        "docs/outline/work.md#assignment-discovery-and-pruning",
+        "docs/outline/work.md#projecttask-tree-and-atomic-drafts",
+        "docs/outline/work.md#places",
+        "docs/outline/work.md#gitattribution",
+        "docs/outline/work.md#sharedplaces",
+        "docs/todo/work.md#b-48",
+        "docs/todo/work.md#b-02",
+        "docs/todo/panes.md#b-49",
+        "docs/todo/panes.md#b-50",
+        "docs/outline/forms.md#navigation",
+        "docs/outline/forms.md#b-31",
+        "docs/outline/forms.md#help",
+        "docs/outline/agents.md#prompts",
+        "docs/outline/agents.md#quickstarts",
+        "docs/outline/agents.md#queueoutcomes",
+        "docs/outline/knowledge.md#context",
+        "docs/outline/knowledge.md#extraction",
+        "docs/outline/knowledge.md#history",
+        "docs/outline/knowledge.md#captures",
+        "docs/outline/knowledge.md#b-05",
+        "docs/outline/knowledge.md#editorvim",
+        "docs/outline/knowledge.md#agentinstructions",
+        "docs/todo/knowledge.md#b-92"
+      ]
+    },
+    {
+      "id": "znbu:docs/prompts/00-init/01-modular.md",
+      "original": "~/proj/znbu/docs/prompts/00-init/01-modular.md",
+      "preserved": "docs/prompts/00-init/01-modular.md",
+      "sha256": "3f55cde95a7f503219327fe577c891c749f7dd83617b778c08ff77678379372b",
+      "role": "prompt-archive",
+      "destinations": [
+        "docs/sources/README.md#prompt-history"
+      ]
+    },
+    {
+      "id": "znbu:docs/prompts/00-init/02-redeck.md",
+      "original": "~/proj/znbu/docs/prompts/00-init/02-redeck.md",
+      "preserved": "docs/prompts/00-init/02-redeck.md",
+      "sha256": "ead77f2a0fd9da0bba3ba7c9b6013f1e80b65838abe01b6f064eb19118c4227c",
+      "role": "prompt-archive",
+      "destinations": [
+        "docs/sources/README.md#prompt-history"
+      ]
+    },
+    {
+      "id": "znbu:docs/prompts/00-init/03-astra.md",
+      "original": "~/proj/znbu/docs/prompts/00-init/03-astra.md",
+      "preserved": "docs/prompts/00-init/03-astra.md",
+      "sha256": "83a94c790a3c6af764c49c59fc5db0ec90f582466c9979229cac6993457969b8",
+      "role": "prompt-archive",
+      "destinations": [
+        "docs/sources/README.md#prompt-history"
+      ]
+    },
+    {
+      "id": "znbu:docs/prompts/01-restart/04-redeck.md",
+      "original": "~/proj/znbu/docs/prompts/01-restart/04-redeck.md",
+      "preserved": "docs/prompts/01-restart/04-redeck.md",
+      "sha256": "a7817034aa8fb63c24fb13ca668f69183f3dc3b7db64b1982dd85625ba5b15be",
+      "role": "prompt-archive",
+      "destinations": [
+        "docs/sources/README.md#prompt-history"
+      ]
+    },
+    {
+      "id": "znbu:docs/prompts/02-steer/05-modular.md",
+      "original": "~/proj/znbu/docs/prompts/02-steer/05-modular.md",
+      "preserved": "docs/prompts/02-steer/05-modular.md",
+      "sha256": "c250e333787a257f527a6a9f41dd8b02eb647454ae58e2cfd88965c0ace80d4f",
+      "role": "prompt-archive",
+      "destinations": [
+        "docs/sources/README.md#prompt-history"
+      ]
+    },
+    {
+      "id": "znbu:docs/prompts/02-steer/06-redeck.md",
+      "original": "~/proj/znbu/docs/prompts/02-steer/06-redeck.md",
+      "preserved": "docs/prompts/02-steer/06-redeck.md",
+      "sha256": "2c72d1ed48320217ad6081fbb3ebea38b65aa752c717a4d8cd39468f2f1335bc",
+      "role": "prompt-archive",
+      "destinations": [
+        "docs/sources/README.md#prompt-history"
+      ]
+    },
+    {
+      "id": "znbu:docs/prompts/03-round/07-astra.md",
+      "original": "~/proj/znbu/docs/prompts/03-round/07-astra.md",
+      "preserved": "docs/prompts/03-round/07-astra.md",
+      "sha256": "09216ca46f71f55d68a3a595b6d0caa723be73f79e9bb675c597f70eaaa27c7b",
+      "role": "prompt-archive",
+      "destinations": [
+        "docs/sources/README.md#prompt-history"
+      ]
+    },
+    {
+      "id": "znbu:docs/prompts/index.json",
+      "original": "~/proj/znbu/docs/prompts/index.json",
+      "preserved": "docs/prompts/index.json",
+      "sha256": "64927822d4edbbfeb77b16f6ebbddc3b4e08c3ec2100c353ccdc12077130b6b1",
+      "role": "prompt-archive",
+      "destinations": [
+        "docs/sources/README.md#prompt-history"
+      ]
+    },
+    {
+      "id": "znbu:docs/prompts/README.md",
+      "original": "~/proj/znbu/docs/prompts/README.md",
+      "preserved": "docs/prompts/README.md",
+      "sha256": "765a17863ec9eff1f642f83c59a81961076985415594a1191188513d33cbb7c9",
+      "role": "prompt-archive",
+      "destinations": [
+        "docs/sources/README.md#prompt-history"
+      ]
+    },
+    {
+      "id": "znbu:docs/reports/README.md",
+      "original": "~/proj/znbu/docs/reports/README.md",
+      "preserved": "docs/reports/README.md",
+      "sha256": "8b87e3c1b331d5bb357d7c4404f7b41a580333e093dba08a5945c70592ad06c9",
+      "role": "original-document",
+      "destinations": [
+        "docs/outline/automation.md#b-01"
+      ]
+    },
+    {
+      "id": "znbu:docs/research/tui-forms.md",
+      "original": "~/proj/znbu/docs/research/tui-forms.md",
+      "preserved": "docs/research/tui-forms.md",
+      "sha256": "5500ecc428488992a3636f7f359223d585cbe988cb1938cbf25082f8755301dc",
+      "role": "research",
+      "destinations": [
+        "docs/outline/forms.md#research",
+        "docs/plans/forms-redesign.md",
+        "docs/todo/forms.md#b-29",
+        "docs/todo/forms.md#b-31"
+      ]
+    },
+    {
+      "id": "znbu:docs/todo-overview.md",
+      "original": "~/proj/znbu/docs/todo-overview.md",
+      "preserved": "docs/sources/znbu/docs/todo-overview.md",
+      "sha256": "ad09f65971be7a0b07222271d6ca1e243ac1c5042e20056f3cdf0705934136ca",
+      "role": "historical-backlog",
+      "destinations": [
+        "docs/outline/automation.md",
+        "docs/todo/automation.md",
+        "docs/todo/architecture.md",
+        "docs/todo/delivery.md",
+        "docs/todo/forms.md",
+        "docs/todo/agents.md",
+        "docs/outline/knowledge.md#b-05",
+        "docs/outline/knowledge.md#b-11",
+        "docs/outline/knowledge.md#b-27",
+        "docs/todo/knowledge.md#b-05",
+        "docs/todo/knowledge.md#b-27"
+      ]
+    },
+    {
+      "id": "znbu:docs/todo.md",
+      "original": "~/proj/znbu/docs/todo.md",
+      "preserved": "docs/sources/znbu/docs/todo.md",
+      "sha256": "75b6638b31cc651646cba8ce71e1c4018412c8070dfa85fa30661139a090d931",
+      "role": "historical-backlog",
+      "destinations": [
+        "docs/outline/automation.md#b-01",
+        "docs/outline/delivery.md#b-03",
+        "docs/outline/automation.md#b-12",
+        "docs/outline/automation.md#b-15",
+        "docs/todo/automation.md#b-16",
+        "docs/outline/automation.md#b-17",
+        "docs/outline/automation.md#b-18",
+        "docs/todo/automation.md#b-19",
+        "docs/todo/automation.md#b-20",
+        "docs/todo/delivery.md#b-22",
+        "docs/todo/delivery.md#b-26",
+        "docs/todo/architecture.md#b-28",
+        "docs/outline/automation.md#b-35",
+        "docs/todo/delivery.md#b-39",
+        "docs/todo/delivery.md#b-40",
+        "docs/outline/work.md#b-07",
+        "docs/outline/work.md#b-37",
+        "docs/outline/panes.md#b-06",
+        "docs/outline/panes.md#b-09",
+        "docs/outline/panes.md#b-10",
+        "docs/outline/panes.md#b-30",
+        "docs/outline/panes.md#b-38",
+        "docs/todo/work.md#b-02",
+        "docs/todo/work.md#b-13",
+        "docs/todo/work.md#b-43",
+        "docs/todo/work.md#b-44",
+        "docs/todo/panes.md#b-08",
+        "docs/todo/panes.md#b-41",
+        "docs/todo/panes.md#b-45",
+        "docs/outline/forms.md#b-04",
+        "docs/outline/forms.md#b-21",
+        "docs/outline/forms.md#b-25",
+        "docs/todo/forms.md#b-23",
+        "docs/todo/forms.md#b-29",
+        "docs/todo/forms.md#b-31",
+        "docs/todo/forms.md#b-33",
+        "docs/todo/forms.md#b-36",
+        "docs/todo/agents.md#b-14",
+        "docs/todo/agents.md#b-32",
+        "docs/todo/agents.md#b-34",
+        "docs/todo/agents.md#b-42",
+        "docs/outline/knowledge.md#b-05",
+        "docs/outline/knowledge.md#b-11",
+        "docs/outline/knowledge.md#b-27",
+        "docs/todo/knowledge.md#b-05",
+        "docs/todo/knowledge.md#b-27"
+      ]
+    },
+    {
+      "id": "znbu:docs/ui-state-visibility.md",
+      "original": "~/proj/znbu/docs/ui-state-visibility.md",
+      "preserved": "docs/ui-state-visibility.md",
+      "sha256": "4e683595edd236436f0929d2b0e60c4f99a2db706c77da3c916090999e4e6159",
+      "role": "original-document",
+      "destinations": [
+        "docs/outline/delivery.md#visibility",
+        "docs/outline/forms.md#visibility",
+        "docs/todo/forms.md#b-60",
+        "docs/outline/panes.md#preview",
+        "docs/todo/panes.md#b-49",
+        "docs/outline/agents.md#queueoutcomes",
+        "docs/todo/agents.md#b-63"
+      ]
+    },
+    {
+      "id": "znbu:README.md",
+      "original": "~/proj/znbu/README.md",
+      "preserved": "docs/sources/znbu/README.md",
+      "sha256": "330c5c9cbcf8bd6df5839d777793601170af4989d1e701aa943a1aaae3b659ec",
+      "role": "historical-overview",
+      "destinations": [
+        "docs/outline.md",
+        "docs/todo.md"
+      ]
+    }
+  ],
+  "plans": [
+    {
+      "path": "docs/plans/vps2-dev-host.md",
+      "status": "partial",
+      "todo": "docs/todo/delivery.md#b-73",
+      "outline": "docs/outline/delivery.md#vpsplan"
+    },
+    {
+      "path": "docs/research/tui-design-samples.md",
+      "status": "partial",
+      "todo": "docs/todo/delivery.md#b-72",
+      "outline": "docs/outline/delivery.md#b-03"
+    },
+    {
+      "path": "docs/research/tui-design-samples.outline.md",
+      "status": "partial",
+      "todo": "docs/todo/delivery.md#b-72",
+      "outline": "docs/outline/delivery.md#b-03"
+    },
+    {
+      "path": "docs/outline-phase2.md",
+      "status": "partial",
+      "todo": "docs/todo/automation.md#b-75",
+      "outline": "docs/outline/architecture.md#unitpages",
+      "relatedTodo": [
+        "docs/todo/knowledge.md#b-90",
+        "docs/todo/knowledge.md#b-91",
+        "docs/todo/agents.md#b-64",
+        "docs/todo/forms.md#b-23"
+      ]
+    },
+    {
+      "path": "docs/plans/ranked-dir-suggestions.md",
+      "status": "partial",
+      "todo": "docs/todo/work.md#b-46",
+      "outline": "docs/outline/work.md#rankedpaths"
+    },
+    {
+      "path": "docs/plans/forms-redesign.md",
+      "status": "partial",
+      "todo": "docs/todo/forms.md#b-31",
+      "outline": "docs/outline/forms.md#b-31",
+      "evidence": [
+        "Copied preserved detailed 149-line forms plan with canonical status preface and topical ownership link",
+        "Retains field/graph/state/layout schemas, compound selectors, ranked recall limits, stable async identities, transactions, key modes and all layouts",
+        "Clarifies later owner-verified composer/defaults separately from fff163c baseline and original 80/200 gap"
+      ]
+    },
+    {
+      "path": "docs/ui-state-visibility.md",
+      "status": "open",
+      "todo": "docs/todo/forms.md#b-60",
+      "outline": "docs/outline/forms.md#visibility"
+    },
+    {
+      "path": "docs/go-code-review.md",
+      "status": "open",
+      "todo": "docs/todo/delivery.md#b-71",
+      "outline": "docs/outline/delivery.md#sourcereview"
+    },
+    {
+      "path": "docs/research/tui-forms.md",
+      "status": "partial",
+      "todo": "docs/todo/forms.md#b-29",
+      "outline": "docs/outline/forms.md#research"
+    }
+  ],
+  "items": [
+    {
+      "id": "B-01",
+      "status": "superseded",
+      "path": "docs/outline/automation.md#b-01",
+      "evidence": [
+        "matomeru removal commit 271da2c; former implementation 956dcd5",
+        "docs/sources/znbu/docs/todo.md B-01/B-35"
+      ],
+      "title": "Superseded fleet orchestrator"
+    },
+    {
+      "id": "B-02",
+      "status": "open",
+      "path": "docs/todo/work.md#b-02",
+      "evidence": [
+        "docs/outline/work.md#sharedplaces consolidates all six message kinds, Claim/PlaceMessage/Preamble schemas, sender-task history, host routing, lifecycle, warnings, and unresolved delivery choices.",
+        "Code audit found no application-owned Claim/PlaceMessage persistence or shared-place router. Existing tuios mail and task notes are not completion."
+      ],
+      "title": "Build application-owned shared-place messaging"
+    },
+    {
+      "id": "B-03",
+      "status": "implemented",
+      "path": "docs/outline/delivery.md#b-03",
+      "evidence": [
+        "docs/research/tui-design-samples.md and tui-design-samples.outline.md",
+        "audited commits 41670da/3492dc4; original recorded 55 samples/73 unique links, not refetched"
+      ],
+      "title": "TUI research deliverable"
+    },
+    {
+      "id": "B-04",
+      "status": "implemented",
+      "path": "docs/outline/forms.md#b-04",
+      "evidence": [
+        "Audit: internal/ui/help_view.go per-column key widths and wrapping; internal/ui/view.go clean strips U+FE0E/U+FE0F; commit 852246b",
+        "Historical recorded 80/120/200-column all-filter help verification: /root/proj/redeck-astra-verification/runs/run.e0LEqHJM/verification.log; not rerun"
+      ],
+      "title": "help and effective binding reference"
+    },
+    {
+      "id": "B-05",
+      "status": "partial",
+      "path": "docs/todo/knowledge.md#b-05",
+      "outline": "docs/outline/knowledge.md#b-05",
+      "evidence": [
+        "Matomeru internal/notes/notes.go:19,181,202 has only task_id/project_id ownership.",
+        "Matomeru internal/ui/model.go:486 loads task-only notes.visible detail.",
+        "Matomeru internal/ui/render_downloads.go has no NOTES block.",
+        "Canonical acceptance preserves original nine owner kinds plus later downloads/documents/action items, inherited via labels, migration, detail formatting, key decisions, stable closed-pane ownership, selection/scroll, and descendant_notes assertions."
+      ],
+      "title": "Notes on almost any record"
+    },
+    {
+      "id": "B-06",
+      "status": "implemented",
+      "path": "docs/outline/panes.md#b-06",
+      "evidence": [
+        "internal/ui/pane_tabs.go and model.go implement the four tabs, selected Screen capture, per-pane memory, and create/live round trip.",
+        "Commits 09a4f22, 48f451f, 3494216; original recorded pane_tabs/shared_navigation/create_jump/live acceptance retained through preserved source links. Historical only, not rerun."
+      ],
+      "title": "Pane detail tabs"
+    },
+    {
+      "id": "B-07",
+      "status": "superseded",
+      "path": "docs/outline/work.md#b-07",
+      "evidence": [
+        "Original dated source explicitly supersedes B-07 with B-37.",
+        "Legacy mass-add is reachable only with work.bulk_create off; default B-37 is the replacement. Legacy detailed alternatives remain substantive in the outline, not active todo."
+      ],
+      "title": "Superseded mass-add outline"
+    },
+    {
+      "id": "B-08",
+      "status": "open",
+      "path": "docs/todo/panes.md#b-08",
+      "evidence": [
+        "Lifecycle sections exist, but source audit found no independent percentage height budget or scroll allocation.",
+        "Retains majority-pane default, heading accounting, overflow, all-page compact-row policy, 40 turns plus 3 panes in 40 rows, and config-init acceptance."
+      ],
+      "title": "Budget rail height by section and compact resting rows"
+    },
+    {
+      "id": "B-09",
+      "status": "implemented",
+      "path": "docs/outline/panes.md#b-09",
+      "evidence": [
+        "internal/ui/rail_sections.go implements Review/middle/Working lifecycle, agents-only Working, U preview unlock, relock on leaving, and focused reviewed-pane retention.",
+        "Commit ce5e679 and recorded rail_lifecycle/history_review/shared_navigation evidence; first-observed working order is distinguished from original submission-time request. Historical only, not rerun."
+      ],
+      "title": "Rail lifecycle"
+    },
+    {
+      "id": "B-10",
+      "status": "implemented",
+      "path": "docs/outline/panes.md#b-10",
+      "evidence": [
+        "internal/ui/accordion.go implements stable expanded/cursor state, oldest-first grouping, record-only marking, x earlier-turn mass marking, review/context stars and ownership display.",
+        "Commit 55c8f10 and original recorded review_accordion acceptance. The source-proposed unchanged-content fingerprint is preserved explicitly as an optimization alternative, not claimed implemented. Historical verification not rerun."
+      ],
+      "title": "Review accordion and stars"
+    },
+    {
+      "id": "B-11",
+      "status": "implemented",
+      "path": "docs/outline/knowledge.md#b-11",
+      "evidence": [
+        "Matomeru internal/documents/documents.go: dedicated M page, star/read/open/list/preview and reusable glow pane; star/context handling at 254-326.",
+        "Matomeru internal/ui/render_documents.go; audit commit 6b72b72.",
+        "Recorded historical verification only: /root/proj/redeck-astra-verification/runs/run.j6e4SZd4/verification.log. VPS used glow stand-in; actual glow 3.0.0 flags were checked on Mac in original report, not rerun here.",
+        "Documents turn_id/written_by gap explicitly remains B-28 in architecture; B-05 owns document notes."
+      ],
+      "title": "Documents"
+    },
+    {
+      "id": "B-12",
+      "status": "implemented",
+      "path": "docs/outline/automation.md#b-12",
+      "evidence": [
+        "matomeru internal/mcp/server.go, tools.go, harness.go; cmd/mtm/wiring.go",
+        "audited commits 75c2e1f/e6147c5; historical lane-2-B-12.log"
+      ],
+      "title": "MCP shell and agent identity"
+    },
+    {
+      "id": "B-13",
+      "status": "partial",
+      "path": "docs/todo/work.md#b-13",
+      "evidence": [
+        "Implemented Todo commands/page/promotion/import baseline consolidated at docs/outline/work.md#b-13; commit 059ba80 and internal/work/todos.go.",
+        "Importer maps parked/unknown to idea. Exact status/notes/current-complete-backlog import remains unproved, including canonical topical backlog discovery. No user store import performed."
+      ],
+      "title": "Complete faithful backlog import"
+    },
+    {
+      "id": "B-14",
+      "status": "open",
+      "path": "docs/todo/agents.md#b-14",
+      "evidence": [
+        "Original log readers, nested OMP eval schema, incremental indexes, catalogs, templates and live replay acceptance consolidated",
+        "Audit found existing MCP server but no harvest/replay implementation; no real Slack/Glean/Linear/GitHub call in dated survey"
+      ],
+      "title": "offline MCP harvest, catalog, templates, and replay"
+    },
+    {
+      "id": "B-15",
+      "status": "implemented",
+      "path": "docs/outline/automation.md#b-15",
+      "evidence": [
+        "matomeru internal/actions/actions.go; internal/ui/scoped_header.go",
+        "audited commit 1971608; historical lane-3-B-15.log"
+      ],
+      "title": "Action items and global attention"
+    },
+    {
+      "id": "B-16",
+      "status": "partial",
+      "path": "docs/todo/automation.md#b-16",
+      "evidence": [
+        "matomeru internal/slack/slack.go persists slack_messages/fixture path, not live MCP/context slack",
+        "audited commit 4f58436; historical fixture-only lane-3-B-16.log"
+      ],
+      "title": "Complete Slack context capture and live monitoring"
+    },
+    {
+      "id": "B-17",
+      "status": "implemented",
+      "path": "docs/outline/automation.md#b-17",
+      "evidence": [
+        "matomeru internal/github/github.go; internal/oncall/oncall.go",
+        "audited commit 570bf6d; historical gh-stub lane-3-B-17.log"
+      ],
+      "title": "GitHub review requests"
+    },
+    {
+      "id": "B-18",
+      "status": "implemented",
+      "path": "docs/outline/automation.md#b-18",
+      "evidence": [
+        "matomeru internal/github/prs.go; audited commit bf40deb",
+        "owner-reported e4cf07a Watched PR preservation; run.t7d5iNMS and run.uMlaOO9N, not executed here"
+      ],
+      "title": "Authored PRs and watch polling"
+    },
+    {
+      "id": "B-19",
+      "status": "open",
+      "path": "docs/todo/automation.md#b-19",
+      "evidence": [
+        "matomeru internal/settings/settings.go linear.enabled only; no ingestion unit in audit"
+      ],
+      "title": "Linear as a source of action items"
+    },
+    {
+      "id": "B-20",
+      "status": "partial",
+      "path": "docs/todo/automation.md#b-20",
+      "evidence": [
+        "matomeru internal/schedules/schedules.go bounds dispatch, not agent-turn lifetime",
+        "audited commit 2af9005; historical lane-3-B-20.log"
+      ],
+      "title": "Supervise prompt schedule lifetime and complete report chaining"
+    },
+    {
+      "id": "B-21",
+      "status": "implemented",
+      "path": "docs/outline/forms.md#b-21",
+      "evidence": [
+        "Audit: internal/settings/settings.go definitions, typed values, changed-only saves, idempotent init; internal/ui/actions.go settings forms; commit 19c2b35",
+        "Historical recorded verification /root/proj/night/logs/lane-2-B-21.log; not rerun",
+        "Concrete original settings keys/defaults and service-needs contract retained"
+      ],
+      "title": "settings"
+    },
+    {
+      "id": "B-22",
+      "status": "partial",
+      "path": "docs/todo/delivery.md#b-22",
+      "evidence": [
+        "matomeru scripts/inventory/main.go and review.go; commit 9e7b76b",
+        "historical run.wTMwj4fO/verification.log covers stage1 only"
+      ],
+      "title": "Complete feature inventory adoption and in-app review"
+    },
+    {
+      "id": "B-23",
+      "status": "open",
+      "path": "docs/todo/forms.md#b-23",
+      "evidence": [
+        "Full original seven-step Neovim input proposal, vim-rsi 45540637, RPC ordering, per-field undo, snapshots, stale-event recovery, picker and compound-edit acceptance retained",
+        "Current shared-engine decision is distinguished from this optional future target; normal Neovim pane is not embedded input"
+      ],
+      "title": "optional embedded Neovim field engine"
+    },
+    {
+      "id": "B-25",
+      "status": "implemented",
+      "path": "docs/outline/forms.md#b-25",
+      "evidence": [
+        "Audit: openPalette/paletteOpensSearching/modalKeyAction and palette.open_in_search; commits b1a68da and 1fab230",
+        "Typed-filter Escape-to-navigation and empty-filter immediate-close exception retained",
+        "Historical /root/proj/night/logs/lane-2-B-25.log; not rerun"
+      ],
+      "title": "searchable palette"
+    },
+    {
+      "id": "B-26",
+      "status": "verification-pending",
+      "path": "docs/todo/delivery.md#b-26",
+      "evidence": [
+        "matomeru scripts/release.sh, AGENTS.md, CHANGELOG.md; commits f59adf6/0bb225d/a31b0b9",
+        "read-only git tag inspection observed annotated v0.5.0/v0.6.0/v0.6.1 mtm tags; no remote publication check",
+        "historical run.eXZQmt1e/verification.log is missing-entry/dry-run evidence, not publication"
+      ],
+      "title": "Establish release publication evidence"
+    },
+    {
+      "id": "B-27",
+      "status": "partial",
+      "path": "docs/todo/knowledge.md#b-27",
+      "outline": "docs/outline/knowledge.md#b-27",
+      "evidence": [
+        "Matomeru internal/downloads/downloads.go implements L page watcher/rescan, newest-first rows, seen and OS opening.",
+        "Matomeru internal/ui/render_downloads.go implements single/marked clipboard actions and seen state, but lacks notes.",
+        "MTM_DOWNLOADS_DIR remains constructor configuration; downloads.dir absent from settings.Definitions.",
+        "Recorded historical verification only: /root/proj/redeck-astra-verification/runs/run.85RFtc62/verification.log; audit commit 4ea5142. Notes and setting remain explicitly open; shared unread-theme departure retained."
+      ],
+      "title": "Finish download notes and directory configuration"
+    },
+    {
+      "id": "B-28",
+      "status": "partial",
+      "path": "docs/todo/architecture.md#b-28",
+      "evidence": [
+        "matomeru internal/core/provenance.go, internal/provenance/provenance.go, internal/history/code.go",
+        "audited commit 322c11c; historical lane-4-B-28.log excludes remaining tables/navigation"
+      ],
+      "title": "Complete cross-record provenance"
+    },
+    {
+      "id": "B-29",
+      "status": "open",
+      "path": "docs/todo/forms.md#b-29",
+      "evidence": [
+        "Original per-page design notes, exact tokens, future requested model/skill, toggle rule, and before/after 120/200-column screenshot acceptance retained",
+        "Forms/design-sample research is integrated as recommendations, not claimed to complete whole-app pass"
+      ],
+      "title": "whole-app UI/UX design pass"
+    },
+    {
+      "id": "B-30",
+      "status": "implemented",
+      "path": "docs/outline/panes.md#b-30",
+      "evidence": [
+        "Commit 52961a5; stale panes keep ordinary ownership groups, stale threshold and close-stale command remain.",
+        "Original recorded verification retained through preserved source link, not rerun."
+      ],
+      "title": "Stale panes remain in their group"
+    },
+    {
+      "id": "B-31",
+      "status": "partial",
+      "path": "docs/todo/forms.md#b-31",
+      "evidence": [
+        "Committed 5f1bd56/fff163c generic engine/five-layout/combined-selector baseline recorded separately in docs/outline/forms.md#b-31; assignment says fff163c already verified",
+        "Original run.VRG1P8eF explicitly did not cover 80/200 columns; retain rendered-row gap",
+        "Full disk-catalog completers remain dependent on B-34",
+        "New e4cf07a composer/default verification does not close original width or full-catalog acceptance"
+      ],
+      "title": "forms acceptance gaps"
+    },
+    {
+      "id": "B-32",
+      "status": "partial",
+      "path": "docs/todo/agents.md#b-32",
+      "evidence": [
+        "Audit: Preset currently id/name/prefix/cwd/created and ApplyPreset prepends once",
+        "Rich prepend/append/agent/ask migration, AskedPrompt provenance, answer capture, preset-first action, Questions page and CLI acceptance retained"
+      ],
+      "title": "rich prompt presets and recorded questions"
+    },
+    {
+      "id": "B-33",
+      "status": "open",
+      "path": "docs/todo/forms.md#b-33",
+      "evidence": [
+        "Original PaletteStack/SubPalette/Verb schemas, all branches/verbs, leaders, pending-prefix state, retained filters and 80/120/200 border acceptance retained",
+        "New user addition captured: shared create/new/edit/delete verbs and consistent labels; new… terminal/agent/vim/prompt/project/task/note flow; ranked base-directory choice after terminal/vim; agent choice order undecided; prompt variants illustrative, not closed taxonomy",
+        "Target design docs/outline/forms.md#commonverbs crosslinks agents/work/panes"
+      ],
+      "title": "nested command palette"
+    },
+    {
+      "id": "B-34",
+      "status": "partial",
+      "path": "docs/todo/agents.md#b-34",
+      "evidence": [
+        "Original per-harness scan roots, config/plugin/MCP/hook/marketplace schemas and cross-harness search/symlink acceptance retained",
+        "Parent reports observed e4cf07a and owner verification of AI/Git/GitHub subsection subset; that subset recorded implemented at docs/outline/agents.md#aiassets",
+        "Owner evidence run.0FUXkwfs AI provenance; run.uMlaOO9N live GitHub; run.t7d5iNMS watched actions; real100PR comparison. Not rerun here",
+        "Recognized harnesses are not installation guarantees; observed conversations are not complete disk sessions; no wholesale scanner completion claim"
+      ],
+      "title": "complete the per-harness AI asset catalog"
+    },
+    {
+      "id": "B-35",
+      "status": "implemented",
+      "path": "docs/outline/automation.md#b-35",
+      "evidence": [
+        "matomeru internal/panes/stuck.go: same-state/waiting-input only",
+        "historical outline stuck_check record; optional repeat-failure explicitly not implemented"
+      ],
+      "title": "Stuck-pane checks"
+    },
+    {
+      "id": "B-36",
+      "status": "open",
+      "path": "docs/todo/forms.md#b-36",
+      "evidence": [
+        "Original list/popup/bar/side/full candidates, one engine/presentation-only registry style interface, hot-switch palette.style, all-style end-to-end coverage retained",
+        "Form layouts are not palette styles; dependency on B-33 retained"
+      ],
+      "title": "interchangeable palette styles"
+    },
+    {
+      "id": "B-37",
+      "status": "implemented",
+      "path": "docs/outline/work.md#b-37",
+      "evidence": [
+        "Commit e3f3780; internal/ui/tree_edit.go and internal/work/tree.go implement atomic adds-only bulk tree with protected dim existing nodes and top-level projects.",
+        "P tree reuse rather than the proposed field-form basis is recorded as the implemented design change. Historical bulk_create/mass_add/switch_creation results retained, not rerun."
+      ],
+      "title": "Adds-only bulk creation"
+    },
+    {
+      "id": "B-38",
+      "status": "implemented",
+      "path": "docs/outline/panes.md#b-38",
+      "evidence": [
+        "Commit a64d09f; internal/ui/rail_tree.go implements below-pin nested middle rail, path group jumps, z/Z folds and flat-mode cycling.",
+        "Historical rail_tree/grouping_stale/pin_scope/rail_lifecycle/history_review/shared_navigation results retained, not rerun."
+      ],
+      "title": "Nested middle rail below the pin"
+    },
+    {
+      "id": "B-39",
+      "status": "open",
+      "path": "docs/todo/delivery.md#b-39",
+      "evidence": [
+        "matomeru scripts/e2e-all.sh sequential/set-e; outline shared-case harness baseline"
+      ],
+      "title": "Parallel isolated end-to-end runner"
+    },
+    {
+      "id": "B-40",
+      "status": "open",
+      "path": "docs/todo/delivery.md#b-40",
+      "evidence": [
+        "matomeru scripts/e2e-all.sh appended duplicate outline selections; AGENTS missing target-once policy at audit"
+      ],
+      "title": "Targeted iteration and one final full suite"
+    },
+    {
+      "id": "B-41",
+      "status": "open",
+      "path": "docs/todo/panes.md#b-41",
+      "evidence": [
+        "Current paneTabs map restores tabs per selection identity and can automatically select Turns.",
+        "Retains new page-level last-explicit-tab behavior across rows on EVERY tabbed page; explicitly changes B-06 rather than claiming B-06 completes it."
+      ],
+      "title": "Keep the page's last explicitly chosen detail tab"
+    },
+    {
+      "id": "B-42",
+      "status": "open",
+      "path": "docs/todo/agents.md#b-42",
+      "evidence": [
+        "Primary location preserved exactly",
+        "Cohesive execution-location/work-assignment/agent-profile groups, one or two recent selections without saved presets, sparse ordered overwrite semantics and working names retained",
+        "e4cf07a inferred fill-empty defaults do not satisfy supplied-fields-overwrite preset layers"
+      ],
+      "title": "field-group presets, recent selections, and sparse layers"
+    },
+    {
+      "id": "B-43",
+      "status": "open",
+      "path": "docs/todo/work.md#b-43",
+      "evidence": [
+        "No dedicated Projects knowledge/research workflow in audit baseline.",
+        "Retains project-owned Know/Do/Make/Share, concise/medium/full-report agent research, dedicated page entry, and associated questions/answers."
+      ],
+      "title": "Give projects their own knowledge and deliverables page"
+    },
+    {
+      "id": "B-44",
+      "status": "partial",
+      "path": "docs/todo/work.md#b-44",
+      "evidence": [
+        "New-row nesting and separate P-editor renames exist; bulk existing rows remain protected and finishTreeLine ends editing.",
+        "Retains one-o/O continuous Enter insertion, Vim-style multiline edits, Tab/Shift+Tab, and same-editor existing-record rename preserving identity/relations. Explicitly replaces B-37 adds-only restriction."
+      ],
+      "title": "Continue insertion and rename existing records in the bulk tree"
+    },
+    {
+      "id": "B-45",
+      "status": "open",
+      "path": "docs/todo/panes.md#b-45",
+      "evidence": [
+        "Pane-close lifecycle and task/project status mutations exist separately, not a close-time choice workflow.",
+        "Retains explicit task/project completion offer, accept updating chosen owner, decline leaving completion state unchanged."
+      ],
+      "title": "Offer task or project completion when closing a pane"
+    },
+    {
+      "id": "B-46",
+      "status": "partial",
+      "path": "docs/todo/work.md#b-46",
+      "evidence": [
+        "NEW retained directory-plan requirement. Implemented local canonical directory catalog baseline: commit e4cf07a and internal/work/directories.go, with owner-reported VPS verification.",
+        "Original source asks current agent/terminal-CWD frequency. Current implementation counts successful launches within contextual rank, not current-CWD frequency. Keeps explicit decision/acceptance for that difference rather than silently closing a changed requirement.",
+        "Owner reports runs run.8tnoOG3b and run.uag5oacy; native macOS picker not exercised on Linux. No check performed by this writer."
+      ],
+      "title": "Resolve the remaining directory-ranking acceptance"
+    },
+    {
+      "id": "B-47",
+      "status": "implemented",
+      "path": "docs/outline/work.md#b-47",
+      "evidence": [
+        "NEW implemented shared repo/branch inventory subset. Commit e4cf07a, internal/gitcatalog/{catalog,inventory,github}.go, internal/ui/subsections.go, and latest Matomeru outline sections 6.15/7.1.",
+        "Owner reports subsection keys/state, watched operations, provenance, and real hundred-PR comparison. Reported runs run.t7d5iNMS, run.0FUXkwfs, run.uMlaOO9N. Parent observed commit; writer read latest implementation docs, not rerun behavior.",
+        "Does not promote B-34 full disk catalogs or B-48 automatic attribution/shared Place scope."
+      ],
+      "title": "Git and GitHub inventories"
+    },
+    {
+      "id": "B-48",
+      "status": "open",
+      "path": "docs/todo/work.md#b-48",
+      "evidence": [
+        "NEW uncovered original 6.3/6.13 requirement. Current Project repo/trees model, explicit provenance and live Git catalogs do not implement rich multi-directory inherited Place or automatic attribution.",
+        "Full target schemas, relationships, host unknown semantics, derived worktree uses, dirty attribution, graph head moves, patch-ID rewrite mapping, branch/task disagreement, PR/CI observation, launch warnings, commands/events and alternative decisions consolidated at outline/work.md#places and #gitattribution."
+      ],
+      "title": "Implement the full Place and observed Git model"
+    },
+    {
+      "id": "B-49",
+      "status": "verification-pending",
+      "path": "docs/todo/panes.md#b-49",
+      "evidence": [
+        "NEW retained UI-state terminal-preview contract beyond basic B-06 Screen tab.",
+        "All six source scenarios and remaining constraints retained: anchored real terminal/agent/Vim output, current/cached/error labels and age, bounded cancelable target-safe reads, no input/focus/resize/lease/review mutation, safe terminal rendering, short layout, failure and stale-result behavior. No runtime performed."
+      ],
+      "title": "Complete the noninterfering preview contract"
+    },
+    {
+      "id": "B-50",
+      "status": "verification-pending",
+      "path": "docs/todo/panes.md#b-50",
+      "evidence": [
+        "NEW retained full original host-qualified pane registry contract. Implemented local relay and remote-agent snapshot preserved in outline/panes.md#daemon and #listing.",
+        "Source inspection established list-host-sessions/list-host-agents and stale retain on explicitly failed hosts, not every remote terminal or every persisted pane-reference boundary. Owner e4cf07a SSH launch result does not prove complete enumeration."
+      ],
+      "title": "Establish the complete host-qualified pane inventory"
+    },
+    {
+      "id": "B-60",
+      "status": "open",
+      "path": "docs/todo/forms.md#b-60",
+      "evidence": [
+        "Previously unnumbered ui-state-visibility.md matrix consolidated substantively at docs/outline/forms.md#visibility",
+        "Complete simultaneous indicators, authoritative transitions/read-models, preview safety, domain states, rendered acceptance and finite-timeout constraints retained"
+      ],
+      "title": "complete the UI-state visibility matrix"
+    },
+    {
+      "id": "B-61",
+      "status": "implemented",
+      "path": "docs/outline/agents.md#b-61",
+      "evidence": [
+        "Parent observed commits ec0d83a/e4cf07a; implementation owner reports five features complete/verified/pushed main origin and vps2",
+        "Read latest Matomeru docs/outline.md 274-305 after owner report; defaults precedence, focused evidence, scoped successful launches, privacy, host separation and same source for form/backend retained",
+        "Owner reports launch-default/CLI/SSH remote/stash/full TUI+live verification; not run here",
+        "Not B-42 grouped or sparse-layer presets"
+      ],
+      "title": "Inferred launch defaults"
+    },
+    {
+      "id": "B-62",
+      "status": "implemented",
+      "path": "docs/outline/agents.md#b-62",
+      "evidence": [
+        "e4cf07a implements Prompt/Settings composer, fuzzy value matching, weighted recall/disambiguation, word-end-space semantics and advanced fields; parent observed commit",
+        "Owner recorded run.8tnoOG3b composer/settings/collision and all five destination layouts; run.uag5oacy TUI plus stash/help/live checks; not rerun here",
+        "Catalog origins/recognized-vs-installed/harness control compatibility limits preserved at #modelcatalog",
+        "Native macOS picker interaction not exercised on Linux; does not complete B-31 width gap/B-32/B-34/B-42"
+      ],
+      "title": "Two-input Prompt/Settings composer"
+    },
+    {
+      "id": "B-63",
+      "status": "open",
+      "path": "docs/todo/agents.md#b-63",
+      "evidence": [
+        "Unnumbered queue identity/outcome matrix consolidated without treating absent receipts as delivery",
+        "Local/daemon identity and counts, untargeted queues, partial targets, closed/missing receipts, durable read errors, no automatic resend, stash distinction and rendered acceptance retained"
+      ],
+      "title": "durable queue and dispatch outcomes"
+    },
+    {
+      "id": "B-64",
+      "status": "open",
+      "path": "docs/todo/agents.md#b-64",
+      "evidence": [
+        "Phase2 Prompts page, generated unit shape+selected notes+instructions, own-repo cwd, ordinary composer/queue dispatch, UnitPrompt persistence, prompt-submitted/response-completed correlation and task-notification exclusion retained",
+        "Knowledge owns complete UnitModal/UnitNote schemas and note CRUD B90; crosslinks avoid duplicate active scope",
+        "Embedding-vs-link, concurrency, own-repo location and modal-key conflicts explicitly unresolved"
+      ],
+      "title": "per-unit prompts and instruction-driven work"
+    },
+    {
+      "id": "B-70",
+      "status": "open",
+      "path": "docs/todo/architecture.md#b-70",
+      "evidence": [
+        "docs/sources/znbu/docs/outline.md original open decisions/Table schema",
+        "matomeru store/events/wiring source baseline; reminders/attach.go still hosts attention units"
+      ],
+      "title": "Settle process ownership and remaining architecture choices"
+    },
+    {
+      "id": "B-71",
+      "status": "open",
+      "path": "docs/todo/delivery.md#b-71",
+      "evidence": [
+        "docs/go-code-review.md full tool-selection/adoption gate, not installed service"
+      ],
+      "title": "Adopt source documentation only after compatibility review"
+    },
+    {
+      "id": "B-72",
+      "status": "open",
+      "path": "docs/todo/delivery.md#b-72",
+      "evidence": [
+        "docs/research/tui-design-samples.md patterns/not-found; B29 remains restyle owner"
+      ],
+      "title": "Decide how to adopt the completed TUI research"
+    },
+    {
+      "id": "B-73",
+      "status": "partial",
+      "path": "docs/todo/delivery.md#b-73",
+      "evidence": [
+        "docs/sources/matomeru/docs/plans/vps2-dev-host.md seven original steps",
+        "matomeru context source still pbcopy/open; runner source has bounded timeout; no plan acceptance run"
+      ],
+      "title": "Finish the seven-step second-development-host plan"
+    },
+    {
+      "id": "B-74",
+      "status": "open",
+      "path": "docs/todo/architecture.md#b-74",
+      "evidence": [
+        "docs/sources/znbu/docs/outline.md Bubble Tea comparison/open mouse/timer decisions",
+        "matomeru internal/ui/model.go current 30-second detail tick"
+      ],
+      "title": "Settle event-loop resilience, timers and mouse interaction"
+    },
+    {
+      "id": "B-75",
+      "status": "open",
+      "path": "docs/todo/automation.md#b-75",
+      "evidence": [
+        "docs/outline-phase2.md reminders page proposal",
+        "matomeru reminders Register defines list modal, not a Page"
+      ],
+      "title": "Complete the phase2 reminders management page"
+    },
+    {
+      "id": "B-76",
+      "status": "partial",
+      "path": "docs/todo/delivery.md#b-76",
+      "evidence": [
+        "docs/sources/znbu/docs/outline.md setup packaging/turn-capture contract",
+        "matomeru internal/setup/setup.go embeds only OMP item with owned install/status/uninstall"
+      ],
+      "title": "Complete packaged setup and supported-harness capture acceptance"
+    },
+    {
+      "id": "B-77",
+      "status": "open",
+      "path": "docs/todo/automation.md#b-77",
+      "evidence": [
+        "docs/sources/znbu/docs/todo.md and sources/matomeru/docs/todo.md B12 vaim API survey",
+        "current tools.go supports narrower tools; remaining survey APIs are target decisions"
+      ],
+      "title": "Settle the remaining MCP survey API proposals"
+    },
+    {
+      "id": "B-90",
+      "status": "open",
+      "path": "docs/todo/knowledge.md#b-90",
+      "outline": "docs/outline/knowledge.md#unitnotes",
+      "evidence": [
+        "docs/outline-phase2.md lines 17-61 and 70-75: UnitModal, Struct, Relation, UnitNote, UnitPrompt schemas, meta tables/commands/events, status/reopen and prompt/review linkage.",
+        "B-90 owns unit-modal and note management. B-64 in agents owns prompt construction/dispatch/queue/turn-correlation. All shared lifecycle schemas/open alternatives are consolidated at outline/knowledge.md#unitnotes."
+      ],
+      "title": "Unit modal and unit-note management"
+    },
+    {
+      "id": "B-91",
+      "status": "open",
+      "path": "docs/todo/knowledge.md#b-91",
+      "outline": "docs/outline/knowledge.md#unitnotes",
+      "evidence": [
+        "docs/outline-phase2.md lines 5-15 requests dedicated Notes and Vim pages with exact actions, scope/all read-only rule and Page.unit ordering.",
+        "Matomeru internal/vim/register.go currently offers palette and resume modal, not dedicated phase-2 Vim page."
+      ],
+      "title": "Dedicated Notes and Vim pages"
+    },
+    {
+      "id": "B-92",
+      "status": "partial",
+      "path": "docs/todo/knowledge.md#b-92",
+      "outline": "docs/outline/knowledge.md#editorvim",
+      "evidence": [
+        "Original znbu outline lines 381-395 includes vim.forget and host/worktree-aware Place relationship.",
+        "Matomeru internal/vim/vim.go and register.go implement direct real nvim open/list, app-owned sessions, save/restore and active cwd/tree, but not vim.forget or the original rich Place schema.",
+        "App-owned discovery decision is settled and not reopened. Shared Place model remains work.md#places; embedded form editor remains B-23."
+      ],
+      "title": "Complete the saved-editor management contract"
+    },
+    {
+      "id": "EXT-001",
+      "status": "reference-only",
+      "path": "docs/todo/panes.md#b-41",
+      "evidence": [
+        "docs/sources/hub/prompts/mtm-todo.md#L4"
+      ],
+      "referenceOnly": true,
+      "adoptedIntoMatomeru": "existing B idea only",
+      "title": "B-41: Keep the page's last explicitly chosen detail tab"
+    },
+    {
+      "id": "EXT-002",
+      "status": "reference-only",
+      "path": "docs/todo/agents.md#b-42",
+      "evidence": [
+        "docs/sources/hub/prompts/mtm-todo.md#L6-L13"
+      ],
+      "referenceOnly": true,
+      "adoptedIntoMatomeru": "existing B idea only",
+      "title": "B-42 field-group presets, recent selections, and sparse layers"
+    },
+    {
+      "id": "EXT-003",
+      "status": "reference-only",
+      "path": "docs/todo/agents.md#b-42",
+      "evidence": [
+        "docs/sources/hub/prompts/mtm-todo.md#L15"
+      ],
+      "referenceOnly": true,
+      "adoptedIntoMatomeru": "existing B idea only",
+      "title": "B-42 field-group presets, recent selections, and sparse layers"
+    },
+    {
+      "id": "EXT-004",
+      "status": "reference-only",
+      "path": "docs/todo/work.md#b-43",
+      "evidence": [
+        "docs/sources/hub/prompts/mtm-todo.md#L20-L41"
+      ],
+      "referenceOnly": true,
+      "adoptedIntoMatomeru": "existing B idea only",
+      "title": "B-43: Give projects their own knowledge and deliverables page"
+    },
+    {
+      "id": "EXT-005",
+      "status": "reference-only",
+      "path": "docs/todo/work.md#b-44",
+      "evidence": [
+        "docs/sources/hub/prompts/mtm-todo.md#L47-L59"
+      ],
+      "referenceOnly": true,
+      "adoptedIntoMatomeru": "existing B idea only",
+      "title": "B-44: Continue insertion and rename existing records in the bulk tree"
+    },
+    {
+      "id": "EXT-006",
+      "status": "reference-only",
+      "path": "docs/todo/panes.md#b-45",
+      "evidence": [
+        "docs/sources/hub/prompts/mtm-todo.md#L63"
+      ],
+      "referenceOnly": true,
+      "adoptedIntoMatomeru": "existing B idea only",
+      "title": "B-45: Offer task or project completion when closing a pane"
+    },
+    {
+      "id": "EXT-007",
+      "status": "idea",
+      "path": "docs/todo/ecosystem.md#ext-007",
+      "evidence": [
+        "docs/sources/notes/ima/iwants.md#L4-L9",
+        "docs/sources/notes/ima/iwants.md#L47-L50",
+        "docs/sources/notes/ima/iwants.md#L59-L71",
+        "docs/sources/notes/ima/unfinished-work.md#L9-L12",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L8-L13",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L24-L28",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L62-L87"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Central funnel and the task-as-now product purpose"
+    },
+    {
+      "id": "EXT-008",
+      "status": "idea",
+      "path": "docs/todo/ecosystem.md#ext-008",
+      "evidence": [
+        "docs/sources/notes/ima/iwants.md#L15-L24",
+        "docs/sources/notes/ima/iwants.md#L29",
+        "docs/sources/notes/ima/unfinished-work.md#L10",
+        "docs/sources/notes/ima/unfinished-work.md#L68",
+        "docs/sources/notes/ima/unfinished-work.md#L72",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L19-L20"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "TUI, optional exact-parity web UI, and optional multiplexer"
+    },
+    {
+      "id": "EXT-009",
+      "status": "idea",
+      "path": "docs/todo/ecosystem.md#ext-009",
+      "evidence": [
+        "docs/sources/notes/ima/iwants.md#L27-L28",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L135-L152"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Generic selector and typed items with metadata"
+    },
+    {
+      "id": "EXT-010",
+      "status": "idea",
+      "path": "docs/todo/ecosystem.md#ext-010",
+      "evidence": [
+        "docs/sources/notes/ima/iwants.md#L25",
+        "docs/sources/notes/ima/iwants.md#L38-L43",
+        "docs/sources/notes/ima/unfinished-work.md#L11",
+        "docs/sources/notes/ima/unfinished-work.md#L71",
+        "docs/sources/notes/ima/unfinished-work.md#L84",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L111-L115",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L145-L146",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L165-L166",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L625-L626",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L664-L665"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Attribute actions rather than prohibit activity"
+    },
+    {
+      "id": "EXT-011",
+      "status": "idea",
+      "path": "docs/todo/ecosystem.md#ext-011",
+      "evidence": [
+        "docs/sources/notes/ima/iwants.md#L30-L39",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L29-L44",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L135-L148"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Time, effort, attention, context, event history, and task kinds"
+    },
+    {
+      "id": "EXT-012",
+      "status": "source-reported-completed",
+      "path": "docs/outline/ecosystem.md#ext-012",
+      "evidence": [
+        "docs/sources/notes/ima/iwants.md#L31",
+        "docs/sources/notes/ima/iwants.md#L54-L57",
+        "docs/sources/notes/ima/unfinished-work.md#L12",
+        "docs/sources/notes/ima/unfinished-work.md#L88-L90",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L156-L173",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L198-L203",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L315-L320",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L516-L535"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Idle reset, breaks, overrun splitting, and attention"
+    },
+    {
+      "id": "EXT-013",
+      "status": "source-reported-completed-with-open-decision",
+      "path": "docs/todo/ecosystem.md#ext-013",
+      "evidence": [
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L103-L109",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L117-L133",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L154-L180",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L302-L320",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L497-L554",
+        "docs/sources/notes/ima/unfinished-work.md#L88-L90"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Picker, one-task Now view, split/finish loop, and completion review"
+    },
+    {
+      "id": "EXT-014",
+      "status": "source-reported-completed-with-open-decision",
+      "path": "docs/todo/ecosystem.md#ext-014",
+      "evidence": [
+        "docs/sources/notes/ima/iwants.md#L37",
+        "docs/sources/notes/ima/unfinished-work.md#L12",
+        "docs/sources/notes/ima/unfinished-work.md#L88",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L40-L42",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L196-L203"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Task-dependent whole-app theme"
+    },
+    {
+      "id": "EXT-015",
+      "status": "source-reported-completed",
+      "path": "docs/outline/ecosystem.md#ext-015",
+      "evidence": [
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L125-L126",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L138-L148",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L184-L188",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L339-L340",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L342",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L363-L375",
+        "docs/sources/notes/ima/unfinished-work.md#L73",
+        "docs/sources/notes/ima/unfinished-work.md#L88"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Noise capture, triage, extraction, links, and deduplication"
+    },
+    {
+      "id": "EXT-016",
+      "status": "idea",
+      "path": "docs/todo/ecosystem.md#ext-016",
+      "evidence": [
+        "docs/sources/notes/ima/iwants.md#L76-L79",
+        "docs/sources/notes/ima/unfinished-work.md#L12",
+        "docs/sources/notes/ima/unfinished-work.md#L88",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L91-L95",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L142-L144",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L190-L194",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L675-L678"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Learn-for-later runs and locked motivations"
+    },
+    {
+      "id": "EXT-017",
+      "status": "source-reported-completed",
+      "path": "docs/outline/ecosystem.md#ext-017",
+      "evidence": [
+        "docs/sources/notes/ima/unfinished-work.md#L13-L14",
+        "docs/sources/notes/ima/unfinished-work.md#L44"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Responsive background work and uniform option navigation"
+    },
+    {
+      "id": "EXT-018",
+      "status": "idea",
+      "path": "docs/todo/ecosystem.md#ext-018",
+      "evidence": [
+        "docs/sources/notes/ima/iwants.md#L83-L119"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Domain vocabulary and distinct concept levels"
+    },
+    {
+      "id": "EXT-019",
+      "status": "idea",
+      "path": "docs/todo/ecosystem.md#ext-019",
+      "evidence": [
+        "docs/sources/notes/ima/unfinished-work.md#L67",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L140-L144"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Dedicated to-know questions and answers"
+    },
+    {
+      "id": "EXT-020",
+      "status": "idea",
+      "path": "docs/todo/ecosystem.md#ext-020",
+      "evidence": [
+        "docs/sources/notes/ima/unfinished-work.md#L65-L73",
+        "docs/sources/notes/ima/iwants.md#L26",
+        "docs/sources/notes/ima/iwants.md#L39"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Projects, documentation encouragement, and automation decisions remain open"
+    },
+    {
+      "id": "EXT-021",
+      "status": "idea",
+      "path": "docs/todo/ecosystem.md#ext-021",
+      "evidence": [
+        "docs/sources/notes/ima/unfinished-work.md#L81",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L600-L626",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L641-L642",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L667-L673"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Task context pointers and terminal focus"
+    },
+    {
+      "id": "EXT-022",
+      "status": "idea",
+      "path": "docs/todo/ecosystem.md#ext-022",
+      "evidence": [
+        "docs/sources/notes/ima/unfinished-work.md#L71",
+        "docs/sources/notes/ima/unfinished-work.md#L79",
+        "docs/sources/notes/ima/unfinished-work.md#L82-L84",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L611-L637",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L643-L665"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "External prompt/reply attribution and tuios event intake"
+    },
+    {
+      "id": "EXT-023",
+      "status": "idea",
+      "path": "docs/todo/ecosystem.md#ext-023",
+      "evidence": [
+        "docs/sources/notes/ima/unfinished-work.md#L83-L84",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L639-L665"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Automatic agent follow-up child tasks without spinner babysitting"
+    },
+    {
+      "id": "EXT-024",
+      "status": "idea",
+      "path": "docs/todo/ecosystem.md#ext-024",
+      "evidence": [
+        "docs/sources/notes/ima/ideas/context-matchers.md#L1-L20",
+        "docs/sources/notes/ima/unfinished-work.md#L79"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Context matchers attach metadata from streams and events"
+    },
+    {
+      "id": "EXT-025",
+      "status": "idea",
+      "path": "docs/todo/ecosystem.md#ext-025",
+      "evidence": [
+        "docs/sources/notes/ima/ideas/change-walker.md#L3-L10",
+        "docs/sources/notes/ima/unfinished-work.md#L80"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Concise task/action/change walkthrough"
+    },
+    {
+      "id": "EXT-026",
+      "status": "source-reported-completed",
+      "path": "docs/outline/ecosystem.md#ext-026",
+      "evidence": [
+        "docs/sources/notes/ima/unfinished-work.md#L16-L29"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Durable Neovim task-entry plugin, completed in Ima"
+    },
+    {
+      "id": "EXT-027",
+      "status": "source-reported-completed",
+      "path": "docs/outline/ecosystem.md#ext-027",
+      "evidence": [
+        "docs/sources/notes/ima/unfinished-work.md#L18",
+        "docs/sources/notes/ima/unfinished-work.md#L25-L37"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Plugin evidence, publication, and durability limits"
+    },
+    {
+      "id": "EXT-028",
+      "status": "source-reported-completed",
+      "path": "docs/outline/ecosystem.md#ext-028",
+      "evidence": [
+        "docs/sources/notes/ima/unfinished-work.md#L39-L49"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Persistent task-scoped agents from the TUI, completed in Ima"
+    },
+    {
+      "id": "EXT-029",
+      "status": "source-reported-completed",
+      "path": "docs/outline/ecosystem.md#ext-029",
+      "evidence": [
+        "docs/sources/notes/ima/unfinished-work.md#L47-L49"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Persistent-agent prerequisites and bounded recovery guarantees"
+    },
+    {
+      "id": "EXT-030",
+      "status": "idea",
+      "path": "docs/todo/ecosystem.md#ext-030",
+      "evidence": [
+        "docs/sources/notes/ima/unfinished-work.md#L51-L61"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Standalone executable and release distribution backlog"
+    },
+    {
+      "id": "EXT-031",
+      "status": "source-reported-completed",
+      "path": "docs/outline/ecosystem.md#ext-031",
+      "evidence": [
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L215-L217",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L325-L340",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L342",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L365-L400",
+        "docs/sources/notes/ima/unfinished-work.md#L88"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Slack/GitHub sources feed the noise funnel"
+    },
+    {
+      "id": "EXT-032",
+      "status": "idea",
+      "path": "docs/todo/ecosystem.md#ext-032",
+      "evidence": [
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L412-L482"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Slack via h-mcp and alternate server providers"
+    },
+    {
+      "id": "EXT-033",
+      "status": "source-reported-completed",
+      "path": "docs/outline/ecosystem.md#ext-033",
+      "evidence": [
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L556-L569",
+        "docs/sources/notes/ima/unfinished-work.md#L86-L90"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Preserve historical UX rough edges as resolved history"
+    },
+    {
+      "id": "EXT-034",
+      "status": "historical",
+      "path": "docs/outline/ecosystem.md#ext-034",
+      "evidence": [
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L205-L213",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L215-L247",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L302-L320"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Historical first-slice architecture and stack alternatives"
+    },
+    {
+      "id": "EXT-035",
+      "status": "historical",
+      "path": "docs/outline/ecosystem.md#ext-035",
+      "evidence": [
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L250-L253",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L273-L300",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L330-L337"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "pstack role-model overrides and global include"
+    },
+    {
+      "id": "EXT-036",
+      "status": "historical",
+      "path": "docs/outline/ecosystem.md#ext-036",
+      "evidence": [
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L484-L493",
+        "docs/sources/notes/ima/ideas/fml-2026-10-15-180521-goal.txt#L571-L589"
+      ],
+      "referenceOnly": false,
+      "adoptedIntoMatomeru": false,
+      "title": "Publish user stories through mdoc"
+    },
+    {
+      "id": "B-100",
+      "status": "open",
+      "path": "docs/todo/inventory.md#b-100",
+      "title": "Inventory kinds, identity, and interconnected relationships",
+      "evidence": [
+        "The user assigned Inventory as a new first-class conceptual category, explicitly a target rather than shipped behavior.",
+        "docs/outline/inventory.md preserves all exact requested kinds, provider distinctions, temporal examples, owned-child versus shared-link relationships, and an illustrative JavaScript reuse example.",
+        "docs/todo/inventory.md preserves kind-by-kind coverage and observable relationship acceptance under open B-100.",
+        "Existing boundaries were read in docs/outline/work.md, knowledge.md, agents.md, automation.md, and forms.md#commonverbs. These are linked as current baselines, not new Inventory feature claims.",
+        "Both new document writes succeeded. No product changes, source overwrites, root index edits, commits, app tests, builds, or checker runs were performed."
+      ],
+      "outline": "docs/outline/inventory.md"
+    }
+  ]
+}
