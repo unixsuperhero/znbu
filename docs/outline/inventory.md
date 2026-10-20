@@ -21,6 +21,29 @@ The groups below help readers find the requested kinds. They are not a final tax
 
 Todo items and tasks remain separate concepts. Existing [lightweight todos and promotion](work.md#b-13) explain their current distinction; Inventory must not collapse the two. Temporal examples retain dates, deadlines, reminders, and birthdays. The trailing `...?` leaves the time taxonomy open rather than requiring every temporal item to schedule delivery.
 
+## Inventory primitives and designer
+
+Status: target, tracked by [B-100](../todo/inventory.md#b-100). Higher-level, more specific inventory types are compositions of multiple inventory primitives or aliases of a single primitive.
+
+The proposed primitives are:
+
+- `note`
+- `file`
+- `dir`
+- `address`, consisting of a protocol plus an identifier or host
+- `reference?`, still an open candidate rather than a settled primitive
+
+An inventory designer lets users define the inventory types they need by composing these primitives or naming aliases, then create items of those types. The built-in kinds are not a closed list of everything users can track. Composition preserves the distinction between owned children and shared links described below.
+
+Illustrative type definitions, not a persistence schema or implemented API:
+
+```js
+const referenceDoc = { name: "Reference document", aliasOf: "file" };
+const service = { name: "Service", fields: { endpoint: "address", notes: "note", config: "file" } };
+```
+
+The exact primitive set, whether `reference` is separate from an ordinary relationship, and the designer interaction remain open design decisions.
+
 ## Owned children and shared links
 
 An owned-child relationship means that the child belongs under its parent, rather than being an independent item arbitrarily duplicated under several parents. Some children must always remain nested. Design must identify which kinds and relationships have that rule before extending behavior. The exact per-kind matrix, allowed reparenting, and lifecycle consequences remain open.
