@@ -35,6 +35,10 @@ Row = { key, label, recall?, value, path?, state: "set | default | new | error",
 
 `forms.layout` is an enumerated setting. Changing it affects the next opened form without a restart. Layouts change presentation, not ranking, linkage, creation, or validation.
 
+Single-select fields share one options control across forms and layouts. Definitions supply the options and whether custom text is accepted. Finite settings, including `forms.layout`, use the same cycle and labeled-choice behavior as other finite fields. Suggested paths use the editable variant, with the native picker still available. A selected path must remain editable without retyping it; nearby suggestions must not overwrite a manually edited path.
+
+For a suggested path, use `alt+o` and its displayed label to select it, then edit the field with `i`, Enter, or its field shortcut. The editor starts with the full selected path. Enter commits the edited text even when similar suggestions remain. Escape, Tab, and submit also preserve the edit. `ctrl+n` or `ctrl+p` explicitly returns to selecting a suggestion.
+
 | Value | Placement and behavior |
 | --- | --- |
 | `list` | Default, full-width field/value rows, focused editor or choices below its row |
