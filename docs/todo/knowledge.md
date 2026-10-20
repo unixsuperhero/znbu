@@ -7,10 +7,10 @@ The [knowledge outline](../outline/knowledge.md) records current behavior, schem
 
 status: open · source: [project homepages target](../outline/knowledge.md#project-homepages)
 
-- Persist one homepage path per stable Matomeru project ID and expose a project-scoped lookup to agents. Reuse the mapped page across project renames and worktrees.
-- Resolve the contribution's project from explicit project or inherited task ownership, then an explicitly assigned pane, then a unique canonical repository match. Never borrow another pane's global pin. If ambiguous or unassigned, retain the contribution for assignment without writing to a guessed page.
-- Provide a project-owned contribution command that accepts an idempotency ID, question or request, short answer, date and source links. Serialize concurrent writes to that project's Markdown page; retrying the same ID must produce exactly one section without losing another agent's section.
-- Show or open the project homepage as the first short-answer destination while preserving the Documents list and chronological artifact index for full reports.
+- Store answer sections under the stable Matomeru project ID and show them as the running document in [the selected project's page](work.md#b-43). Do not require a filesystem path or duplicate canonical content between the app and `~/notes`.
+- Resolve the contribution's project from explicit project or inherited task ownership, then an explicitly assigned pane, then a unique canonical repository match. Project-page selection is not evidence that another pane belongs there. If ambiguous or unassigned, retain the contribution for assignment without guessing.
+- Provide a project-owned contribution command that accepts an idempotency ID, question or request, short answer, date, and source links. In one transaction persist the section and ID; retries add no duplicate, and simultaneous agents lose no sections.
+- Show the question, answer, and source links on the project page. Keep the Documents list and chronological artifact index for full reports. Treat the existing `~/notes/proj/matomeru/index.md` as a manual note and possible import/export source, not a second authoritative document.
 
 <a id="b-05"></a>
 ## B-05: Notes on almost any record

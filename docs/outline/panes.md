@@ -52,6 +52,12 @@ A pane without an activity timestamp uses its first observation as the age basel
 
 The [shared status contract](forms.md) requires simultaneous flags, plain-text counts, reasons, and unknown/stale distinctions. A primary state alone is not acceptance of that target. [Preview acceptance](../todo/panes.md#b-49) also distinguishes current output from a cached image.
 
+<a id="panes-page-and-rail"></a>
+## Panes page and left rail (target)
+
+The current rail is a pane inventory split into Review, middle Panes, and Working, with tree, grouping, and height budgets. Those sections are implemented and remain the current baseline below. They are too much navigation to make the rail also act as a project page. Keep a distinct Panes page as the full inventory of agents, terminals, and live Vim panes across projects, with an explicit project filter when needed. Selecting a row opens its Screen, Activity, Transcript, or Turns detail; review and live controls stay reachable there. An unassigned or stale pane remains findable without visiting an unrelated project's page.
+
+Provisional rail direction: retain a slim page switcher with a current-page indicator and attention counts or badges; move the full pane tree, lifecycle sections, grouping, and their height budgets onto the Panes page rather than rendering them on every page. Keep an urgent pane reachable in one action via its attention indicator, without duplicating the Panes page list in the rail. The project page owns project-specific answers; the Panes page owns the inventory. Leaving the project page removes its navigation scope. This is a target layout to validate in the TUI before removing the current rail interaction model, not a claim that the current rail has changed. [Remaining page and rail work](../todo/panes.md#panes-page-and-rail) records the cutover.
 <a id="b-06"></a>
 ## B-06: Pane detail tabs
 

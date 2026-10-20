@@ -31,10 +31,9 @@ The existing project record and task tree do not implement this workflow. [Targe
 
 Acceptance:
 
-- Open a dedicated Projects page and select a project without using Tasks as its only entry point.
-- Record and view four project-associated categories: things to know, things to do, things to make, and things to share. Support the organizing question for one particular project and as a reusable way to approach any project.
-- Request agent research for a knowledge item at the chosen depth: a small concise answer, a medium answer of a few paragraphs, or a large full report. Agents obtain what they can rather than merely recording the question.
-- Keep each project-specific question and its answer or report associated with that project.
+- Open a dedicated Projects page and select a project without using Tasks as its only entry point. Make the selected project's running short-answer document the main content of that page. Record and view things to know, do, make, and share for one project and as a reusable way to organize any project, without making those categories a second answer store.
+- Make "scoped to a project" and "pinned to a project" mean the selected Projects page, not a database-wide task pin that silently filters unrelated pages. Leaving that page restores global page navigation. Keep task ownership, task-specific filtering, and explicit CLI project queries distinct.
+- Request agent research for a project knowledge item at the chosen depth: a small concise answer, a medium answer of a few paragraphs, or a large full report. Keep the question and its answer associated with the stable project ID; a full report remains linked from the short answer. [The project-owned answer command](knowledge.md#project-homepages) belongs to the knowledge backlog.
 
 Sources: [original B-43](../sources/znbu/docs/todo.md#b-43-give-projects-their-own-page-organized-around-what-needs-to-be-known-done-made-and-shared) and [captured user request](../sources/hub/prompts/mtm-todo.md). Related reusable knowledge/research ideas remain in the [ecosystem outline](../outline/ecosystem.md) and [ecosystem backlog](ecosystem.md).
 

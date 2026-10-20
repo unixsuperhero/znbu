@@ -121,15 +121,15 @@ Evidence: Matomeru `internal/documents/documents.go`, especially star/context an
 Sources: [B-11 design, acceptance, and dated caveats, lines 876-911](../sources/znbu/docs/todo.md#b-11-documents-page-starred-docs-glow-preview-live-mode-unread-theme) and [implementation-era documents contract, lines 459-470](../sources/matomeru/docs/outline.md#614-documents--internaldocuments). [B-05](../todo/knowledge.md#b-05) still owns document notes. Review-document placement and accordion behavior belong to [panes and reviews](panes.md#b-10).
 
 <a id="project-homepages"></a>
-## Project homepages (target)
+## Project-page running document (target)
 
-Status: proposed, not implemented. The Documents page catalogs separate agent-written files, but finding three short answers currently means opening separate artifacts. Keep that catalog for full reports and sources. Add one running Markdown homepage per project as the first place to read brief answers; the existing `~/notes/proj/<project>/index.md` convention supplies a human-readable starting location, not a unique project identity.
+Status: proposed, not implemented. The running document is the main content of the selected project's page inside Matomeru, not a Markdown path that agents or users must find. The existing Documents page remains a catalog of separate full reports and sources. `~/notes/proj/matomeru/index.md` is the current manual note and a possible import/export source, not the future authoritative project document.
 
-- Store one explicit homepage path against the stable Matomeru project ID. An assigned task inherits its root project's ID; an explicitly assigned project or pane identifies its own project. If no assignment exists, resolve a unique match from the canonical repository association. The global pin is not evidence for another pane. A name, slug or worktree alone is insufficient. Renaming a project keeps its project ID and page. Ambiguous or unassigned work remains pending for explicit assignment; never create a plausible duplicate page.
-- Agents submit `{ contribution_id, project_id, question, answer, at, source_links }` to one project-owned writer. The heading repeats the user's question or request; the body is a short answer with a date and links to detailed research, documents or the originating turn. The homepage stays skim-friendly while the Documents page and chronological index retain complete artifacts.
-- The writer serializes submissions for each project, checks the project-to-path mapping, appends atomically, and records contribution IDs so a retry does not duplicate a section. Concurrent agents submit separate contributions rather than editing the same Markdown file at once. Three requests for one project produce three sections in its one page.
+- Store running answer sections under a stable Matomeru project ID, independently of the project's name or repositories. The project page displays those sections for its selected project. A renamed project keeps its answers. The person can read the short answers there without opening a file or visiting another page.
+- Agents submit `{ contribution_id, project_id, question, answer, at, source_links }` to a project-owned command. Resolve the destination from explicit project or inherited task ownership, then an explicitly assigned pane, then a unique canonical repository match. A project's page selection is navigation context, not evidence of another pane's ownership. Ambiguous or unassigned contributions wait for explicit assignment.
+- The command writes the section and deduplication ID in one transaction, so simultaneous agents cannot overwrite each other and repeated delivery adds no duplicate. The page shows each user's question or request as a heading, a brief answer, date, and links to detailed reports or the source turn. Full artifacts remain in Documents and the chronological index.
 
-[Remaining acceptance](../todo/knowledge.md#project-homepages) tracks the resolver, mapping, writer and reader workflow. None of these commands or automatic writes exist today.
+[Remaining acceptance](../todo/knowledge.md#project-homepages) tracks the project-owned writer and reader. [B-43](../todo/work.md#b-43) owns the page itself; neither is shipped.
 
 <a id="b-27"></a>
 ## B-27: Downloads

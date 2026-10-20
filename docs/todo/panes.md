@@ -6,6 +6,15 @@ The outline owns implemented [B-06 tabs](../outline/panes.md#b-06), [B-09 lifecy
 
 Implemented rail budgets [B-08](../outline/panes.md#b-08), page-level explicit tab memory [B-41](../outline/panes.md#b-41), and close-time completion [B-45](../outline/panes.md#b-45) now live in the outline.
 
+<a id="panes-page-and-rail"></a>
+## Panes page and left rail redesign
+
+Status: open · source: [Panes page and rail target](../outline/panes.md#panes-page-and-rail)
+
+- Make the Panes page the full global inventory of agents, terminals, and live Vim panes; retain pane search, grouping, review/working lifecycle, detail tabs, and live entry. Offer an explicit project filter on that page without carrying a project-page selection into it. Keep unassigned and stale rows discoverable.
+- Prototype a slim persistent rail for page navigation, current-page state, and attention counts; move the full pane tree and its section budgets into Panes. Compare reachable review and working-agent actions at narrow and normal terminal widths before removing the current rail list. An attention indicator must take the person directly to the matching row.
+- Migrate existing rail selection, keyboard shortcuts, live next/previous pane, and create-jump behavior to the Panes page or an explicit global shortcut. Do not silently drop B-06, B-08, B-09, B-10, B-38, or B-41 behavior during the cutover.
+
 <a id="b-49"></a>
 ## B-49: Complete the noninterfering preview contract
 
