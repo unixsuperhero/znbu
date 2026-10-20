@@ -15,6 +15,8 @@ Znbu is the canonical design and backlog. This index replaces the oversized sing
 | Delivery and verification: Releases, VPS, inventories, visibility and research adoption | [Design and current behavior](outline/delivery.md) | [Todo](todo/delivery.md) |
 | Related product ideas: Ima, Now, Thinktank, pstack, mdoc and shared ideas not automatically Matomeru scope | [Design and current behavior](outline/ecosystem.md) | [Todo](todo/ecosystem.md) |
 
+The [project homepages target](outline/knowledge.md#project-homepages) proposes one running answer page per project alongside the existing Documents catalog. It is not implemented.
+
 ## Reading status
 
 - Implemented behavior belongs in the concept outline, with evidence and limits.

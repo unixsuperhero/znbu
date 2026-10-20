@@ -120,6 +120,17 @@ Evidence: Matomeru `internal/documents/documents.go`, especially star/context an
 
 Sources: [B-11 design, acceptance, and dated caveats, lines 876-911](../sources/znbu/docs/todo.md#b-11-documents-page-starred-docs-glow-preview-live-mode-unread-theme) and [implementation-era documents contract, lines 459-470](../sources/matomeru/docs/outline.md#614-documents--internaldocuments). [B-05](../todo/knowledge.md#b-05) still owns document notes. Review-document placement and accordion behavior belong to [panes and reviews](panes.md#b-10).
 
+<a id="project-homepages"></a>
+## Project homepages (target)
+
+Status: proposed, not implemented. The Documents page catalogs separate agent-written files, but finding three short answers currently means opening separate artifacts. Keep that catalog for full reports and sources. Add one running Markdown homepage per project as the first place to read brief answers; the existing `~/notes/proj/<project>/index.md` convention supplies a human-readable starting location, not a unique project identity.
+
+- Store one explicit homepage path against the stable Matomeru project ID. An assigned task inherits its root project's ID; an explicitly assigned project or pane identifies its own project. If no assignment exists, resolve a unique match from the canonical repository association. The global pin is not evidence for another pane. A name, slug or worktree alone is insufficient. Renaming a project keeps its project ID and page. Ambiguous or unassigned work remains pending for explicit assignment; never create a plausible duplicate page.
+- Agents submit `{ contribution_id, project_id, question, answer, at, source_links }` to one project-owned writer. The heading repeats the user's question or request; the body is a short answer with a date and links to detailed research, documents or the originating turn. The homepage stays skim-friendly while the Documents page and chronological index retain complete artifacts.
+- The writer serializes submissions for each project, checks the project-to-path mapping, appends atomically, and records contribution IDs so a retry does not duplicate a section. Concurrent agents submit separate contributions rather than editing the same Markdown file at once. Three requests for one project produce three sections in its one page.
+
+[Remaining acceptance](../todo/knowledge.md#project-homepages) tracks the resolver, mapping, writer and reader workflow. None of these commands or automatic writes exist today.
+
 <a id="b-27"></a>
 ## B-27: Downloads
 

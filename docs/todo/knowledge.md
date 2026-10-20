@@ -2,6 +2,16 @@
 
 The [knowledge outline](../outline/knowledge.md) records current behavior, schemas, and target decisions. This backlog contains only unfinished acceptance. B-11's implemented Documents core lives [in the outline](../outline/knowledge.md#b-11); its missing turn provenance stays in [B-28](architecture.md#b-28), not a second Documents implementation item. Historical verification logs below are recorded evidence, not checks performed for this consolidation.
 
+<a id="project-homepages"></a>
+## Project homepages
+
+status: open · source: [project homepages target](../outline/knowledge.md#project-homepages)
+
+- Persist one homepage path per stable Matomeru project ID and expose a project-scoped lookup to agents. Reuse the mapped page across project renames and worktrees.
+- Resolve the contribution's project from explicit project or inherited task ownership, then an explicitly assigned pane, then a unique canonical repository match. Never borrow another pane's global pin. If ambiguous or unassigned, retain the contribution for assignment without writing to a guessed page.
+- Provide a project-owned contribution command that accepts an idempotency ID, question or request, short answer, date and source links. Serialize concurrent writes to that project's Markdown page; retrying the same ID must produce exactly one section without losing another agent's section.
+- Show or open the project homepage as the first short-answer destination while preserving the Documents list and chronological artifact index for full reports.
+
 <a id="b-05"></a>
 ## B-05: Notes on almost any record
 
