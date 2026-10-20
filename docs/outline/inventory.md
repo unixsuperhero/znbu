@@ -44,6 +44,30 @@ const service = { name: "Service", fields: { endpoint: "address", notes: "note",
 
 The exact primitive set, whether `reference` is separate from an ordinary relationship, and the designer interaction remain open design decisions.
 
+## Pinning and starring every inventory item
+
+Status: target, tracked by [B-100](../todo/inventory.md#b-100). Universal pinning and starring are required; contextual pinning is a proposed extension, not a settled implementation.
+
+### Original note, verbatim
+
+> add another very important note about inventory...  any record/item is both pinnable and starrable.  and if we really want to be daring...we can make the pinning ability contextual, meaning "we want the link to be pinned on the project page, but not on the context page?
+
+### Agent-facing interpretation
+
+- Every inventory record or item supports both pinning and starring, including built-in and user-defined types. These are separate capabilities; supporting one does not satisfy the other.
+- Explore contextual pinning: the same item can be pinned in one presentation context without being pinned in another. For example, a link can be pinned on the project page but remain unpinned on the context page. Both pages still refer to the same link, not duplicate records.
+- Keep the contextual extension distinct from the universal requirement. Decide whether a pin belongs to a page type, a specific project/page instance, or another explicit context before implementing it. The note does not settle those boundaries or request contextual starring.
+- Distinguish inventory pinning from the existing active task/project pin. Do not silently make an inventory presentation pin change the application's work scope.
+
+Illustrative contextual state, not a prescribed storage schema:
+
+```js
+const pins = [
+	{ item: "link-1", context: "project page", pinned: true },
+	{ item: "link-1", context: "context page", pinned: false },
+];
+```
+
 ## Owned children and shared links
 
 An owned-child relationship means that the child belongs under its parent, rather than being an independent item arbitrarily duplicated under several parents. Some children must always remain nested. Design must identify which kinds and relationships have that rule before extending behavior. The exact per-kind matrix, allowed reparenting, and lifecycle consequences remain open.
