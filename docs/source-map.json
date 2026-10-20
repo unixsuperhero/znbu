@@ -718,6 +718,34 @@
   ],
   "plans": [
     {
+      "path": "docs/plans/todo-dispatch.md",
+      "status": "partial",
+      "todo": "docs/todo/work.md#todo-dispatch",
+      "outline": "docs/outline/work.md#b-13",
+      "original": "~/proj/matomeru3/docs/plans/todo-dispatch.md",
+      "sourceCommits": ["da244e4", "b7c4a07"],
+      "evidence": [
+        "Two source commits change only the plan; rebased onto main 4219e44",
+        "Current parser already follows canonical index/directory and parses size; import preserves body/status and upserts",
+        "Source-location metadata, stored size, structured export, todo_dir, marked dispatch and preset remain planned",
+        "Canonical copy corrects obsolete parser-rewrite instruction; immutable sources are unchanged"
+      ]
+    },
+    {
+      "path": "docs/plans/queue.md",
+      "status": "verification-pending",
+      "todo": "docs/todo/agents.md#b-63",
+      "outline": "docs/outline/agents.md#queueoutcomes",
+      "original": "~/proj/matomeru2/docs/plans/queue.md",
+      "evidence": [
+        "Historical B-39 queue label maps to B-63; canonical B-39 remains the isolated runner",
+        "Source review by integrate-work-queue identifies item/batch CRUD, grouped claim, finish/release, bounded dispatch, pane-close release, TUI rapid entry/marks/target and pane-bound MCP; no runtime acceptance performed",
+        "Dispatch calls prompts.start-agent; window creation is not PromptStatus delivery/acknowledgement proof; B-63 receipt outcomes remain open",
+        "Historical queue.session=queue is superseded by blank default and project-named session resolution; explicit dispatch/configured sessions win",
+        "Historical plan text retained with operative canonical preface; immutable sources are unchanged"
+      ]
+    },
+    {
       "path": "docs/plans/vps2-dev-host.md",
       "status": "partial",
       "todo": "docs/todo/delivery.md#b-73",

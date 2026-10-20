@@ -133,6 +133,8 @@ Recorded real VPS CLI evidence: `run.GsYNEfhn` covers all 66 IDs and repeat impo
 
 Historical baseline evidence remains commit `059ba80`, `internal/work/todos.go`, and `internal/work/commands.go`. The [implementation source](../sources/matomeru/docs/outline.md#17-b-13-todo-unit-and-page-items-that-are-not-yet-tasks) records original ordering, errors, claim, promotion, notes, activation, and fixture repeat-import acceptance. [Original B-13 acceptance](../sources/znbu/docs/todo.md#b-13-todo-unit-and-page-items-that-are-not-yet-tasks) remains preserved.
 
+The [todo metadata and dispatch plan](../plans/todo-dispatch.md) extends this implemented baseline. Per-item source file/line, stored size, structured export, directory setting, marked dispatch, and orchestrator preset acceptance remain in the [work backlog](../todo/work.md#todo-dispatch). The plan is not evidence that those extensions exist, and does not justify rewriting canonical index import.
+
 ## Projects as knowledge and deliverables
 
 Target, not implemented: a dedicated Projects page organizes a project's work as things to know, do, make, and share. Knowledge items can request a concise answer, a medium answer of a few paragraphs, or a full report, while keeping questions and answers associated with the project. [B-43](../todo/work.md#b-43) owns that work. Existing projects and their task tree are not evidence of this page or workflow. Related research and reusable knowledge ideas belong in the [ecosystem outline](ecosystem.md) and [ecosystem backlog](../todo/ecosystem.md).

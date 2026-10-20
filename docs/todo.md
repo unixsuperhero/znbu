@@ -32,6 +32,7 @@ See [maintenance](maintenance.md) and [source coverage](sources/README.md). The 
 ## Item locations
 
 This is a navigation index, not a second task list. Status and acceptance live in the linked concept document.
+The [todo file metadata and marked-dispatch extension](todo/work.md#todo-dispatch) remains planned separately from implemented B-13. The [batch work queue](plans/queue.md) maps to existing B-63, not runner B-39, and awaits final integration proof.
 
 ### Remaining Matomeru work
 

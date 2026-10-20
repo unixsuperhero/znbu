@@ -110,6 +110,12 @@ Sources: [original B-42](../sources/znbu/docs/todo.md#b-42-field-group-presets-r
 
 Status: open. This identifier preserves the unnumbered queue-outcome requirements in the [UI-state inventory](../ui-state-visibility.md#queue-identity-and-transitions). [Current queue behavior and target](../outline/agents.md#queueoutcomes) distinguish receipt reconciliation from delivery evidence. The verified new composer does not prove all these outcomes exist.
 
+The [batch work-queue plan](../plans/queue.md) belongs here, not under canonical [B-39](delivery.md#b-39), which remains the isolated runner. Its distinct item/batch workflow is merged and its CLI, dispatch, MCP and TUI acceptance passed in `run.K14YL9XV`; see the [implemented portions](../outline/agents.md#batch-work-queue-integration). Its ready/claimed/done/failed results do not prove the prompt-receipt outcomes below.
+
+Remaining batch-queue evidence includes queue-watch scheduling, TUI dispatch-and-jump, and explicit configured-session/failure-path acceptance beyond the exercised CLI dispatch cases. The operative launch contract uses explicit dispatch session, then nonblank `queue.session`, then ordinary project-named session resolution with a blank queue default. The historical plan's hard-coded `queue` session is superseded.
+
+Source review finds that batch dispatch treats a returned window as started without requiring `PromptStatus` delivery/acknowledgement evidence. Keep that gap open even after item/batch acceptance passes; created-target identity and prompt delivery are different outcomes.
+
 - A newly queued prompt appears immediately in the queue list. Send-now and queue-at-turn-end remain distinct actions.
 - Join persisted prompts and daemon receipts by delivery identity plus host-qualified target, not text. Count a local row with `DaemonID` and its daemon entry once. When correlation is impossible, display separate local/daemon counts rather than a false exact total. Untargeted prompts stay in the task/project queue.
 - Add an inspectable outcome model where `SyncQueue` currently deletes or logs. Distinguish accepted, waiting, evidenced delivery, blocked, failed, closed target, cancelled, and unknown. Disappearance alone never means delivered.

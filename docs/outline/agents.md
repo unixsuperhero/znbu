@@ -122,6 +122,16 @@ Visible outcomes distinguish accepted, waiting, evidenced delivery, blocked, fai
 
 Sources: [original prompt unit](../sources/znbu/docs/outline.md), section 6.4; [UI state inventory](../ui-state-visibility.md#queue-identity-and-transitions); source audit of `internal/prompts/composer.go`, `prompts.go`, and `SyncQueue`. The [shared visibility contract](forms.md#visibility) covers the rendered matrix and acknowledgement rules.
 
+### Batch work queue integration
+
+The [work-queue plan](../plans/queue.md) describes a separate `internal/queue` item/batch workflow, not the prompts unit's `queued_prompts` receipts. It is merged into main; real CLI, MCP, dispatch, and TUI acceptance passed on vps2 in `run.K14YL9XV` (28 seconds). [B-63](../todo/agents.md#b-63) retains the delivery-outcome gaps. The plan's original B-39 label does not change canonical [runner B-39](../todo/delivery.md#b-39).
+
+Implemented portions include `queue_items`/`queue_batches`, repository-group claim, finish/release, bounded dispatch, pane-close release, rapid-add/mark/target TUI actions, and pane-bound MCP tools. The acceptance run exercised CLI group/finish/release, dispatch limits and closed-pane recovery, MCP claim/finish/history, and TUI rapid add/mark/target/finish. Dispatch uses `prompts.start-agent`; blank harness/session/cwd inherit ordinary launch defaults and requested rows/columns are forwarded. Existing prompt queues remain separate.
+
+The remaining delivery gap is explicit: dispatch treats a returned window as started and does not use decoded `PromptStatus` as proof of prompt delivery or acknowledgement. Passing item/batch acceptance does not promote that target-created result to delivered.
+
+The current session requirement supersedes the historical plan default. Explicit dispatch session wins, followed by nonblank configured `queue.session`; a blank queue session delegates to ordinary project-named launch defaults. A batch result or closed-pane release does not prove prompt delivery, cancellation, or receipt reconciliation.
+
 <a id="aiassets"></a>
 ## AI assets and subsection navigation
 

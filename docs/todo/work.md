@@ -4,7 +4,23 @@
 
 Only unfinished acceptance is active here. Implemented [B-37 bulk creation](../outline/work.md#b-37) and [B-47 Git inventories](../outline/work.md#b-47) live in the outline. [B-07](../outline/work.md#b-07) is superseded, not an active request to rebuild the legacy mass-add outline. Historical evidence is not a test performed during this consolidation.
 
-Implemented canonical backlog import [B-13](../outline/work.md#b-13) lives in the outline.
+Implemented canonical backlog import [B-13](../outline/work.md#b-13) lives in the outline. The [todo dispatch extension](#todo-dispatch) remains a separate plan.
+
+<a id="todo-dispatch"></a>
+## Todo file metadata and marked dispatch
+
+Status: open extension to implemented B-13. [Plan](../plans/todo-dispatch.md). The plan commits contain no feature implementation. Canonical index/directory traversal, status/priority/size parsing, body import, repeat-import upserts, and note/owner preservation are existing baselines, not work to rewrite. The historical 39-item survey is not the current import inventory.
+
+Remaining acceptance:
+
+- Normalize missing field lines without changing acceptance prose or treating coverage status as execution state. Preserve canonical index import and completed dispositions.
+- Retain per-item source file and line, define exact-body preservation and missing-field warnings, and persist size/source metadata for structured export. Size is already parsed but not stored on the Todo row.
+- Add the proposed `todo_dir` setting and directory picker, and expose structured `mtm todo export --json`. Keep repeat imports idempotent and preserve notes and ownership.
+- Add marked-row selection and the proposed status/priority filter without taking an existing action key. Prove two visible marks in the rail.
+- Add `todos.dispatch` and CLI dispatch for selected ids, including each id, title, file path, and body in the existing start-agent composer. Resolve cwd from the focused project or configured backlog directory, retain ordinary project-session launch defaults, and never write execution state back to source files. Prove both selected ids and paths in the first turn and return the created window identity.
+- Record the orchestrator preset using the existing agent-start path and approved worktree, VPS verification, and MCP reporting conventions. This does not depend on completing [B-63](agents.md#b-63) prompt-outcome work.
+
+No feature code or runtime verification was performed for this plan integration.
 
 <a id="b-43"></a>
 ## B-43: Give projects their own knowledge and deliverables page
