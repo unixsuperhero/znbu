@@ -1,3 +1,28 @@
+
+# NEW
+
+- auto-scoped cli tools
+    - mtm todo
+- create arbitrary concepts/inventory
+    - questions
+    - ideas
+    - they should have "relationships" alongside key/val
+- assigning dirs
+    - methods
+        - `z`
+        - base dir -> fuzzyfind
+        - base dor =? fd
+        - known repo dirs and other dirs -> fuzzy
+- dirs to monitor
+- action/keybinding viewer
+    - cycle grouping/sort
+    - group by verb, noun, etc.
+- page describer and designer
+
+---
+
+
+
 # Matomeru backlog
 
 Znbu owns the canonical backlog. Each concept pairs its remaining acceptance with the [outline](outline.md); implemented work is indexed below but lives in the outline, not the active queue.
