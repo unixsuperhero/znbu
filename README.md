@@ -8,5 +8,6 @@ Canonical design and backlog for Matomeru, with related product ideas kept in a 
 - [Source coverage](docs/sources/README.md): preserved originals and their canonical destinations.
 - [Maintenance](docs/maintenance.md): where changes belong, promotion rules and documentation checks.
 - [Prompt archive](docs/prompts/README.md): historical instructions, not a second backlog.
+- [clean-mtm](~/hub/prompts/clean-mtm.md): historical instructions, not a second backlog.
 
 Edit the concept documents, not the historical snapshots. An outline proposal is not proof of implementation; its status and linked todo define what remains.

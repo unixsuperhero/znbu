@@ -73,6 +73,15 @@ after = { host: "vps2", task: "Login", model: "model-a", effort: "high" }
 
 Expose the one or two most recent selections as preset-like choices even when there is no saved preset. The names above are working terminology. Implemented `launchDefaults` fills inferred values; it does not implement this overwrite rule. Sources: [preserved request](../sources/hub/prompts/mtm-todo.md), lines 6–15; [original B-42](../sources/znbu/docs/todo.md#b-42-field-group-presets-recent-selections-and-composable-preset-layers).
 
+<a id="session-inference"></a>
+## Project-based session inference
+
+Target requirement: session selection is exceptional, not a routine launch or prompt field. Resolve project ownership from explicit input or a restored draft first, then the focused item's known ownership, then active project/pin context. Derive the new window's session from that project's name on the selected host/server. Do not copy an unrelated ambient session merely because it launched mtm. An explicit no-project choice uses `no-project`; unknown ownership is not an implicit no-project choice.
+
+Quick starts, forms, and queued launches share this inference. Display the resolved session as derived context rather than requiring a session picker. Changing the draft project recomputes the destination; background focus or refresh must not replace an explicit draft choice. Sending to an existing window retains that window's actual identity and session.
+
+Ask only when current state cannot establish the project or when a naming/placement conflict requires a decision; prefer resolving the project over asking for a session name. Explicit session management remains available for rare deliberate operations. Earlier inherited-session descriptions do not override this target.
+
 <a id="b-61"></a>
 <a id="launchdefaults"></a>
 ## Inferred launch defaults
@@ -96,6 +105,18 @@ Status: implemented in commit `e4cf07a`, with owner-reported VPS verification. T
 Settings displays Harness, Model, Effort, and Speed columns backed by catalogs. Fuzzy queries match option values rather than descriptions. Live weighted suffix recall and visible searchable disambiguation tokens help choose colliding labels; storage retains the original option value, never the display token. Host precedes Destination and Assignment in advanced launch forms. Aliases include configured addresses. The local daemon labels itself with `TUIOS_HOST` only when its socket matches the current pane; otherwise it shows its socket endpoint.
 
 Source: `internal/ui/forms/prompt_composer.go`, launch-default wiring, and the [preserved implementation outline](../sources/matomeru/docs/outline.md), section 6.4. Commit `e4cf07a` and the newer owner verification, not the older form log, support this richer composer. Full `/` skill/command discovery remains [B-34](../todo/agents.md#b-34); rich ask records remain [B-32](../todo/agents.md#b-32).
+
+<a id="prompt-syntax"></a>
+## Prompt input syntax
+
+Target requirement, not a claim that the existing composer implements every form: wherever mtm accepts a prompt, use the shared syntax-aware input system with prompt-specific interpretation rather than the shell's ordinary context-sensitive `:` command input.
+
+- `@path` references a file anywhere accessible through the CLI, not only within the current project or repository. Support absolute, home-relative, and working-directory-relative paths, with quoting or escaping for spaces. Resolve and complete in the selected host and working-directory context; never substitute local paths for remote ones.
+- `/cmd` invokes a command available in the selected harness/context.
+- `/skill` selects or invokes an available skill through slash syntax.
+- `$skill` references an available skill through dollar syntax.
+
+Completion and discovery use real accessible paths and installed/configured command and skill catalogs. Distinguish commands from skills and explain unavailable or unsupported entries. Preserve ordinary prose and literal syntax through quoting or escaping. Typing or completing a token must not send the prompt or execute a shell UI action; preserve references through submission using the selected harness's supported contract. Command and skill discovery remains part of [B-34](../todo/agents.md#b-34).
 
 <a id="modelcatalog"></a>
 ## Harness and model option provenance

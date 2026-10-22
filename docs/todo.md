@@ -1,6 +1,7 @@
 
 # NEW
 
+- i want a fact db.
 - auto-scoped cli tools
     - mtm todo
 - create arbitrary concepts/inventory

@@ -2,6 +2,42 @@
 
 Znbu is the canonical design and backlog. This index replaces the oversized single-file outline; each concept keeps its current behavior, target design and remaining work together through links. **Target** and **open** sections are proposals, not shipped behavior.
 
+## Required implementation stack
+
+- **Go (Golang)** is the implementation language for the application, CLI, and backend/domain logic.
+- **Charm's Bubble Tea** is the TUI framework. Use its `Init`/`Update`/`View` model and commands for asynchronous work, keeping domain logic independent of the UI.
+- **Charm libraries** are the default for terminal UI building blocks: **Bubbles** for reusable components, **Lip Gloss** for styling and layout, and **Glamour** for terminal Markdown rendering where needed. Reuse these libraries rather than building equivalent primitives.
+- Select additional Charm libraries where they fit the existing contracts; this does not require adopting every Charm package. In particular, retain the [registry-backed forms engine](outline/forms.md#forms) rather than replacing it with Huh.
+
+These are implementation requirements, not a claim that every listed library is already integrated. The [architecture](outline/architecture.md) and [forms and actions](outline/forms.md) outlines retain the detailed behavior and boundaries.
+
+## Systems-first implementation
+
+- Build and improve reusable systems, not one-off fixes for individual screens, concepts, or callers.
+- Before every change, inspect the existing implementation, relevant design documents, shared interfaces, and affected callers to identify the system that already owns the behavior. Check for an existing capability or extension point before adding code.
+- Reuse or extend that owning system so the change applies consistently to all affected consumers. Fix defects at their source rather than adding caller-specific workarounds, duplicated logic, or a parallel implementation.
+- Introduce a new shared system only when the existing ones cannot reasonably serve the requirement; state the gap and keep its responsibility and interfaces explicit. Prefer the smallest coherent design that meets actual requirements, not speculative frameworks.
+- Verify the changed behavior across affected consumers and update the owning system's documentation and behavioral coverage.
+
+
+## Normal and input mode bindings
+
+- Provide two distinct binding forms throughout the shared UI: **normal mode** for navigation/actions and **input mode** (insert mode) for editing text.
+- Normal-mode bindings should feel like Vim: prefer simple keys and short key sequences, with modifiers used rarely rather than as the default for common actions.
+- Input mode is primarily driven by user-typed syntax, typically `:` followed by a command or expression relevant to the current mode/context, rather than a collection of modifier shortcuts. Preserve ordinary text entry and editing keys without triggering normal-mode actions.
+- Prompt composition is a specialized input context: support `@path` file references anywhere accessible through the CLI, `/cmd` commands, `/skill` skills, and `$skill` skill references. See [prompt syntax](outline/agents.md#prompt-syntax).
+- Declare bindings per mode in the shared action/config system and show the effective bindings for the active mode in help. Keep mode transitions explicit and retain the separate live-terminal routing contract.
+- All single-line inputs support Readline editing. In path inputs, `ctrl+w` removes only the final path component before the cursor, one directory level per press, never the entire multi-level path.
+- Field `CODE` values are as short as possible: prefer one character, adding characters only to avoid ambiguity or reserved-key conflicts. Keep descriptive labels separate from these compact codes.
+
+These are target requirements, not a claim that existing modifier-heavy normal bindings have been migrated. See [navigation and input](outline/forms.md#navigation) for the owning contract.
+
+## Infer sessions from project context
+
+Target requirement: the user should almost never have to choose a TUIOS session. Infer the project from current state and derive the session from that project's name; ordinary launch and prompt flows must not require a session picker. Show the inferred destination without making it an extra decision. See [session inference](outline/agents.md#session-inference) for precedence and exceptional cases.
+
+## Concept index
+
 | Concept | Outline | Remaining work |
 |---|---|---|
 | Architecture: Unit boundaries, store, buses, registry, shells and design rules | [Design and current behavior](outline/architecture.md) | [Todo](todo/architecture.md) |
