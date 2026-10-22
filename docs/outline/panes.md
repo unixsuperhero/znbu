@@ -52,6 +52,15 @@ A pane without an activity timestamp uses its first observation as the age basel
 
 The [shared status contract](forms.md) requires simultaneous flags, plain-text counts, reasons, and unknown/stale distinctions. A primary state alone is not acceptance of that target. [Preview acceptance](../todo/panes.md#b-49) also distinguishes current output from a cached image.
 
+<a id="project-sessions"></a>
+## Project sessions (target)
+
+All project terminals, agents, and other live panes belong in windows inside a tuios session named after that project. Session placement follows explicit project ownership, including ownership inherited through a task, rather than inferring a project from cwd.
+
+Reserve two special tuios sessions: `no-project` for windows without a project, and `mtm-only` for Matomeru itself. These are session names, not projects or tasks.
+
+This is a target, not a claim of complete enforcement. [Current pane creation](#live) defaults to the project's named session but permits an explicit destination to override it. [Remaining session work](../todo/panes.md#project-sessions) must reconcile that override with project placement.
+
 <a id="panes-page-and-rail"></a>
 ## Panes page and left rail (target)
 

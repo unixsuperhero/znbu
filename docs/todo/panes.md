@@ -6,6 +6,15 @@ The outline owns implemented [B-06 tabs](../outline/panes.md#b-06), [B-09 lifecy
 
 Implemented rail budgets [B-08](../outline/panes.md#b-08), page-level explicit tab memory [B-41](../outline/panes.md#b-41), and close-time completion [B-45](../outline/panes.md#b-45) now live in the outline.
 
+<a id="project-sessions"></a>
+## Project sessions
+
+Status: open · source: [Project sessions target](../outline/panes.md#project-sessions)
+
+- Keep every project terminal, agent, and other live pane in a window inside the tuios session named after its owning project. Cover creation and reassignment, not only launch defaults.
+- Provide the reserved `no-project` and `mtm-only` sessions for projectless windows and Matomeru itself.
+- Resolve how explicit destination overrides interact with project placement before claiming enforcement. Verify both project-owned windows and the two special sessions.
+
 <a id="panes-page-and-rail"></a>
 ## Panes page and left rail redesign
 

@@ -11,6 +11,7 @@ Start with the [outline](../outline.md) or [backlog](../todo.md). Znbu is the so
 - Incorporated the concurrent owner's completed `ec0d83a` and `e4cf07a` scope and reported verification, without closing broader catalog, form-width, provenance or Place requirements. Both the [latest Matomeru outline](matomeru/docs/outline.md) and [pre-handoff outline](matomeru/docs/outline.pre-handoff.md) are retained.
 - Added the user's [shared verbs and nested creation palette](../outline/forms.md#commonverbs) to [B-33](../todo/forms.md#b-33); agent-choice ordering and prompt variants remain open decisions.
 - Added the user's [first-class Inventory concept](../outline/inventory.md) and [B-100](../todo/inventory.md#b-100), preserving all named kinds and the distinction between owned children and reusable linked records.
+- Folded the user's project-session notes into the [pane/session target](../outline/panes.md#project-sessions) and [remaining acceptance](../todo/panes.md#project-sessions), including the reserved `no-project` and `mtm-only` sessions. Removed the temporary rewrite section from the outline index.
 
 ## How to read status
 
